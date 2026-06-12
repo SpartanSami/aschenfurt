@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#14161a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Aschenfurt – Akte Nachtgrau</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="css/style.css?v=4">
+</head>
+<body data-theme="dunkel" data-textsize="m">
+
+<div id="app">
+  <!-- Titelbildschirm -->
+  <div id="screen-title" class="screen aktiv">
+    <div class="title-inner">
+      <div class="title-logo">🌒</div>
+      <h1 class="title-haupt">ASCHENFURT</h1>
+      <div class="title-sub">Akte Nachtgrau</div>
+      <p class="title-tag">Ein textbasiertes Detektivspiel in einer Stadt,<br>in der die Nacht Verträge hat.</p>
+      <div class="title-buttons" id="title-buttons"></div>
+      <p class="title-frei">Vollständig kostenlos · Keine Paywalls · Keine Wartezeiten · Alles freigeschaltet</p>
+    </div>
+  </div>
+
+  <!-- Charaktererstellung -->
+  <div id="screen-create" class="screen">
+    <div id="create-inner" class="create-inner"></div>
+  </div>
+
+  <!-- Hauptspiel -->
+  <div id="screen-game" class="screen">
+    <header id="topbar">
+      <div id="topbar-fall"></div>
+      <div id="topbar-rechts">
+        <button id="btn-hinweis" class="tb-btn" title="Spoilerfreie Hinweise">💡</button>
+        <button id="btn-menu" class="tb-btn" title="Menü">☰</button>
+      </div>
+    </header>
+    <main id="view"></main>
+    <nav id="tabbar"></nav>
+  </div>
+
+  <!-- Modal -->
+  <div id="modal-wrap" class="versteckt">
+    <div id="modal-back"></div>
+    <div id="modal"></div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toasts"></div>
+</div>
+
+<script src="js/util.js?v=4"></script>
+<script src="js/data_world.js?v=4"></script>
+<script src="js/data_npcs.js?v=4"></script>
+<script src="js/data_fall1.js?v=4"></script>
+<script src="js/data_fall2.js?v=4"></script>
+<script src="js/data_fall3.js?v=4"></script>
+<script src="js/data_finale.js?v=4"></script>
+<script src="js/engine.js?v=4"></script>
+<script src="js/ui.js?v=4"></script>
+<script src="js/main.js?v=4"></script>
+<script>
+// Offline-Fähigkeit (PWA): nur bei http/https registrieren – die Einzeldatei-Version braucht das nicht
+if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1")) {
+  navigator.serviceWorker.register("sw.js").catch(() => {});
+}
+</script>
+</body>
+</html>
