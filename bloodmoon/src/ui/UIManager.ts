@@ -533,7 +533,8 @@ export class UIManager {
         <b>Entwicklung, Story, Dialoge</b>Claude (Anthropic) als Ein-Personen-Studio
         <b>Technik</b>Three.js · three-mesh-bvh · TypeScript · Vite
         <b>Grafik</b>Sämtliche Texturen, Modelle und Figuren werden prozedural zur Laufzeit erzeugt.
-        <b>Klang & Musik</b>Prozedurale Synthese mit der Web-Audio-API. Optional: Sprachaufnahmen über ElevenLabs (siehe README).
+        <b>Klang & Musik</b>Prozedurale Synthese mit der Web-Audio-API.
+        <b>Stimmen</b>Sprachausgabe erzeugt mit ElevenLabs (elevenlabs.io) – Standardstimmen Brian, Lily, Harry, George, Sarah, Callum, Roger, Bill, Matilda, Chris, Jessica, Eric, Daniel, Bella und Charlie.
         <b>Schriften</b>Cinzel, Cinzel Decorative, Cormorant Garamond (SIL Open Font License)
       </div><div class="actions"></div></div>`);
     const back = h("button", "btn small", "Zurück");

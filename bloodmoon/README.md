@@ -70,17 +70,22 @@ In Dialogen: W/S, Mausrad oder Mausbewegung zum Auswählen, E oder Linksklick zu
 
 ## Vertonung mit ElevenLabs
 
-Ohne Sprachdateien läuft das Spiel vollständig mit Untertiteln; Figuren bewegen trotzdem Lippen und Mimik. Sobald Sprachdateien vorhanden sind, spielt das Spiel sie automatisch ab.
+**Stand:** Kapitel 1–3, alle Bluterinnerungen und die Blutdurst-Zeilen sind vertont (222 Zeilen, Modell `eleven_turbo_v2_5`, Standardstimmen). Kapitel 4–6 laufen noch mit Untertiteln – sie brauchen etwa 8.700 weitere Credits und lassen sich nach dem nächsten Credit-Reset mit demselben Befehl nachholen; bereits vorhandene Zeilen werden übersprungen.
+
+Zeilen ohne Sprachdatei laufen mit Untertiteln; Figuren bewegen trotzdem Lippen und Mimik. Sobald Sprachdateien vorhanden sind, spielt das Spiel sie automatisch ab.
 
 ```bash
 cd bloodmoon
 npm run voice:lines                          # erzeugt tools/voice/lines.json (≈ 400 Zeilen, ≈ 36 000 Zeichen)
 ELEVENLABS_API_KEY=dein_schluessel npm run voice:generate
-# optional: nur ein Kapitel / nur ein paar Zeilen zum Probehören
-ELEVENLABS_API_KEY=... npm run voice:generate -- --only=ch1 --limit=20
+# optional: nur bestimmte Kapitel, nur ein paar Zeilen, oder ein Credit-Budget
+ELEVENLABS_API_KEY=... npm run voice:generate -- --only=ch4,ch5,ch6
+ELEVENLABS_API_KEY=... npm run voice:generate -- --limit=20 --budget=2000
 ```
 
-- Die Stimmen pro Figur stehen in `tools/voice/voices.json` (Modell `eleven_multilingual_v2`, Deutsch). Die dort eingetragenen Stimmen-IDs sind Beispiele aus der ElevenLabs-Bibliothek – ersetze sie durch Stimmen aus deinem Konto, wenn du andere Klangfarben willst.
+- Die Stimmen pro Figur stehen in `tools/voice/voices.json`. Im Free-Plan sind nur die Standardstimmen über die API nutzbar; mit bezahltem Plan lassen sich dort deutsche Muttersprachler-Stimmen aus der Voice Library eintragen (dann `--force`, um neu zu vertonen).
+- Kosten: `eleven_turbo_v2_5` kostet 0,5 Credits pro Zeichen, `eleven_multilingual_v2` (etwas ausdrucksstärker) 1 Credit. Das Skript prüft vorher das Guthaben und hält vor dem Limit an.
+- Im Free-Plan verlangt ElevenLabs eine Namensnennung (steht unter „Mitwirkende“) und erlaubt keine kommerzielle Nutzung.
 - Die Dateien landen in `public/assets/audio/voice/` und werden in `manifest.json` eingetragen. Bereits erzeugte Zeilen werden beim nächsten Lauf übersprungen.
 - `npm run sfx:generate` erzeugt zusätzlich Geräusche (Türen, Heulen, Glocke …) über die Sound-Generation-API; sie ersetzen dann die synthetischen Klänge.
 
@@ -119,7 +124,7 @@ Automatisiert in headless Chromium (Software-Rendering über SwiftShader):
 
 - **Figuren:** prozedural modelliert und animiert (Skelett, Mimik, Lippenbewegung). Sie wirken stilisiert, eher wie bemalte Holzfiguren als wie handmodellierte Charaktere. Für echte Produktionsqualität bräuchte es modellierte und geriggte Figuren (z. B. Blender, Lizenz geklärt) und Motion-Capture-Animationen.
 - **Spielzeit:** Die sechs Kapitel sind vollständig spielbar, aber deutlich kürzer als die angestrebten 4–6 Stunden (je nach Spielweise eher 1,5–2,5 Stunden).
-- **Vertonung:** Die Pipeline ist fertig, die Sprachdateien selbst sind noch nicht erzeugt – dafür werden ein ElevenLabs-Konto und ein API-Schlüssel gebraucht.
+- **Vertonung:** Kapitel 1–3 und alle Erinnerungen sind vertont, Kapitel 4–6 noch nicht (Credit-Grenze des Free-Plans). Die Standardstimmen sind keine deutschen Muttersprachler; ein leichter Akzent ist möglich.
 - **Testabdeckung:** automatisiert nur in headless Chromium mit Software-Rendering. Ein Durchlauf auf echter Grafikkarte in Chrome und Edge sowie ein vollständiger manueller Durchlauf von Anfang bis Ende stehen noch aus; Bildrate und Feinabstimmung der Helligkeit können auf echter Hardware anders ausfallen.
 - **Eingabe:** ausgelegt auf Maus und Tastatur am Desktop. Die Touch-Steuerung ist eine einfache Ergänzung, getestet nur im Handy-Emulator von Chromium; auf echten Geräten können Bildrate und Bedienung abweichen (schwächere Handys: Grafikqualität „niedrig“ wählen).
 
