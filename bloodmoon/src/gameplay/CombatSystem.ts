@@ -341,7 +341,7 @@ export class CombatSystem {
     this.pushCd -= dt;
     const can = !G.player.locked && !G.dialogue.active && !G.story.busy && G.player.health > 0;
     // Blutstoß
-    if (can && input.mousePressed[0] && input.locked && G.abilities.has("bloodpush") && this.pushCd <= 0) {
+    if (can && input.mousePressed[0] && input.looking && G.abilities.has("bloodpush") && this.pushCd <= 0) {
       this.pushCd = 1.1;
       G.abilities.addHunger(5);
       G.audio.sfx("push");

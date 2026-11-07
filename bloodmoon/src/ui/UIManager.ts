@@ -4,6 +4,7 @@ import { settings, Quality } from "../core/Settings";
 import { HUD } from "./HUD";
 import { DialogueUI } from "./DialogueUI";
 import { PuzzleUI } from "./PuzzleUI";
+import { TouchControls } from "./TouchControls";
 import { icon, pathIcon } from "./Icons";
 import { ABILITIES } from "../player/PlayerAbilities";
 import { DOCUMENTS } from "../story/data/documents";
@@ -49,6 +50,7 @@ export class UIManager {
   hud: HUD;
   dialogue: DialogueUI;
   puzzle: PuzzleUI;
+  touch: TouchControls;
   modal: ModalName | null = null;
   private modalEl: HTMLElement | null = null;
   private modalStack: ModalName[] = [];
@@ -92,6 +94,7 @@ export class UIManager {
     this.loadingEl.style.display = "none";
     root.appendChild(this.loadingEl);
     this.puzzle = new PuzzleUI(this);
+    this.touch = new TouchControls(root);
     this.hud.setVisible(false);
     window.addEventListener("keydown", (e) => this.onKey(e));
     this.applySubtitleSize();
@@ -219,7 +222,7 @@ export class UIManager {
     if (this.inMenu || this.modalOpen) return;
     input.requestLock();
     setTimeout(() => {
-      if (!input.locked && !this.inMenu && !this.modalOpen && G.running) this.clickEl.classList.remove("hidden");
+      if (!input.looking && !this.inMenu && !this.modalOpen && G.running) this.clickEl.classList.remove("hidden");
     }, 350);
   }
 
@@ -516,7 +519,7 @@ export class UIManager {
       ["Mausrad", "Fähigkeit wählen"], ["Linke Maustaste", "Blutstoß (sobald erlernt)"], ["R (halten)", "Regeneration (sobald erlernt)"],
       ["Tab", "Inventar"], ["J", "Tagebuch"], ["K", "Fähigkeiten"], ["Escape", "Pause"],
     ];
-    const el = h("div", "screen", `<div class="box panel" style="max-width:700px"><h2>Steuerung</h2><div class="ornament"></div><div class="keys">${keys.map(([k, v]) => `<div><kbd>${k}</kbd></div><div>${v}</div>`).join("")}</div><p style="color:var(--ink-dim);font-style:italic;margin-top:22px;font-size:17px">In Dialogen: W/S, Mausrad oder Mausbewegung zum Auswählen, E oder Linksklick zum Bestätigen, Zahlentasten für direkte Wahl.</p><div class="actions"></div></div>`);
+    const el = h("div", "screen", `<div class="box panel" style="max-width:700px"><h2>Steuerung</h2><div class="ornament"></div><div class="keys">${keys.map(([k, v]) => `<div><kbd>${k}</kbd></div><div>${v}</div>`).join("")}</div><p style="color:var(--ink-dim);font-style:italic;margin-top:22px;font-size:17px">In Dialogen: W/S, Mausrad oder Mausbewegung zum Auswählen, E oder Linksklick zum Bestätigen, Zahlentasten für direkte Wahl.</p>${input.touch ? `<p style="color:var(--ink-dim);font-style:italic;font-size:17px">Touch: Linke Bildschirmhälfte gedrückt halten und ziehen = gehen (weit nach vorn = sprinten). Rechte Hälfte wischen = umschauen. E = interagieren, Q = Fähigkeit, ⟳ = Fähigkeit wechseln. Antworten in Dialogen direkt antippen.</p>` : ""}<div class="actions"></div></div>`);
     const back = h("button", "btn small", "Zurück");
     back.addEventListener("click", () => this.closeModal());
     el.querySelector(".actions")!.appendChild(back);
@@ -797,6 +800,7 @@ export class UIManager {
 
   update(dt: number): void {
     this.dialogue.update(dt);
+    this.touch.update();
     if (!this.inMenu) this.hud.update(dt);
   }
 

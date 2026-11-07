@@ -108,7 +108,7 @@ export class PlayerController {
     const cam = G.camera;
     const s = settings.data;
     // Blick
-    if (!this.lookLocked && input.locked) {
+    if (!this.lookLocked && input.looking) {
       const sens = 0.0021 * s.sensitivity;
       this.yaw -= input.mouseDX * sens;
       this.pitch -= input.mouseDY * sens * (s.invertY ? -1 : 1);

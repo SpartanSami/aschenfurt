@@ -22,6 +22,14 @@ export interface SettingsData {
 
 const KEY = "bloodmoon.settings.v1";
 
+function isTouchDevice(): boolean {
+  try {
+    return matchMedia("(pointer: coarse)").matches && navigator.maxTouchPoints > 0;
+  } catch {
+    return false;
+  }
+}
+
 export const defaultSettings: SettingsData = {
   master: 0.85,
   music: 0.6,
@@ -47,6 +55,7 @@ class SettingsStore {
     try {
       const raw = localStorage.getItem(KEY);
       if (raw) this.data = { ...defaultSettings, ...JSON.parse(raw) };
+      else if (isTouchDevice()) this.data = { ...defaultSettings, quality: "mittel", fov: 78 };
     } catch {
       this.data = { ...defaultSettings };
     }

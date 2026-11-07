@@ -88,3 +88,25 @@ Object.assign(window.T, {
   },
 });
 "harness2 ok";
+Object.assign(window.T, {
+  /** Interaktion auslösen und alles Folgende (Dialoge, Dokumente, Rätsel) automatisch abarbeiten. */
+  async run(id, prefer = [], solver = null, max = 150000) {
+    const G = this.G();
+    let done = false;
+    const log = [];
+    const p = this.interact(id).then((r) => { done = true; return r; });
+    const t0 = Date.now();
+    let solved = false;
+    while (!done && Date.now() - t0 < max) {
+      await this.sleep(300);
+      if (G.dialogue.active) log.push(...(await this.dialogue(prefer)));
+      else if (document.querySelector(".puzzle")) {
+        if (solver && !solved) { solved = true; log.push("puzzle: " + (await solver())); }
+      } else if (G.ui.modalOpen) G.ui.closeModal(false);
+    }
+    await this.waitIdle();
+    if (G.ui.modalOpen && !document.querySelector(".puzzle")) G.ui.closeModal(false);
+    return { done, log };
+  },
+});
+"harness3 ok";

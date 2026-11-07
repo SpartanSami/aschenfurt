@@ -4,6 +4,8 @@ Ein tiefgründiges, textbasiertes Fantasy-Detektivspiel: interaktiver Krimi × M
 
 **Vollständig kostenlos. Keine Paywalls, keine Energie-Systeme, keine gekauften Hinweise, keine Werbung. Alle Inhalte, Modi, Hinweise und Enden sind frei zugänglich.**
 
+> **Neu in diesem Repository:** [`bloodmoon/`](bloodmoon/README.md) – *BLOODMOON – Das Erbe der Finsternis*, ein First-Person-Gothic-Horror-Spiel für den Browser (Three.js/TypeScript). Start: `cd bloodmoon && npm install && npm run dev`.
+
 ---
 
 ## ▶️ Spielen

@@ -92,6 +92,15 @@ export class Game {
     const start = async () => {
       splash.removeEventListener("click", start);
       window.removeEventListener("keydown", start);
+      if (input.touch) {
+        // Auf Smartphones: Vollbild und Querformat, soweit der Browser es erlaubt
+        try {
+          const fs = document.documentElement.requestFullscreen?.();
+          fs?.then(() => (screen.orientation as any)?.lock?.("landscape")).catch(() => undefined);
+        } catch {
+          /* nicht unterstützt (z. B. iOS Safari) */
+        }
+      }
       await G.audio.init();
       G.audio.music.play("menu", 4);
       G.audio.setAmbience("exterior");

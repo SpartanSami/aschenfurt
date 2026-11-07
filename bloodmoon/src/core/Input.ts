@@ -10,6 +10,8 @@ export class Input {
   mouseDown = [false, false, false];
   mousePressed = [false, false, false];
   locked = false;
+  /** Touch-Modus (Smartphone/Tablet): Umschauen per Wischen statt Pointer Lock. */
+  touch = false;
   private canvas: HTMLElement | null = null;
   /** Wenn false, werden Spieleingaben ignoriert (z. B. in Menüs). */
   enabled = true;
@@ -17,6 +19,18 @@ export class Input {
 
   attach(canvas: HTMLElement): void {
     this.canvas = canvas;
+    try {
+      this.touch = matchMedia("(pointer: coarse)").matches && navigator.maxTouchPoints > 0;
+    } catch {
+      this.touch = false;
+    }
+    window.addEventListener("touchstart", () => {
+      if (!this.touch) {
+        this.touch = true;
+        document.body.classList.add("touch");
+      }
+    }, { passive: true });
+    if (this.touch) document.body.classList.add("touch");
     window.addEventListener("keydown", (e) => {
       if (e.code === "Tab" || e.code === "Space" || e.code.startsWith("Arrow")) e.preventDefault();
       if (e.ctrlKey && (e.code === "KeyW" || e.code === "KeyS" || e.code === "KeyD")) e.preventDefault();
@@ -59,11 +73,25 @@ export class Input {
     });
   }
 
+  /** Darf die Kamera gerade gesteuert werden (Pointer Lock oder Touch)? */
+  get looking(): boolean {
+    return this.locked || this.touch;
+  }
+
   requestLock(): void {
-    if (!this.canvas || this.locked) return;
+    if (!this.canvas || this.locked || this.touch) return;
     try {
       const p = (this.canvas as any).requestPointerLock?.({ unadjustedMovement: false });
-      if (p && typeof p.catch === "function") p.catch(() => (this.canvas as any).requestPointerLock?.());
+      if (p && typeof p.catch === "function")
+        p.catch(() => {
+          // Manche Browser kennen die Option nicht – ohne Option erneut versuchen.
+          try {
+            const p2 = (this.canvas as any).requestPointerLock?.();
+            if (p2 && typeof p2.catch === "function") p2.catch(() => undefined);
+          } catch {
+            /* ohne Nutzergeste nicht möglich – der Klick-Hinweis bleibt sichtbar */
+          }
+        });
     } catch {
       /* Pointer Lock nicht verfügbar */
     }

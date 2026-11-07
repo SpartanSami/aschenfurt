@@ -75,13 +75,12 @@ export class DialogueSystem {
     const h = G.abilities.hunger;
     this.choices = (node.choices ?? [])
       .map((c, index) => {
-        const onceKey = `${this.def!.id}.${id}.${index}`;
-        const usedOnce = c.once && G.state.data.dialogueSeen["c:" + onceKey];
+        const usedOnce = c.once && G.state.data.dialogueSeen[this.onceKey(c.text)];
         let ok = (!c.if || c.if()) && !usedOnce;
         if (c.hungerMin !== undefined && h < c.hungerMin) ok = false;
         return { choice: c, index, locked: !ok };
       })
-      .filter((c) => !c.locked || (c.choice.lockedHint && !(c.choice.once && G.state.data.dialogueSeen[`c:${this.def!.id}.${id}.${c.index}`])));
+      .filter((c) => !c.locked || (c.choice.lockedHint && !(c.choice.once && G.state.data.dialogueSeen[this.onceKey(c.choice.text)])));
     G.ui.dialogue.showNode(node, this.choices);
     this.canAdvanceAt = performance.now() + 350;
     // Sprachausgabe & Mimik
@@ -94,6 +93,11 @@ export class DialogueSystem {
       if (speakerChar) speakerChar.talk(d);
     });
     this.voiceTimer = estimate;
+  }
+
+  /** „once“-Antworten gelten pro Dialog und Antworttext – auch wenn dieselbe Antwort in mehreren Knoten angeboten wird. */
+  private onceKey(text: string): string {
+    return `c:${this.def!.id}:${text}`;
   }
 
   advance(): void {
@@ -110,8 +114,8 @@ export class DialogueSystem {
     const c = this.choices.find((x) => x.index === i);
     if (!c || c.locked) return;
     if (performance.now() < this.canAdvanceAt) return;
-    const onceKey = `${this.def.id}.${this.nodeId}.${i}`;
-    if (c.choice.once) G.state.data.dialogueSeen["c:" + onceKey] = 1;
+    const onceKey = this.onceKey(c.choice.text);
+    if (c.choice.once) G.state.data.dialogueSeen[onceKey] = 1;
     G.audio.stopVoice();
     G.audio.sfx("uiClick");
     try {
