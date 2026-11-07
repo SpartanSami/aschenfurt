@@ -1,3 +1,35 @@
 import type { LineDef } from "../types";
 
-export const LINES_CH5: Record<string, LineDef> = {};
+export const LINES_CH5: Record<string, LineDef> = {
+  "ch5.well": { s: "sami", t: "Der Gang endet im Brunnen meines eigenen Hofes. Natürlich. Alles in diesem Haus führt nach unten." },
+  "ch5.changed": { s: "sami", t: "Der Mond steht still. Und die Burg blutet aus den Fugen." },
+  "ch5.enter": { s: "sami", t: "Das Torhaus. Diesmal betrete ich die Burg, statt aus ihr zu fliehen." },
+  "ch5.echo": { s: "sami", t: "Ein Echo. Sie gehen den Weg von damals – den Weg zur Krypta." },
+  "ch5.musicbox": { s: "sami", t: "Eine Spieluhr. In meiner alten Spielzeugtruhe. Die lag hier nicht, als ich zuletzt hier war." },
+  "ch5.panel": { s: "sami", t: "In die Wandvertäfelung sind sieben kleine Tasten eingelassen. Wie bei einer Spieluhr." },
+  "ch5.panelHint": { s: "sami", t: "Vielleicht muss ich die Melodie hören, bevor ich sie spielen kann." },
+  "ch5.chamber": { s: "sami", t: "Die Gemächer meiner Mutter. Achtzig Jahre unberührt – bis auf den Staub." },
+  "ch5.mirror": { s: "sami", t: "Ihr Spiegel zeigt den Raum, aber nicht mich. Und nicht sie." },
+  "ch5.fragments": { s: "sami", t: "Vier Bruchstücke jener Nacht. Ich muss sie ordnen, bevor sie mich ordnen." },
+  "ch5.needMore": { s: "sami", t: "Mir fehlen noch Bruchstücke. In der Krypta. Und hier, in ihren Räumen." },
+  "ch5.key": { s: "sami", t: "Ein Schlüssel aus geronnenem Blut. Ihrem Blut. Er ist noch warm." },
+  "ch5.ilyasHere": { s: "sami", t: "Jemand sitzt am Schreibtisch meines Vaters. Ein Mensch." },
+  "ch5.desk": { s: "sami", t: "Unter der Tischplatte – ein Hohlraum. Und eine Scheibe aus Messing mit vier Ringen." },
+  "ch5.decoded": { s: "sami", t: "„Nicht vernichten. Nicht beherrschen. Lösen.“" },
+  "ch5.howl": { s: "sami", t: "Ich habe es Bassem versprochen. Ich heule." },
+  "ch5.noAnswer": { s: "sami", t: "Keine Antwort. Nur der Wind über den Zinnen." },
+  "ch5.bassemComes": { s: "sami", t: "Ein Heulen antwortet. Dann noch eines. Und noch eines." },
+  "ch5.crypt": { s: "sami", t: "Die Krypta. Der Sarkophag, aus dem ich gestiegen bin. Darunter wartet er." },
+  "ch5.cryptLocked": { s: "sami", t: "Der Sarkophag rührt sich nicht. Unter ihm pocht etwas – wie ein Herz hinter einer Tür." },
+  "ch5.cryptOpen": { s: "sami", t: "Der Stein gleitet zur Seite. Eine Treppe, älter als jedes Blut." },
+  "ch5.notReady": { s: "sami", t: "Noch nicht. Ich habe nicht alles, was ich dort unten brauche." },
+  "ch5.hollowHall": { s: "sami", t: "Die Verlorenen sind erwacht. Sie wandern durch die Hallen, als suchten sie etwas." },
+  // Erinnerungen
+  "mem.rit.1": { s: "corvin", t: "Jetzt, Malachias. Jetzt fällt das Licht." },
+  "mem.rit.2": { s: "erste", t: "„Ein Haus. Endlich ein Haus.“" },
+  "mem.rit.3": { s: "ysolde", t: "Nein. Nicht ihn. Hörst du mich? NICHT IHN." },
+  "mem.rit.4": { s: "corvin", t: "Ysolde! Was tust du – deine Hände –" },
+  "mem.rit.5": { s: "ysolde", t: "Was eine Mutter tut, Corvin. Ich schließe die Tür." },
+  "mem.falsch.1": { s: "mine", t: "Es tut mir leid, Sami. Sie hat es so gewollt." },
+  "mem.falsch.2": { s: "erste", t: "„Siehst du? Sie war es. Immer schon sie.“" },
+};

@@ -20,30 +20,35 @@ const box3 = (a: V3, b: V3) => new THREE.Box3(v(a), v(b));
 
 /** Kapitel 1 – Das Erwachen: Burg Drakenfels. */
 export class Ch1Drakenfels extends Level {
-  readonly id = "ch1_drakenfels";
-  readonly chapter = 1;
-  readonly title = "Das Erwachen";
-  readonly location = "Burg Drakenfels";
+  readonly id: string = "ch1_drakenfels";
+  readonly chapter: number = 1;
+  readonly title: string = "Das Erwachen";
+  readonly location: string = "Burg Drakenfels";
   override music = "crypt";
+  /** 1 = Erwachen, 5 = Rückkehr der Blutlinie (gleiche Burg, verwandelt) */
+  protected variant: 1 | 5 = 1;
+  protected get v1(): boolean {
+    return this.variant === 1;
+  }
 
-  private passageSlab!: THREE.Mesh;
-  private passageBlocker!: ReturnType<Level["col"]["addBlocker"]>;
-  private portcullis!: THREE.Group;
-  private portBlocker!: ReturnType<Level["col"]["addBlocker"]>;
-  private portState: "down" | "rising" | "up" | "falling" = "down";
-  private portT = 0;
-  private statue!: THREE.Group;
-  private statueSeen = false;
-  private statueTurned = false;
-  private cloth!: THREE.Mesh;
-  private ruprecht: Character | null = null;
-  private chest!: THREE.Group;
-  private horseMesh: THREE.Object3D | null = null;
-  private horseOnChest: THREE.Object3D | null = null;
-  private galleryDoor!: Door;
-  private hollow: Enemy | null = null;
-  private mineFigure: Character | null = null;
-  private terrainH = (x: number, z: number) => 8 + (fbm((((x + 500) / 80) % 1 + 1) % 1, (((z + 500) / 80) % 1 + 1) % 1, 3, 3, 9) - 0.5) * 0.6;
+  protected passageSlab!: THREE.Mesh;
+  protected passageBlocker!: ReturnType<Level["col"]["addBlocker"]>;
+  protected portcullis!: THREE.Group;
+  protected portBlocker!: ReturnType<Level["col"]["addBlocker"]>;
+  protected portState: "down" | "rising" | "up" | "falling" = "down";
+  protected portT = 0;
+  protected statue!: THREE.Group;
+  protected statueSeen = false;
+  protected statueTurned = false;
+  protected cloth!: THREE.Mesh;
+  protected ruprecht: Character | null = null;
+  protected chest!: THREE.Group;
+  protected horseMesh: THREE.Object3D | null = null;
+  protected horseOnChest: THREE.Object3D | null = null;
+  protected galleryDoor!: Door;
+  protected hollow: Enemy | null = null;
+  protected mineFigure: Character | null = null;
+  protected terrainH = (x: number, z: number) => 8 + (fbm((((x + 500) / 80) % 1 + 1) % 1, (((z + 500) / 80) % 1 + 1) % 1, 3, 3, 9) - 0.5) * 0.6;
 
   override requiredSurfaces(): SurfaceName[] {
     return ["cryptStone", "cryptFloor", "castleStone", "castleStoneDark", "castleFloor", "woodDark", "woodOld", "woodFloor", "iron", "ironRusty", "bone", "velvet", "gold", "silver", "clothLinen", "plaster", "grass", "forest", "bark", "rock", "roofSlate", "marbleBlack", "leather", "clothDark"];
@@ -76,7 +81,7 @@ export class Ch1Drakenfels extends Level {
     this.spawn("courtyard", [-13, 8.1, 15], Math.PI);
   }
 
-  private setupZones(): void {
+  protected setupZones(): void {
     this.zone("crypt", [-6, -1, -11], [6, 7, 11], { reverb: "crypt", ambience: "crypt", fogDensity: 0.05, ambientIntensity: 0.5, music: "crypt" });
     this.zone("ossuary", [5, -1, -10], [30, 5, -5], { reverb: "crypt", ambience: "crypt", fogDensity: 0.08, ambientIntensity: 0.12, hemiIntensity: 0.06, fogColor: 0x050508 });
     this.zone("stair", [30, -1, -20], [40, 13, -4], { reverb: "hall", ambience: "castle", fogDensity: 0.04, ambientIntensity: 0.5, music: "castle" });
@@ -91,7 +96,7 @@ export class Ch1Drakenfels extends Level {
   // ===========================================================================
   // Krypta
   // ===========================================================================
-  private buildCrypt(): void {
+  protected buildCrypt(): void {
     const st = materials.surface("cryptStone");
     const fl = materials.surface("cryptFloor");
     const dark = materials.surface("castleStoneDark");
@@ -141,7 +146,7 @@ export class Ch1Drakenfels extends Level {
       id: "sarc", pos: v([0, 1.0, 1]), radius: 2.6, prompt: "Inschrift lesen", angle: 0.7,
       onInteract: () => {
         G.story.readDocument("sarkophag");
-        if (!this.st.sarcRead) {
+        if (!this.st.sarcRead && this.v1) {
           this.st.sarcRead = true;
           setTimeout(() => G.story.say("ch1.wake2"), 400);
           this.unlockBloodSight(8);
@@ -190,7 +195,7 @@ export class Ch1Drakenfels extends Level {
     this.col.addBox([0, 1.5, 10], [2.4, 3, 0.3]);
     P.rubble(this, [0, 0, 11.6], 1.3, 18, 4, materials.surface("cryptStone"));
     this.box(st, [0, 1.5, 12.6], [2.6, 3, 0.4]);
-    this.interact({ id: "gate", pos: v([0, 1.3, 9.8]), radius: 2.4, prompt: "Gitter untersuchen", onInteract: () => {
+    this.interact({ id: "gate", pos: v([0, 1.3, 9.8]), radius: 2.4, prompt: "Gitter untersuchen", enabled: () => this.v1, onInteract: () => {
       G.story.say("ch1.gate");
       this.unlockBloodSight(4);
     } });
@@ -247,7 +252,7 @@ export class Ch1Drakenfels extends Level {
     this.add(crest);
   }
 
-  private unlockBloodSight(delay: number): void {
+  protected unlockBloodSight(delay: number): void {
     if (G.abilities.has("bloodsight") || this.st.bsPending) return;
     this.st.bsPending = true;
     setTimeout(async () => {
@@ -259,7 +264,7 @@ export class Ch1Drakenfels extends Level {
     }, delay * 1000);
   }
 
-  private async openPassage(): Promise<void> {
+  protected async openPassage(): Promise<void> {
     if (this.st.passage) return;
     this.st.passage = true;
     G.story.say("ch1.lever");
@@ -273,7 +278,7 @@ export class Ch1Drakenfels extends Level {
     this.passageBlocker.enabled = false;
   }
 
-  private async memSiegel(): Promise<void> {
+  protected async memSiegel(): Promise<void> {
     if (!G.abilities.has("bloodmemory")) G.abilities.unlock("bloodmemory");
     await G.story.say("ch1.memhint");
     await G.story.playMemory("m_siegel", [
@@ -295,11 +300,11 @@ export class Ch1Drakenfels extends Level {
     this.checkMemories();
   }
 
-  private checkMemories(): void {
+  protected checkMemories(): void {
     if (G.state.hasMemory("m_siegel") && G.state.hasMemory("m_festmahl")) G.quests.task("q_erwachen", "erinnerung");
   }
 
-  private pickupVial(id: string, pos: V3): void {
+  protected pickupVial(id: string, pos: V3): void {
     if (this.st[id]) return;
     const g = new THREE.Group();
     const glass = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.035, 0.13, 10), materials.basic("vialGlass", () => new THREE.MeshStandardMaterial({ color: 0x5a0a10, emissive: 0x400005, emissiveIntensity: 0.6, roughness: 0.1, transparent: true, opacity: 0.9 })));
@@ -324,7 +329,7 @@ export class Ch1Drakenfels extends Level {
   // ===========================================================================
   // Gebeingang
   // ===========================================================================
-  private buildOssuary(): void {
+  protected buildOssuary(): void {
     const st = materials.surface("cryptStone");
     const fl = materials.surface("cryptFloor");
     const dark = materials.surface("castleStoneDark");
@@ -378,7 +383,7 @@ export class Ch1Drakenfels extends Level {
     // Durchgang zum Treppenhaus
     this.box(dark, [30, 1.3, -6.5], [0.6, 0.2, 2.4], { collide: false });
 
-    this.trigger("ossEnter", [6.5, 0, -8], [8, 3, -5], () => {
+    if (this.v1) this.trigger("ossEnter", [6.5, 0, -8], [8, 3, -5], () => {
       G.quests.task("q_erwachen", "krypta");
       G.save.checkpoint();
     });
@@ -409,7 +414,7 @@ export class Ch1Drakenfels extends Level {
   // ===========================================================================
   // Treppenhaus
   // ===========================================================================
-  private buildStairwell(): void {
+  protected buildStairwell(): void {
     const st = materials.surface("castleStone");
     const fl = materials.surface("castleFloor");
     const dark = materials.surface("castleStoneDark");
@@ -462,10 +467,10 @@ export class Ch1Drakenfels extends Level {
       },
     });
     if (G.horror.done("ch1_stairFigure")) this.spawnHorse();
-    this.trigger("stairTop", [30, 8, -16], [33, 11, -12], () => G.save.checkpoint());
+    if (this.v1) this.trigger("stairTop", [30, 8, -16], [33, 11, -12], () => G.save.checkpoint());
   }
 
-  private spawnHorse(): void {
+  protected spawnHorse(): void {
     if (G.state.hasItem("holzpferd") || G.quests.isDone("q_holzpferd") || this.horseMesh) return;
     const g = this.horseGroup();
     g.position.set(31.6, 8, -15.2);
@@ -480,7 +485,7 @@ export class Ch1Drakenfels extends Level {
     } });
   }
 
-  private horseGroup(): THREE.Group {
+  protected horseGroup(): THREE.Group {
     const w = materials.tinted("woodOld", 0xc8a070);
     const g = new THREE.Group();
     const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.05, 0.14, 4, 8), w);
@@ -503,7 +508,7 @@ export class Ch1Drakenfels extends Level {
   // ===========================================================================
   // Ahnengalerie
   // ===========================================================================
-  private buildGallery(): void {
+  protected buildGallery(): void {
     const st = materials.surface("castleStone");
     const fl = materials.surface("woodFloor");
     const dark = materials.surface("castleStoneDark");
@@ -585,10 +590,11 @@ export class Ch1Drakenfels extends Level {
         G.story.say("ch1.whisper");
       },
     });
-    this.trigger("galleryEnter", [26, y, -16], [29.5, y + 4, -12], () => G.story.say("ch1.gallery"));
-    this.trigger("bloodwall", [21, y, -14], [26, y + 4, -12], () => G.story.say("ch1.bloodwall"), { condition: () => this.playerSees(v([24, y + 1.4, -12.4]), 0.7) });
+    if (this.v1) this.trigger("galleryEnter", [26, y, -16], [29.5, y + 4, -12], () => G.story.say("ch1.gallery"));
+    if (this.v1) this.trigger("bloodwall", [21, y, -14], [26, y + 4, -12], () => G.story.say("ch1.bloodwall"), { condition: () => this.playerSees(v([24, y + 1.4, -12.4]), 0.7) });
     // Statue beobachten
     this.onUpdate(() => {
+      if (!this.v1) return;
       if (this.statueTurned && this.st.statueRemarked) return;
       const head = v([5.2, y + 2.6, -14]);
       const inGallery = G.player.position.x > 6 && G.player.position.x < 30 && G.player.position.y > 7 && G.player.position.z > -16.5 && G.player.position.z < -11.5;
@@ -610,7 +616,7 @@ export class Ch1Drakenfels extends Level {
     });
   }
 
-  private async revealPortrait(): Promise<void> {
+  protected async revealPortrait(): Promise<void> {
     if (this.st.cloth) {
       G.story.say("ch1.portrait");
       return;
@@ -635,7 +641,7 @@ export class Ch1Drakenfels extends Level {
   // ===========================================================================
   // Arbeitszimmer
   // ===========================================================================
-  private buildStudy(): void {
+  protected buildStudy(): void {
     const st = materials.surface("castleStone");
     const fl = materials.surface("woodFloor");
     const wood = materials.surface("woodDark");
@@ -708,10 +714,10 @@ export class Ch1Drakenfels extends Level {
     plate.rotation.y = -Math.PI / 2;
     this.add(plate);
     this.interact({ id: "chest", pos: v([12.2, y + 0.6, -17.4]), radius: 2.2, prompt: () => (this.st.chestOpen ? "" : "Symbolräder der Truhe drehen"), enabled: () => !this.st.chestOpen, onInteract: () => this.chestPuzzle() });
-    this.trigger("studyEnter", [5, y, -21], [13, y + 3, -16.5], () => G.story.say("ch1.study"));
+    if (this.v1) this.trigger("studyEnter", [5, y, -21], [13, y + 3, -16.5], () => G.story.say("ch1.study"));
   }
 
-  private async chestPuzzle(): Promise<void> {
+  protected async chestPuzzle(): Promise<void> {
     G.quests.start("q_wappen", false);
     if (!this.st.chestHint) {
       this.st.chestHint = true;
@@ -753,14 +759,14 @@ export class Ch1Drakenfels extends Level {
   // ===========================================================================
   // Kinderzimmer
   // ===========================================================================
-  private buildNursery(): void {
+  protected buildNursery(): void {
     const pl = materials.surface("plaster");
     const fl = materials.surface("woodFloor");
     const wood = materials.surface("woodOld");
     const y = 8;
     this.floor(fl, 18, -22, 24, -16, y);
     wall(this, pl, [17.6, -22.4], [24.4, -22.4], y, 3.6, 0.8);
-    wall(this, pl, [17.6, -22.4], [17.6, -16], y, 3.6, 0.8);
+    wall(this, pl, [17.6, -22.4], [17.6, -16], y, 3.6, 0.8, this.v1 ? [] : [{ at: 3.2, w: 1.2, h: 2.3, kind: "rect" }]);
     wall(this, pl, [24.4, -22.4], [24.4, -16], y, 3.6, 0.8, [{ at: 3.2, w: 1.0, h: 1.8, y: 1.0, kind: "round", glass: materials.glassMoon(1.4), frame: materials.surface("woodDark") }]);
     this.ceiling(materials.surface("woodDark"), 17.6, -22.4, 24.4, -16, y + 3.6, 0.3);
     this.door({ id: "nursery", pos: [21, y, -16.4], rotY: 0, width: 1.5, height: 2.6, kind: "wood", hinge: "right", swing: 1.6 });
@@ -778,17 +784,17 @@ export class Ch1Drakenfels extends Level {
     // Spielzeug auf dem Boden
     for (let i = 0; i < 6; i++) this.box(materials.tinted("woodOld", 0xa08060), [20 + Math.sin(i * 2) * 1.2, y + 0.05, -18.5 + Math.cos(i * 3) * 1], [0.1, 0.1, 0.1], { rotY: i, collide: false });
     if (G.quests.isDone("q_holzpferd")) this.placeHorseOnChest();
-    this.interact({ id: "toychest", pos: v([22.8, y + 0.6, -21.6]), radius: 2.2, prompt: () => (G.state.hasItem("holzpferd") ? "Holzpferd zurückstellen" : "Spielzeugtruhe"), enabled: () => !G.quests.isDone("q_holzpferd"), onInteract: () => {
+    this.interact({ id: "toychest", pos: v([22.8, y + 0.6, -21.6]), radius: 2.2, prompt: () => (G.state.hasItem("holzpferd") ? "Holzpferd zurückstellen" : "Spielzeugtruhe"), enabled: () => this.v1 && !G.quests.isDone("q_holzpferd"), onInteract: () => {
       if (!G.state.hasItem("holzpferd")) {
         G.ui.notify("Eine leere Spielzeugtruhe. Auf dem Deckel ist ein heller Fleck im Staub – als hätte dort lange etwas gestanden.", "info");
         return;
       }
       this.memLullaby();
     } });
-    this.trigger("nurseryEnter", [18, y, -22], [24, y + 3, -17], () => G.story.say("ch1.nursery"));
+    if (this.v1) this.trigger("nurseryEnter", [18, y, -22], [24, y + 3, -17], () => G.story.say("ch1.nursery"));
   }
 
-  private placeHorseOnChest(): void {
+  protected placeHorseOnChest(): void {
     if (this.horseOnChest) return;
     const g = this.horseGroup();
     g.position.set(22.8, 8.62, -21.6);
@@ -797,7 +803,7 @@ export class Ch1Drakenfels extends Level {
     this.horseOnChest = g;
   }
 
-  private async memLullaby(): Promise<void> {
+  protected async memLullaby(): Promise<void> {
     G.inventory.remove("holzpferd");
     this.placeHorseOnChest();
     G.audio.sfx("lullabyBox", v([22.8, 8.8, -21.6]));
@@ -820,7 +826,7 @@ export class Ch1Drakenfels extends Level {
   // ===========================================================================
   // Thronsaal
   // ===========================================================================
-  private buildThroneHall(): void {
+  protected buildThroneHall(): void {
     const st = materials.surface("castleStone");
     const dark = materials.surface("castleStoneDark");
     const fl = materials.surface("castleFloor");
@@ -851,6 +857,7 @@ export class Ch1Drakenfels extends Level {
       id: "throne", pos: [4.4, y, -14], rotY: Math.PI / 2, width: 2.0, height: 3.0, kind: "dark", hinge: "right", swing: -1.7, prompt: "Wappentür öffnen",
       locked: { item: "siegelring", message: "Das Portal trägt das Wappen des Hauses. In der Mitte eine Vertiefung, wie für einen Ring." },
       onOpen: () => {
+        if (!this.v1) return;
         G.quests.task("q_erwachen", "thronsaal");
         G.story.say("ch1.throneEnter");
         G.levels.playMusic("castle");
@@ -861,7 +868,7 @@ export class Ch1Drakenfels extends Level {
     crestDoor.position.set(4.62, y + 1.9, -14);
     crestDoor.rotation.y = Math.PI / 2;
     this.add(crestDoor);
-    this.trigger("throneDoorHint", [4.5, y, -16], [7, y + 3, -12], () => {
+    if (this.v1) this.trigger("throneDoorHint", [4.5, y, -16], [7, y + 3, -12], () => {
       if (!G.state.hasItem("siegelring")) G.story.say("ch1.throneDoor");
     });
     // Thron
@@ -908,8 +915,8 @@ export class Ch1Drakenfels extends Level {
       }
     } });
     // Mondsicht durch die Fenster
-    this.trigger("moonLook", [-24, y, -14], [4, y + 6, -2], () => G.story.say("ch1.moon"), { condition: () => this.playerSees(v([-7, y + 5, -1.6]), 0.75, false) || this.playerSees(v([-19, y + 5, -1.6]), 0.75, false) });
-    this.trigger("feast", [-6, y, -18], [0, y + 4, -10], () => G.story.say("ch1.feast"));
+    if (this.v1) this.trigger("moonLook", [-24, y, -14], [4, y + 6, -2], () => G.story.say("ch1.moon"), { condition: () => this.playerSees(v([-7, y + 5, -1.6]), 0.75, false) || this.playerSees(v([-19, y + 5, -1.6]), 0.75, false) });
+    if (this.v1) this.trigger("feast", [-6, y, -18], [0, y + 4, -10], () => G.story.say("ch1.feast"));
     for (const x of [-19, -7]) moonShaft(this, new THREE.Vector3(x, y + 6.5, -1.8), new THREE.Vector3(x + 1.2, y, -10.5), 2.0, 0xa03040, 0.06);
     P.candelabrum(this, [1.6, y, -9.4], 0, 5, true, 1.7, 3, true);
     P.candelabrum(this, [1.6, y, -18.6], 0, 5, true, 1.7, 3, false);
@@ -930,7 +937,7 @@ export class Ch1Drakenfels extends Level {
       this.col.circles.push({ pos: r.root.position, radius: 0.4, height: 1.6, enabled: true });
       this.ruprecht = r;
       P.chair(this, [-4.0, y, -14], -Math.PI / 2, false, materials.surface("woodDark"), true);
-      this.interact({ id: "ruprecht", pos: v([-4.0, y + 1.1, -14]), radius: 2.6, prompt: "Die sitzende Gestalt ansprechen", enabled: () => !G.state.is("ruprechtGone"), onInteract: () => this.talkRuprecht() });
+      this.interact({ id: "ruprecht", pos: v([-4.0, y + 1.1, -14]), radius: 2.6, prompt: () => (this.v1 ? "Die sitzende Gestalt ansprechen" : "Ruprecht ansprechen"), enabled: () => !G.state.is("ruprechtGone"), onInteract: () => this.talkRuprecht() });
       G.horror.register({
         id: "ch1_seated", area: box3([-2, y - 1, -18], [4.4, y + 4, -10]), major: true,
         run: async () => {
@@ -955,9 +962,9 @@ export class Ch1Drakenfels extends Level {
     P.rug(this, [-12, y, -14], 18, 3, 0, 33);
   }
 
-  private async talkRuprecht(): Promise<void> {
+  protected async talkRuprecht(): Promise<void> {
     if (!this.ruprecht) return;
-    await G.dialogue.start("ch1_ruprecht", this.ruprecht);
+    await G.dialogue.start(this.v1 ? "ch1_ruprecht" : "ch5_ruprecht", this.ruprecht);
     if (G.state.is("ruprechtGone") && this.ruprecht) {
       const r = this.ruprecht;
       this.ruprecht = null;
@@ -975,7 +982,7 @@ export class Ch1Drakenfels extends Level {
     }
   }
 
-  private async memFeast(): Promise<void> {
+  protected async memFeast(): Promise<void> {
     const y = 8;
     await G.story.playMemory("m_festmahl", [
       { ghost: "co", preset: PRESETS.corvin, pos: [-17.6, y, -14], yaw: Math.PI / 2, pose: "raiseArms" },
@@ -1006,7 +1013,7 @@ export class Ch1Drakenfels extends Level {
   // ===========================================================================
   // Torhaus
   // ===========================================================================
-  private buildGatehouse(): void {
+  protected buildGatehouse(): void {
     const st = materials.surface("castleStone");
     const dark = materials.surface("castleStoneDark");
     const fl = materials.surface("castleFloor");
@@ -1067,8 +1074,8 @@ export class Ch1Drakenfels extends Level {
       this.portBlocker.enabled = false;
     }
     this.onUpdate((dt) => this.updatePortcullis(dt));
-    this.trigger("gatehouse", [-16, y, 0], [-10, y + 4, 4], () => this.startGatehouseFight());
-    this.trigger("pastGate", [-16, y, 10.6], [-10, y + 4, 13], () => {
+    if (this.v1) this.trigger("gatehouse", [-16, y, 0], [-10, y + 4, 4], () => this.startGatehouseFight());
+    if (this.v1) this.trigger("pastGate", [-16, y, 10.6], [-10, y + 4, 13], () => {
       if (!this.st.gateOpen) {
         this.st.gateOpen = true;
         this.portBlocker.enabled = false;
@@ -1079,7 +1086,7 @@ export class Ch1Drakenfels extends Level {
     });
   }
 
-  private startGatehouseFight(): void {
+  protected startGatehouseFight(): void {
     if (this.st.hollowDead) return;
     G.story.say("ch1.gatehouse");
     setTimeout(() => {
@@ -1116,7 +1123,7 @@ export class Ch1Drakenfels extends Level {
     setTimeout(check, 3000);
   }
 
-  private async pullLever(arm: THREE.Mesh): Promise<void> {
+  protected async pullLever(arm: THREE.Mesh): Promise<void> {
     if (!this.st.hollowDead && this.hollow?.alive) {
       G.ui.notify("Nicht jetzt.", "warn");
       return;
@@ -1136,7 +1143,7 @@ export class Ch1Drakenfels extends Level {
     }
   }
 
-  private updatePortcullis(dt: number): void {
+  protected updatePortcullis(dt: number): void {
     const y0 = 8;
     if (this.st.gateOpen) return;
     this.portT += dt;
@@ -1169,7 +1176,7 @@ export class Ch1Drakenfels extends Level {
   // ===========================================================================
   // Burghof
   // ===========================================================================
-  private buildCourtyard(): void {
+  protected buildCourtyard(): void {
     const st = materials.surface("castleStone");
     const dark = materials.surface("castleStoneDark");
     const roof = materials.surface("roofSlate");
@@ -1220,16 +1227,16 @@ export class Ch1Drakenfels extends Level {
     const flock = new Flock(new THREE.Vector3(-10, 34, 34), 10, 22);
     this.scene.add(flock.group);
     this.onUpdate((_dt, t) => flock.update(t));
-    this.trigger("yard", [-16, 6, 12], [-10, 12, 16], () => G.story.say("ch1.outside"));
+    if (this.v1) this.trigger("yard", [-16, 6, 12], [-10, 12, 16], () => G.story.say("ch1.outside"));
     // Mine auf dem Wehrgang
     G.horror.register({
       id: "ch1_mine", area: box3([-30, 6, 28], [20, 14, 46]), major: true, minTime: 1,
       run: () => this.showMine(),
     });
-    this.trigger("end", [-17, 6, 50], [-9, 14, 58], () => this.endChapter(), { condition: () => G.horror.done("ch1_mine") });
+    if (this.v1) this.trigger("end", [-17, 6, 50], [-9, 14, 58], () => this.endChapter(), { condition: () => G.horror.done("ch1_mine") });
   }
 
-  private async showMine(): Promise<void> {
+  protected async showMine(): Promise<void> {
     const c = new Character(PRESETS.mine);
     c.root.position.set(20.2, 16.8, 40);
     c.root.rotation.y = -Math.PI / 2;
@@ -1244,7 +1251,7 @@ export class Ch1Drakenfels extends Level {
     this.light({ pos: [19, 18.5, 40], color: new THREE.Color(0.9, 0.3, 0.3), intensity: 3, distance: 6, flicker: 0.1 });
   }
 
-  private async endChapter(): Promise<void> {
+  protected async endChapter(): Promise<void> {
     await G.story.cutscene(async () => {
       const mp = v([20.2, 18.4, 40]);
       G.player.lookAt(mp, 1.6);

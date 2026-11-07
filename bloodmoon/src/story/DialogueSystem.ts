@@ -65,6 +65,13 @@ export class DialogueSystem {
     } catch (err) {
       console.error("[Dialog] Aktion", this.def.id, id, err);
     }
+    if (!this.active) return;
+    // Weiche ohne eigenen Text: direkt weiter
+    if (!node.text && !(node.choices && node.choices.length)) {
+      const n = node.next;
+      this.show(typeof n === "function" ? n() : n ?? "end");
+      return;
+    }
     const h = G.abilities.hunger;
     this.choices = (node.choices ?? [])
       .map((c, index) => {
