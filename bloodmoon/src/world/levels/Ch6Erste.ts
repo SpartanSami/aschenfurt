@@ -63,7 +63,7 @@ export class Ch6Erste extends Level {
     this.zone("descent", [-3, YB - 1, -16], [3, 6, 5], { reverb: "cave", fogDensity: 0.05 }, 1);
     this.zone("loop", [-3, YB - 1, -56], [3, YB + 6, -15], { reverb: "crypt", fogDensity: 0.07, fogColor: 0x120204 }, 2);
     this.zone("trial", [-62, YB - 1, -56], [-18, YB + 20, -10], { reverb: "cathedral", fogDensity: 0.035, music: "memory" }, 2);
-    this.zone("heart", [-160, YH - 5, -70], [-92, 30, 4], { reverb: "void", fogDensity: 0.028, music: "finale", ambientIntensity: 0.6 }, 2);
+    this.zone("heart", [-160, YH - 5, -70], [-92, 30, 4], { reverb: "void", fogDensity: 0.011, music: "finale", ambientIntensity: 0.9, hemiIntensity: 0.7, fogColor: 0x2a0608 }, 2);
     this.spawn("start", [0, 0.05, 2.6], 0);
     this.spawn("trial", [-24, YB + 0.05, -33], Math.PI / 2);
     this.spawn("heart", [-104, YH + 0.05, -33], Math.PI / 2);
@@ -449,7 +449,7 @@ export class Ch6Erste extends Level {
     domeMesh.position.set(hx, YH, hz);
     this.add(domeMesh);
     // Riesige Rippen wie ein Brustkorb
-    for (let i = -3; i <= 3; i++) this.rib(hx + i * 6, hz, YH, 50, 26 - Math.abs(i) * 2, false, 0.9);
+    for (let i = -3; i <= 3; i++) this.rib(hx + i * 6, hz, YH, 50, 26 - Math.abs(i) * 2, true, 0.9);
     // Siegelring
     this.ring = new THREE.Mesh(new THREE.TorusGeometry(7, 0.5, 12, 64), materials.basic("sealRing", () => new THREE.MeshStandardMaterial({ color: 0x1a0204, emissive: 0xff2010, emissiveIntensity: 2, roughness: 0.4 })));
     this.ring.position.set(hx - 13, YH + 8, hz);
@@ -459,8 +459,15 @@ export class Ch6Erste extends Level {
     sealFace.position.copy(this.ring.position);
     sealFace.rotation.y = Math.PI / 2;
     this.add(sealFace);
-    this.light({ pos: [hx - 12, YH + 8, hz], color: new THREE.Color(1, 0.1, 0.06), intensity: 9, distance: 30, flicker: 0.15 });
-    this.light({ pos: [hx + 8, YH + 6, hz], color: new THREE.Color(1, 0.3, 0.2), intensity: 4, distance: 20, flicker: 0.2 });
+    this.light({ pos: [hx - 12, YH + 8, hz], color: new THREE.Color(1, 0.1, 0.06), intensity: 14, distance: 36, flicker: 0.15 });
+    this.light({ pos: [hx + 8, YH + 6, hz], color: new THREE.Color(1, 0.3, 0.2), intensity: 6, distance: 24, flicker: 0.2 });
+    this.light({ pos: [hx - 30, YH + 18, hz], color: new THREE.Color(1, 0.05, 0.04), intensity: 20, distance: 40, flicker: 0.05 });
+    this.light({ pos: [hx, YH + 14, hz + 18], color: new THREE.Color(0.8, 0.15, 0.2), intensity: 8, distance: 30, flicker: 0.1 });
+    this.light({ pos: [hx, YH + 14, hz - 18], color: new THREE.Color(0.8, 0.15, 0.2), intensity: 8, distance: 30, flicker: 0.1 });
+    // Gegenlicht hinter dem Ersten
+    const back = new THREE.PointLight(0xff2010, 600, 60, 1.4);
+    back.position.set(hx - 34, YH + 16, hz);
+    this.scene.add(back);
     // Plattform
     const plat = cylGeo(6, 6.5, 0.6, 32);
     this.geo(plat, materials.surface("castleStoneDark"), [hx + 3, YH + 0.3, hz], [0, 0, 0], 1, { collide: true });

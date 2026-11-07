@@ -23,7 +23,7 @@ export const PRESETS: Record<string, CharacterPreset> = {
       lipColor: "rgba(95,12,30,0.92)", seed: 23,
     },
     hair: { style: "long", color: "#0c0808" },
-    outfit: { top: "dress", topMat: "velvet", topTint: 0x6a3a44, skirt: 1, skirtMat: "clothDark", legMat: "clothDark", bootMat: "leather", collar: "high", sleeveMat: "clothDark", gem: 0x9a0a14, mantle: "cloth", mantleMat: "clothDark" },
+    outfit: { top: "dress", topMat: "velvet", topTint: 0x6a3a44, skirt: 1, skirtMat: "clothDark", legMat: "clothDark", bootMat: "leather", collar: "high", sleeveMat: "clothDark", gem: 0x9a0a14, trim: "silver" },
   },
   bassem: {
     id: "bassem", name: "Bassem", height: 1.93, build: "broad",

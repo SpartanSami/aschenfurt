@@ -52,7 +52,7 @@ export class Ch4Ebon extends Level {
 
   async build(): Promise<void> {
     this.env = {
-      ...this.env, fogColor: 0x120a0e, fogDensity: 0.018, ambientColor: 0x5a4650, ambientIntensity: 0.55, hemiSky: 0x6a4a5a, hemiGround: 0x140808,
+      ...this.env, fogColor: 0x1a0e14, fogDensity: 0.016, ambientColor: 0x6a5460, ambientIntensity: 0.65, hemiSky: 0x6a4a5a, hemiGround: 0x140808,
       hemiIntensity: 0.45, moonIntensity: 3.5, reverb: "cathedral", ambience: "cathedral", surface: "stone", exposure: 1.3,
     };
     const moonDir = new THREE.Vector3(0.75, 0.6, 0.2).normalize();
@@ -402,7 +402,7 @@ export class Ch4Ebon extends Level {
       if (!this.mine && G.quests.taskDone("q_dynastie", "mine")) this.placeMine([0, 0.4, -43.2], Math.PI);
       return;
     }
-    this.placeMine([0, 0.4, -42.6], Math.PI);
+    this.placeMine([0, 0.4, -42.6], 0);
     G.story.say("ch4.mineAppears");
     this.interact({ id: "mine", pos: v([0, 2.0, -42.6]), radius: 3.2, prompt: "Mit Mine sprechen", enabled: () => !G.quests.taskDone("q_dynastie", "mine"), onInteract: async () => {
       await G.dialogue.start("ch4_mine", this.mine);

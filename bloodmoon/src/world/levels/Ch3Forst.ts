@@ -61,8 +61,8 @@ export class Ch3Forst extends Level {
 
   async build(): Promise<void> {
     this.env = {
-      ...this.env, fogColor: 0x0c100e, fogDensity: 0.04, ambientColor: 0x4a5a52, ambientIntensity: 0.5, hemiSky: 0x506a60, hemiGround: 0x0c0a08,
-      hemiIntensity: 0.55, moonIntensity: 2.0, reverb: "forest", ambience: "forest", surface: "dirt", exposure: 1.3,
+      ...this.env, fogColor: 0x141a18, fogDensity: 0.032, ambientColor: 0x5a6a62, ambientIntensity: 0.6, hemiSky: 0x506a60, hemiGround: 0x0c0a08,
+      hemiIntensity: 0.9, moonIntensity: 3.6, reverb: "forest", ambience: "forest", surface: "dirt", exposure: 1.4,
     };
     const moonDir = new THREE.Vector3(0.5, 0.55, -0.65).normalize();
     this.setupSky({ moonDir, redness: 0.95, cloudiness: 0.45, moonSize: 0.05, zenith: 0x040606, horizon: 0x0e1410 });

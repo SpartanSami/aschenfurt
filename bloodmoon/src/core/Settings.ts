@@ -33,7 +33,7 @@ export const defaultSettings: SettingsData = {
   fov: 72,
   quality: "hoch",
   renderScale: 1,
-  brightness: 1,
+  brightness: 1.12,
   subtitles: true,
   subtitleSize: "mittel",
   headBob: true,

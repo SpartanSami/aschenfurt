@@ -1,0 +1,2027 @@
+[
+  {
+    "id": "hunger.1",
+    "speaker": "sami",
+    "text": "Trink. Nur ein wenig. Niemand würde es merken."
+  },
+  {
+    "id": "hunger.2",
+    "speaker": "sami",
+    "text": "Ich höre Herzen schlagen, die ich nicht sehe."
+  },
+  {
+    "id": "hunger.3",
+    "speaker": "sami",
+    "text": "Wie lange noch, bis ich nicht mehr frage?"
+  },
+  {
+    "id": "hunger.4",
+    "speaker": "sami",
+    "text": "Der Durst spricht mit meiner Stimme. Das ist das Schlimmste daran."
+  },
+  {
+    "id": "ch1.intro1",
+    "speaker": "sami",
+    "text": "Dunkelheit. Stein unter meinen Händen. Und ein Geschmack von Eisen."
+  },
+  {
+    "id": "ch1.intro2",
+    "speaker": "sami",
+    "text": "Wie lange …? Ich weiß nicht einmal, wie lange."
+  },
+  {
+    "id": "ch1.wake1",
+    "speaker": "sami",
+    "text": "Der Deckel ist zerbrochen. Von innen."
+  },
+  {
+    "id": "ch1.wake2",
+    "speaker": "sami",
+    "text": "Mein Name. Auf meinem eigenen Sarg."
+  },
+  {
+    "id": "ch1.candle",
+    "speaker": "sami",
+    "text": "Diese Kerze brennt. Sie ist nicht älter als eine Nacht. Jemand war hier."
+  },
+  {
+    "id": "ch1.gate",
+    "speaker": "sami",
+    "text": "Verschlossen. Und das Schloss sitzt auf der anderen Seite. Man wollte nicht, dass ich hinausgehe."
+  },
+  {
+    "id": "ch1.smell",
+    "speaker": "sami",
+    "text": "Ich rieche es. Altes Blut. Überall um mich herum."
+  },
+  {
+    "id": "ch1.trail",
+    "speaker": "sami",
+    "text": "Eine Spur. Jemand hat sich vom Sarkophag zur Wand geschleppt – mit blutigen Händen."
+  },
+  {
+    "id": "ch1.lever",
+    "speaker": "sami",
+    "text": "Der steinerne Rabe. Er gibt nach."
+  },
+  {
+    "id": "ch1.memhint",
+    "speaker": "sami",
+    "text": "Dieses Blut ist anders. Es … erinnert sich."
+  },
+  {
+    "id": "ch1.afterSiegel",
+    "speaker": "sami",
+    "text": "Diese Hände. Ich kenne diese Hände."
+  },
+  {
+    "id": "ch1.dark",
+    "speaker": "sami",
+    "text": "Kein Licht. Und trotzdem gewöhnen sich meine Augen. Sie erinnern sich an die Dunkelheit."
+  },
+  {
+    "id": "ch1.steps",
+    "speaker": "sami",
+    "text": "Schritte. Da vorn ist jemand."
+  },
+  {
+    "id": "ch1.figureGone",
+    "speaker": "sami",
+    "text": "… Niemand. Aber dort stand jemand. Ich bin mir sicher."
+  },
+  {
+    "id": "ch1.stairFigure",
+    "speaker": "sami",
+    "text": "Dort oben – auf dem Absatz."
+  },
+  {
+    "id": "ch1.horse",
+    "speaker": "sami",
+    "text": "Ein Holzpferd. Mit einem S in der Flanke. Meins?"
+  },
+  {
+    "id": "ch1.gallery",
+    "speaker": "sami",
+    "text": "Meine Ahnen. Jemand hat ihnen die Gesichter herausgekratzt."
+  },
+  {
+    "id": "ch1.portraitCloth",
+    "speaker": "sami",
+    "text": "Nur dieses eine Bild ist verhüllt."
+  },
+  {
+    "id": "ch1.portrait",
+    "speaker": "sami",
+    "text": "Mutter."
+  },
+  {
+    "id": "ch1.bloodwall",
+    "speaker": "sami",
+    "text": "Die Spur endet hier. Mitten auf der Wand. Als wäre jemand hineingegangen."
+  },
+  {
+    "id": "ch1.whisper",
+    "speaker": "stimme",
+    "text": "Sami …"
+  },
+  {
+    "id": "ch1.doorClosed",
+    "speaker": "sami",
+    "text": "Die Tür. Ich habe sie offen gelassen."
+  },
+  {
+    "id": "ch1.statue",
+    "speaker": "sami",
+    "text": "Hat diese Statue eben schon in meine Richtung gesehen?"
+  },
+  {
+    "id": "ch1.nursery",
+    "speaker": "sami",
+    "text": "Hier hat es gestanden. Ich weiß es, ohne zu wissen, woher."
+  },
+  {
+    "id": "ch1.afterLullaby",
+    "speaker": "sami",
+    "text": "Die erste Strophe kann ich mitsummen. Die zweite … ist einfach nicht da."
+  },
+  {
+    "id": "ch1.study",
+    "speaker": "sami",
+    "text": "Das Arbeitszimmer meines Vaters. Es riecht noch nach ihm. Nach Tinte und Ungeduld."
+  },
+  {
+    "id": "ch1.motto",
+    "speaker": "sami",
+    "text": "Der Wahlspruch unseres Hauses. Jemand hat zwei Worte herausgekratzt."
+  },
+  {
+    "id": "ch1.mottoBlood",
+    "speaker": "sami",
+    "text": "Rabe. Blut. Mit Blut nachgezogen. Jemand wollte, dass nur einer von uns ihn lesen kann."
+  },
+  {
+    "id": "ch1.chestHint",
+    "speaker": "sami",
+    "text": "Vier Räder. Vier Sätze im Wahlspruch. Das ist kein Zufall."
+  },
+  {
+    "id": "ch1.chestOpen",
+    "speaker": "sami",
+    "text": "Der Siegelring meines Vaters. Und unsere Hauschronik."
+  },
+  {
+    "id": "ch1.throneDoor",
+    "speaker": "sami",
+    "text": "Das Wappen. In der Mitte eine Vertiefung, wie für einen Ring."
+  },
+  {
+    "id": "ch1.throneEnter",
+    "speaker": "sami",
+    "text": "Der Thronsaal. Hier hat mein Vater Hof gehalten."
+  },
+  {
+    "id": "ch1.feast",
+    "speaker": "sami",
+    "text": "Das Festmahl ist nie abgeräumt worden. Achtzig Jahre lang."
+  },
+  {
+    "id": "ch1.moon",
+    "speaker": "sami",
+    "text": "Der Mond. Er ist rot. So rot wie in jener Nacht."
+  },
+  {
+    "id": "ch1.mondtafel",
+    "speaker": "sami",
+    "text": "Achtzig Jahre. Ich habe achtzig Jahre geschlafen."
+  },
+  {
+    "id": "ch1.seated",
+    "speaker": "sami",
+    "text": "Da sitzt jemand. Am Ende der Tafel."
+  },
+  {
+    "id": "ch1.rupGone",
+    "speaker": "sami",
+    "text": "Er ist fort. Nur Staub auf dem Stuhl."
+  },
+  {
+    "id": "ch1.gatehouse",
+    "speaker": "sami",
+    "text": "Das Torhaus. Wenn ich das Fallgitter heben kann, bin ich draußen."
+  },
+  {
+    "id": "ch1.hollowAttack",
+    "speaker": "sami",
+    "text": "Bleib zurück!"
+  },
+  {
+    "id": "ch1.pushLearn",
+    "speaker": "sami",
+    "text": "Mein Blut … es gehorcht mir."
+  },
+  {
+    "id": "ch1.takedown",
+    "speaker": "sami",
+    "text": "Verzeih mir. Du warst schon lange nicht mehr da."
+  },
+  {
+    "id": "ch1.regen",
+    "speaker": "sami",
+    "text": "Die Wunde schließt sich, wenn ich es will."
+  },
+  {
+    "id": "ch1.portcullis",
+    "speaker": "sami",
+    "text": "Das Gitter fällt zu schnell. Kein Mensch wäre schnell genug."
+  },
+  {
+    "id": "ch1.portcullis2",
+    "speaker": "sami",
+    "text": "Aber ich bin kein Mensch."
+  },
+  {
+    "id": "ch1.outside",
+    "speaker": "sami",
+    "text": "Nachtluft. Und der Geruch von Regen."
+  },
+  {
+    "id": "ch1.voice",
+    "speaker": "stimme",
+    "text": "Du hättest niemals aufwachen dürfen."
+  },
+  {
+    "id": "ch1.voiceAfter",
+    "speaker": "sami",
+    "text": "Diese Stimme. Ich kenne sie."
+  },
+  {
+    "id": "ch1.road",
+    "speaker": "sami",
+    "text": "Unten im Tal brennen Lichter. Rabenfurt. Es gibt es noch."
+  },
+  {
+    "id": "ch1.vial",
+    "speaker": "sami",
+    "text": "Eine Blutphiole. Mein Vater hat für schlechte Zeiten vorgesorgt."
+  },
+  {
+    "id": "ch1.letter2",
+    "speaker": "sami",
+    "text": "Verkohltes Papier im Kamin. Dieselbe Handschrift wie unten in der Krypta."
+  },
+  {
+    "id": "mem.siegel.1",
+    "speaker": "ysolde",
+    "text": "Schlaf, mein Kind. Wenn der Mond wieder rot wird, darfst du nicht mehr hier sein. Und wenn doch …"
+  },
+  {
+    "id": "mem.siegel.2",
+    "speaker": "stimme",
+    "text": "Er wird es nicht verstehen, Ysolde."
+  },
+  {
+    "id": "mem.siegel.3",
+    "speaker": "ysolde",
+    "text": "Er muss es nicht verstehen. Er muss nur überleben. Versprich es mir."
+  },
+  {
+    "id": "mem.siegel.4",
+    "speaker": "stimme",
+    "text": "… Ich verspreche es."
+  },
+  {
+    "id": "mem.lied.1",
+    "speaker": "ysolde",
+    "text": "„Tief im Brunnen schläft der Mond, wo kein Wind die Wasser kämmt …“"
+  },
+  {
+    "id": "mem.lied.2",
+    "speaker": "ysolde",
+    "text": "„… wer ihn ruft, den hört er nicht. Wer ihn liebt, der weckt ihn nicht.“"
+  },
+  {
+    "id": "mem.lied.3",
+    "speaker": "ysolde",
+    "text": "Schlaf jetzt, Sami. Die zweite Strophe singe ich dir, wenn du groß bist."
+  },
+  {
+    "id": "mem.fest.1",
+    "speaker": "corvin",
+    "text": "Auf den Erben! Auf die Nacht, in der das Haus Drakenfels nicht länger dient, sondern herrscht."
+  },
+  {
+    "id": "mem.fest.2",
+    "speaker": "sami",
+    "text": "Und wenn ich nicht will, Vater?"
+  },
+  {
+    "id": "mem.fest.3",
+    "speaker": "corvin",
+    "text": "Dann ist es gut, dass niemand dich fragt."
+  },
+  {
+    "id": "mem.fest.4",
+    "speaker": "anselm",
+    "text": "Verzeiht, Herr – meine Hand …"
+  },
+  {
+    "id": "mem.fest.5",
+    "speaker": "corvin",
+    "text": "Schreib es auf, Anselm. Alles. Die Welt soll wissen, wer sie gerettet hat."
+  },
+  {
+    "id": "mem.fest.6",
+    "speaker": "ysolde",
+    "text": "Niemand rettet die Welt, Corvin. Man verschiebt nur ihr Ende."
+  },
+  {
+    "id": "ch2.arrive",
+    "speaker": "sami",
+    "text": "Rabenfurt. Die Häuser stehen noch. Die Menschen haben gelernt, ihre Türen zu verriegeln."
+  },
+  {
+    "id": "ch2.square",
+    "speaker": "sami",
+    "text": "Ein Brunnen, eine Laterne – und jemand, der im Regen wartet."
+  },
+  {
+    "id": "ch2.ilyasHouse",
+    "speaker": "sami",
+    "text": "Das hohe Haus mit dem Licht oben. Dort wohnt der Schreiber."
+  },
+  {
+    "id": "ch2.ilyasDoor",
+    "speaker": "sami",
+    "text": "Verriegelt. Oben bewegt sich ein Vorhang."
+  },
+  {
+    "id": "ch2.innDoor",
+    "speaker": "sami",
+    "text": "Hinter der Tür atmet jemand. Er hält den Atem an, seit ich hier stehe."
+  },
+  {
+    "id": "ch2.bolt",
+    "speaker": "sami",
+    "text": "Silber. Es brennt wie Erinnerung."
+  },
+  {
+    "id": "ch2.lene1",
+    "speaker": "sami",
+    "text": "Ein Kind. Barfuß, mitten in der Nacht. Und sie summt …"
+  },
+  {
+    "id": "ch2.lene2",
+    "speaker": "sami",
+    "text": "Das ist das Lied meiner Mutter."
+  },
+  {
+    "id": "ch2.leneFollow",
+    "speaker": "sami",
+    "text": "Sie geht zur Kapelle. Ich darf sie nicht verlieren."
+  },
+  {
+    "id": "ch2.chapelLocked",
+    "speaker": "sami",
+    "text": "Die Kapelle ist verschlossen. Der Kirchenvogt wird einen Schlüssel haben."
+  },
+  {
+    "id": "ch2.chapelEnter",
+    "speaker": "sami",
+    "text": "Kerzen brennen. Für niemanden. Und es riecht nach dem Atem eines Hundes."
+  },
+  {
+    "id": "ch2.footprints",
+    "speaker": "sami",
+    "text": "Nackte Füße. Viele. Sie enden hinter dem Altar."
+  },
+  {
+    "id": "ch2.trapdoor",
+    "speaker": "sami",
+    "text": "Eine Falltür. Von unten kommt Wärme. Und ein Summen."
+  },
+  {
+    "id": "ch2.crypt",
+    "speaker": "sami",
+    "text": "Sie knien vor einem Riss im Boden. Und sie träumen alle dasselbe."
+  },
+  {
+    "id": "ch2.crack",
+    "speaker": "sami",
+    "text": "Rotes Licht aus dem Stein. Wie das Auge, von dem die Chronik schrieb."
+  },
+  {
+    "id": "ch2.scout",
+    "speaker": "sami",
+    "text": "Ein Wolf in Menschengestalt. Tot. Seine Krallen haben sich in den Stein gegraben, bevor er starb."
+  },
+  {
+    "id": "ch2.stealth",
+    "speaker": "sami",
+    "text": "Diese zwei träumen nicht. Sie bewachen. Leise jetzt."
+  },
+  {
+    "id": "ch2.voice",
+    "speaker": "erste",
+    "text": "Komm nach Hause, Erbe."
+  },
+  {
+    "id": "ch2.afterVoice",
+    "speaker": "sami",
+    "text": "Das war nicht Gerolds Gott. Das war das, was meine Familie geweckt hat."
+  },
+  {
+    "id": "ch2.villagersWake",
+    "speaker": "sami",
+    "text": "Sie wachen auf. Gut. Lasst uns gehen, bevor er wieder anfängt zu reden."
+  },
+  {
+    "id": "ch2.leneOut",
+    "speaker": "sami",
+    "text": "Bring sie zu Berta. Und dann zu İlyas."
+  },
+  {
+    "id": "ch2.toForest",
+    "speaker": "sami",
+    "text": "Der Weg nach Norden. Dahinter beginnt der Schwarze Forst – und das Land des Wolfsbundes."
+  },
+  {
+    "id": "ch2.notYet",
+    "speaker": "sami",
+    "text": "Noch nicht. Rabenfurt ist nicht fertig mit mir."
+  },
+  {
+    "id": "mem.kap.1",
+    "speaker": "gerold",
+    "text": "Adelheid? Bist du das? Ich höre dich … ich höre dich unter dem Stein."
+  },
+  {
+    "id": "mem.kap.2",
+    "speaker": "erste",
+    "text": "„Gerold. Mein Lieber. Es ist so dunkel hier, und ich habe Hunger.“"
+  },
+  {
+    "id": "mem.kap.3",
+    "speaker": "gerold",
+    "text": "Was soll ich tun? Sag es mir. Ich tue alles."
+  },
+  {
+    "id": "mem.kap.4",
+    "speaker": "erste",
+    "text": "„Bring sie mir. Sie träumen ohnehin schon von mir.“"
+  },
+  {
+    "id": "ch3.enter",
+    "speaker": "sami",
+    "text": "Der Schwarze Forst. Die Bäume stehen so dicht, dass der Mond nur zwischen ihnen hindurchsickert."
+  },
+  {
+    "id": "ch3.stone1",
+    "speaker": "sami",
+    "text": "Ein Grenzstein. Alte Schrift. Und Blut – zwei Arten Blut, auf demselben Stein."
+  },
+  {
+    "id": "ch3.stones",
+    "speaker": "sami",
+    "text": "Wolf und Vampir aus demselben Ursprung. Das hat mir niemand je erzählt."
+  },
+  {
+    "id": "ch3.eyes",
+    "speaker": "sami",
+    "text": "Augen. Zwischen den Stämmen. Sie folgen mir."
+  },
+  {
+    "id": "ch3.shape",
+    "speaker": "sami",
+    "text": "Etwas Großes. Es bewegt sich auf vier Beinen – und dann auf zwei."
+  },
+  {
+    "id": "ch3.tracks",
+    "speaker": "sami",
+    "text": "Wolfsspuren. Und Blut darin. Sie führen nach Westen."
+  },
+  {
+    "id": "ch3.camp",
+    "speaker": "sami",
+    "text": "Ein Lager. Verlassen. Die Zelte sind von innen aufgerissen worden."
+  },
+  {
+    "id": "ch3.campBodies",
+    "speaker": "sami",
+    "text": "Sie haben einander zerrissen. Der Mond hat sie vergessen lassen, wer sie sind."
+  },
+  {
+    "id": "ch3.chains",
+    "speaker": "sami",
+    "text": "Ketten aus Silber, aufgebrochen. Hier wurde jemand gehalten."
+  },
+  {
+    "id": "ch3.circle",
+    "speaker": "sami",
+    "text": "Der Steinkreis. Etwas atmet auf dem Altar."
+  },
+  {
+    "id": "ch3.nadiraCalm",
+    "speaker": "sami",
+    "text": "Ruhig. Ruhig … hör auf mein Blut, nicht auf den Mond."
+  },
+  {
+    "id": "ch3.nadiraCalmed",
+    "speaker": "sami",
+    "text": "Das Fell weicht zurück. Darunter: ein Gesicht, das Bassems Augen hat."
+  },
+  {
+    "id": "ch3.nadiraKilled",
+    "speaker": "sami",
+    "text": "Es ist vorbei. Und unter dem Fell war eine junge Frau."
+  },
+  {
+    "id": "ch3.nadiraFled",
+    "speaker": "sami",
+    "text": "Sie ist fort. In den Bergen wird man ihr Heulen hören."
+  },
+  {
+    "id": "ch3.bassemGrief",
+    "speaker": "bassem",
+    "text": "Nadira … nein. NEIN!"
+  },
+  {
+    "id": "ch3.bassemThanks",
+    "speaker": "bassem",
+    "text": "Du hast ihr dein Blut gegeben. Ein Drakenfels. Ich werde es den Ältesten erzählen, und sie werden es nicht glauben."
+  },
+  {
+    "id": "ch3.tower",
+    "speaker": "sami",
+    "text": "Die Rabenwacht. Unser Wappen über dem Tor – und Kratzspuren darunter, tief wie Gräben."
+  },
+  {
+    "id": "ch3.hatch",
+    "speaker": "sami",
+    "text": "Eine Luke mit einem Blutsiegel. Es kennt mein Blut."
+  },
+  {
+    "id": "ch3.hatchOpen",
+    "speaker": "sami",
+    "text": "Ein Gang nach Süden. Nach Ebon."
+  },
+  {
+    "id": "ch3.notYet",
+    "speaker": "sami",
+    "text": "Noch nicht. Der Wald hat mir noch etwas zu zeigen."
+  },
+  {
+    "id": "ch3.transform",
+    "speaker": "sami",
+    "text": "Er verwandelt sich. Knochen, die brechen und neu wachsen, in einem einzigen Atemzug."
+  },
+  {
+    "id": "mem.zehnt.1",
+    "speaker": "corvin",
+    "text": "Silber an Hals und Handgelenke. Er soll unterwegs nicht sterben. Er ist für die Krone."
+  },
+  {
+    "id": "mem.zehnt.2",
+    "speaker": "wolf",
+    "text": "Vater! VATER!"
+  },
+  {
+    "id": "mem.zehnt.3",
+    "speaker": "corvin",
+    "text": "Notier: ein Lebender, Sippe Harun. Und haltet den Jungen fern. Wir sind keine Ungeheuer."
+  },
+  {
+    "id": "mem.eid.1",
+    "speaker": "wolf",
+    "text": "Bei dem, was zuerst war, und bei dem, was nach uns kommt."
+  },
+  {
+    "id": "mem.eid.2",
+    "speaker": "ysolde",
+    "text": "Wir wecken ihn nicht. Weder für Macht noch für Rache noch für Liebe."
+  },
+  {
+    "id": "mem.eid.3",
+    "speaker": "wolf",
+    "text": "Bis der Mond blutet."
+  },
+  {
+    "id": "ch4.tunnel",
+    "speaker": "sami",
+    "text": "Der Gang endet in einer Unterkirche. Rinnen im Boden, alle voll mit getrocknetem Blut."
+  },
+  {
+    "id": "ch4.nave",
+    "speaker": "sami",
+    "text": "Ebon. Sie haben eine Kathedrale gebaut – für einen Gott, den niemand sehen sollte."
+  },
+  {
+    "id": "ch4.candles",
+    "speaker": "sami",
+    "text": "Tausend Kerzen. Und keine einzige ist heruntergebrannt."
+  },
+  {
+    "id": "ch4.rit1",
+    "speaker": "sami",
+    "text": "Ein Becken voller Blut. Die Rinnen führen alle in dieselbe Richtung – zum Chor."
+  },
+  {
+    "id": "ch4.rit1b",
+    "speaker": "sami",
+    "text": "„Wer gibt, wird erinnert.“ Und wer nimmt?"
+  },
+  {
+    "id": "ch4.rit2",
+    "speaker": "sami",
+    "text": "Ein Spiegel. Kein Spiegelbild – natürlich nicht."
+  },
+  {
+    "id": "ch4.rit2b",
+    "speaker": "sami",
+    "text": "Aber dort hinten im Glas steht jemand."
+  },
+  {
+    "id": "ch4.rit2c",
+    "speaker": "sami",
+    "text": "„Was du vergisst, gehört ihm.“"
+  },
+  {
+    "id": "ch4.rit3",
+    "speaker": "sami",
+    "text": "Ein Stuhl mit Riemen. Zu klein für einen Erwachsenen."
+  },
+  {
+    "id": "ch4.rit3b",
+    "speaker": "sami",
+    "text": "Ich war hier. Ich weiß es, wie man weiß, dass man friert."
+  },
+  {
+    "id": "ch4.ritsDone",
+    "speaker": "sami",
+    "text": "Gabe, Vergessen, Gefäß. Sie haben mich vorbereitet, bevor ich laufen konnte."
+  },
+  {
+    "id": "ch4.mineAppears",
+    "speaker": "sami",
+    "text": "Jemand steht am Altar. Sie hat auf mich gewartet."
+  },
+  {
+    "id": "ch4.fresco",
+    "speaker": "sami",
+    "text": "Ein Stammbaum aus Farbe und Gold. Vier Häuser, vier Fenster."
+  },
+  {
+    "id": "ch4.windowEbon",
+    "speaker": "sami",
+    "text": "Das Fenster des Auges. Ebon."
+  },
+  {
+    "id": "ch4.windowValcourt",
+    "speaker": "sami",
+    "text": "Das Fenster der Schlange. Valcourt."
+  },
+  {
+    "id": "ch4.windowMorwen",
+    "speaker": "sami",
+    "text": "Das Fenster der Rose. Morwen – Mines Haus."
+  },
+  {
+    "id": "ch4.windowDrakenfels",
+    "speaker": "sami",
+    "text": "Das Fenster des Raben. Drakenfels."
+  },
+  {
+    "id": "ch4.wrongOrder",
+    "speaker": "sami",
+    "text": "Die Flammen ersticken. Falsche Ordnung. Das Blut der Häuser hat eine Reihenfolge."
+  },
+  {
+    "id": "ch4.libraryOpen",
+    "speaker": "sami",
+    "text": "Die Wand gibt nach. Dahinter riecht es nach Papier und altem Wachs."
+  },
+  {
+    "id": "ch4.library",
+    "speaker": "sami",
+    "text": "Die Bibliothek der Blutlinien. Jedes Buch ein Haus, jedes Haus eine Lüge."
+  },
+  {
+    "id": "ch4.diary",
+    "speaker": "sami",
+    "text": "Die Handschrift meiner Mutter."
+  },
+  {
+    "id": "ch4.diaryAfter",
+    "speaker": "sami",
+    "text": "Ein Gefäß. Mein Vater hat mich gezeugt wie man einen Krug brennt."
+  },
+  {
+    "id": "ch4.seal",
+    "speaker": "sami",
+    "text": "Ein Siegel im Boden der Apsis. Zwei Vertiefungen – zwei Blutlinien."
+  },
+  {
+    "id": "ch4.sealNeed",
+    "speaker": "sami",
+    "text": "Mein Blut allein reicht nicht. Es braucht ein zweites, älteres."
+  },
+  {
+    "id": "ch4.sealOpen",
+    "speaker": "sami",
+    "text": "Das Siegel trinkt. Und darunter beginnt eine Treppe."
+  },
+  {
+    "id": "ch4.rose",
+    "speaker": "sami",
+    "text": "Hinter dem Rosenfenster bewegt sich etwas. Größer als die Kathedrale."
+  },
+  {
+    "id": "ch4.erste1",
+    "speaker": "erste",
+    "text": "Du hast dich erinnert, Erbe. Das ist gut. Erinnerungen schmecken mir."
+  },
+  {
+    "id": "ch4.erste2",
+    "speaker": "erste",
+    "text": "Komm nach Hause. Deine Mutter wartet. Sie wartet so lange schon."
+  },
+  {
+    "id": "ch4.afterVision",
+    "speaker": "sami",
+    "text": "Die Treppe führt nicht nach unten. Sie führt nach Drakenfels zurück."
+  },
+  {
+    "id": "ch4.fightAcolytes",
+    "speaker": "sami",
+    "text": "Seine Akolythen. Sie lieben ihn. Sie werden für ihn sterben."
+  },
+  {
+    "id": "ch4.malachiasBlood",
+    "speaker": "sami",
+    "text": "Uraltes Blut. Es schmeckt nach Asche und nach Namen, die niemand mehr kennt."
+  },
+  {
+    "id": "ch4.notYet",
+    "speaker": "sami",
+    "text": "Noch nicht. Erst muss ich wissen, was meine Mutter wusste."
+  },
+  {
+    "id": "ch4.mirrorShape",
+    "speaker": "stimme",
+    "text": "Sami …"
+  },
+  {
+    "id": "mem.dorn.1",
+    "speaker": "ysolde",
+    "text": "Nimm ihn. Der Schlafdorn. Wenn er erwacht und ER in ihm ist – dann tu es."
+  },
+  {
+    "id": "mem.dorn.2",
+    "speaker": "mine",
+    "text": "Und wenn er es nicht ist? Woran soll ich das erkennen, Ysolde?"
+  },
+  {
+    "id": "mem.dorn.3",
+    "speaker": "ysolde",
+    "text": "Er wird sich an das Lied erinnern. Der Erste nicht. Nicht an alles."
+  },
+  {
+    "id": "mem.dorn.4",
+    "speaker": "mine",
+    "text": "Und wenn ich es nicht kann?"
+  },
+  {
+    "id": "mem.dorn.5",
+    "speaker": "ysolde",
+    "text": "Dann hast du ihn mehr geliebt als ich. Und das wäre kein Fehler."
+  },
+  {
+    "id": "ch5.well",
+    "speaker": "sami",
+    "text": "Der Gang endet im Brunnen meines eigenen Hofes. Natürlich. Alles in diesem Haus führt nach unten."
+  },
+  {
+    "id": "ch5.changed",
+    "speaker": "sami",
+    "text": "Der Mond steht still. Und die Burg blutet aus den Fugen."
+  },
+  {
+    "id": "ch5.enter",
+    "speaker": "sami",
+    "text": "Das Torhaus. Diesmal betrete ich die Burg, statt aus ihr zu fliehen."
+  },
+  {
+    "id": "ch5.echo",
+    "speaker": "sami",
+    "text": "Ein Echo. Sie gehen den Weg von damals – den Weg zur Krypta."
+  },
+  {
+    "id": "ch5.musicbox",
+    "speaker": "sami",
+    "text": "Eine Spieluhr. In meiner alten Spielzeugtruhe. Die lag hier nicht, als ich zuletzt hier war."
+  },
+  {
+    "id": "ch5.panel",
+    "speaker": "sami",
+    "text": "In die Wandvertäfelung sind sieben kleine Tasten eingelassen. Wie bei einer Spieluhr."
+  },
+  {
+    "id": "ch5.panelHint",
+    "speaker": "sami",
+    "text": "Vielleicht muss ich die Melodie hören, bevor ich sie spielen kann."
+  },
+  {
+    "id": "ch5.chamber",
+    "speaker": "sami",
+    "text": "Die Gemächer meiner Mutter. Achtzig Jahre unberührt – bis auf den Staub."
+  },
+  {
+    "id": "ch5.mirror",
+    "speaker": "sami",
+    "text": "Ihr Spiegel zeigt den Raum, aber nicht mich. Und nicht sie."
+  },
+  {
+    "id": "ch5.fragments",
+    "speaker": "sami",
+    "text": "Vier Bruchstücke jener Nacht. Ich muss sie ordnen, bevor sie mich ordnen."
+  },
+  {
+    "id": "ch5.needMore",
+    "speaker": "sami",
+    "text": "Mir fehlen noch Bruchstücke. In der Krypta. Und hier, in ihren Räumen."
+  },
+  {
+    "id": "ch5.key",
+    "speaker": "sami",
+    "text": "Ein Schlüssel aus geronnenem Blut. Ihrem Blut. Er ist noch warm."
+  },
+  {
+    "id": "ch5.ilyasHere",
+    "speaker": "sami",
+    "text": "Jemand sitzt am Schreibtisch meines Vaters. Ein Mensch."
+  },
+  {
+    "id": "ch5.desk",
+    "speaker": "sami",
+    "text": "Unter der Tischplatte – ein Hohlraum. Und eine Scheibe aus Messing mit vier Ringen."
+  },
+  {
+    "id": "ch5.decoded",
+    "speaker": "sami",
+    "text": "„Nicht vernichten. Nicht beherrschen. Lösen.“"
+  },
+  {
+    "id": "ch5.howl",
+    "speaker": "sami",
+    "text": "Ich habe es Bassem versprochen. Ich heule."
+  },
+  {
+    "id": "ch5.noAnswer",
+    "speaker": "sami",
+    "text": "Keine Antwort. Nur der Wind über den Zinnen."
+  },
+  {
+    "id": "ch5.bassemComes",
+    "speaker": "sami",
+    "text": "Ein Heulen antwortet. Dann noch eines. Und noch eines."
+  },
+  {
+    "id": "ch5.crypt",
+    "speaker": "sami",
+    "text": "Die Krypta. Der Sarkophag, aus dem ich gestiegen bin. Darunter wartet er."
+  },
+  {
+    "id": "ch5.cryptLocked",
+    "speaker": "sami",
+    "text": "Der Sarkophag rührt sich nicht. Unter ihm pocht etwas – wie ein Herz hinter einer Tür."
+  },
+  {
+    "id": "ch5.cryptOpen",
+    "speaker": "sami",
+    "text": "Der Stein gleitet zur Seite. Eine Treppe, älter als jedes Blut."
+  },
+  {
+    "id": "ch5.notReady",
+    "speaker": "sami",
+    "text": "Noch nicht. Ich habe nicht alles, was ich dort unten brauche."
+  },
+  {
+    "id": "ch5.hollowHall",
+    "speaker": "sami",
+    "text": "Die Verlorenen sind erwacht. Sie wandern durch die Hallen, als suchten sie etwas."
+  },
+  {
+    "id": "mem.rit.1",
+    "speaker": "corvin",
+    "text": "Jetzt, Malachias. Jetzt fällt das Licht."
+  },
+  {
+    "id": "mem.rit.2",
+    "speaker": "erste",
+    "text": "„Ein Haus. Endlich ein Haus.“"
+  },
+  {
+    "id": "mem.rit.3",
+    "speaker": "ysolde",
+    "text": "Nein. Nicht ihn. Hörst du mich? NICHT IHN."
+  },
+  {
+    "id": "mem.rit.4",
+    "speaker": "corvin",
+    "text": "Ysolde! Was tust du – deine Hände –"
+  },
+  {
+    "id": "mem.rit.5",
+    "speaker": "ysolde",
+    "text": "Was eine Mutter tut, Corvin. Ich schließe die Tür."
+  },
+  {
+    "id": "mem.falsch.1",
+    "speaker": "mine",
+    "text": "Es tut mir leid, Sami. Sie hat es so gewollt."
+  },
+  {
+    "id": "mem.falsch.2",
+    "speaker": "erste",
+    "text": "„Siehst du? Sie war es. Immer schon sie.“"
+  },
+  {
+    "id": "ch6.descend",
+    "speaker": "sami",
+    "text": "Die Stufen sind nicht gehauen. Sie sind gewachsen – wie Knochen."
+  },
+  {
+    "id": "ch6.walls",
+    "speaker": "sami",
+    "text": "Die Wände atmen. Unter dem Stein pulsiert etwas Rotes."
+  },
+  {
+    "id": "ch6.loop1",
+    "speaker": "sami",
+    "text": "Diesen Gang bin ich schon gegangen. Dieselbe Rippe, derselbe Riss."
+  },
+  {
+    "id": "ch6.loop2",
+    "speaker": "sami",
+    "text": "Ich gehe im Kreis. Er will, dass ich im Kreis gehe."
+  },
+  {
+    "id": "ch6.loopHint",
+    "speaker": "sami",
+    "text": "Meine Augen lügen. Mein Blut nicht."
+  },
+  {
+    "id": "ch6.loopExit",
+    "speaker": "sami",
+    "text": "Eine Spur aus Blut – mitten in die Wand. Und die Wand gibt nach."
+  },
+  {
+    "id": "ch6.fakeMine",
+    "speaker": "mine",
+    "text": "Sami! Hier entlang – schnell!"
+  },
+  {
+    "id": "ch6.fakeIlyas",
+    "speaker": "ilyas",
+    "text": "Sami? Ich finde den Weg nicht … hilf mir …"
+  },
+  {
+    "id": "ch6.fakeYsolde",
+    "speaker": "ysolde",
+    "text": "Mein Kind. Du gehst in die falsche Richtung."
+  },
+  {
+    "id": "ch6.notThem",
+    "speaker": "sami",
+    "text": "Das sind nicht sie. Er leiht sich ihre Stimmen."
+  },
+  {
+    "id": "ch6.lake",
+    "speaker": "sami",
+    "text": "Ein See aus Blut, glatt wie ein Spiegel. Und zwei Frauen auf der anderen Seite."
+  },
+  {
+    "id": "ch6.twoMothers",
+    "speaker": "sami",
+    "text": "Mutter. Zweimal."
+  },
+  {
+    "id": "ch6.real",
+    "speaker": "sami",
+    "text": "Ich kenne das ganze Lied. Endlich."
+  },
+  {
+    "id": "ch6.fakeChosen",
+    "speaker": "sami",
+    "text": "Nein – NEIN! Das war nicht sie. Ich habe die Falsche gewählt."
+  },
+  {
+    "id": "ch6.shades",
+    "speaker": "sami",
+    "text": "Schatten lösen sich aus dem Blut. Er ist wütend."
+  },
+  {
+    "id": "ch6.wolves",
+    "speaker": "sami",
+    "text": "Mondkranke Wölfe. Er hat sie hinabgerufen."
+  },
+  {
+    "id": "ch6.bassemHolds",
+    "speaker": "bassem",
+    "text": "Geh weiter, Drakenfels! Die hier gehören uns!"
+  },
+  {
+    "id": "ch6.inscription",
+    "speaker": "sami",
+    "text": "Eine Wand voller Zeichen. Sie sind älter als die Kammern selbst."
+  },
+  {
+    "id": "ch6.heart",
+    "speaker": "sami",
+    "text": "Das Herz von Vareth."
+  },
+  {
+    "id": "ch6.giant",
+    "speaker": "sami",
+    "text": "Er hat keine Gestalt. Er hat alle."
+  },
+  {
+    "id": "ch6.reflection",
+    "speaker": "sami",
+    "text": "Und dort, vor ihm – ich. Mein Gesicht. Meine Haltung. Nur ohne Augen."
+  },
+  {
+    "id": "ch6.mineHere",
+    "speaker": "sami",
+    "text": "Mine. Sie ist hier. Sie hält den Dorn umklammert."
+  },
+  {
+    "id": "ch6.ilyasFinal",
+    "speaker": "ilyas",
+    "text": "Ich schreibe es auf, Sami. Alles. Damit es diesmal jemand liest."
+  },
+  {
+    "id": "ch6.mineFinal",
+    "speaker": "mine",
+    "text": "Was immer du wählst – ich bin hier. Ich war immer hier."
+  },
+  {
+    "id": "ch6.bassemFinal",
+    "speaker": "bassem",
+    "text": "Halt durch, Drakenfels! Wir halten sie auf!"
+  },
+  {
+    "id": "ch6.end1",
+    "speaker": "sami",
+    "text": "Nimm alles. Nimm uns alle. Und dann verhungere."
+  },
+  {
+    "id": "ch6.end2",
+    "speaker": "sami",
+    "text": "Komm herein. Das Haus steht offen."
+  },
+  {
+    "id": "ch6.end3a",
+    "speaker": "sami",
+    "text": "„Tief im Brunnen schläft der Mond, wo kein Wind die Wasser kämmt …“"
+  },
+  {
+    "id": "ch6.end3b",
+    "speaker": "sami",
+    "text": "„… und wenn der Mond erwacht, mein Kind, dann sing ihn in den Brunnen zurück.“"
+  },
+  {
+    "id": "ch6.erste1",
+    "speaker": "erste",
+    "text": "Erbe. Du bist zu Hause."
+  },
+  {
+    "id": "ch6.erste2",
+    "speaker": "erste",
+    "text": "Deine Mutter hat mich achtzig Jahre lang festgehalten. Weißt du, wie sehr sie dich dafür gehasst hat?"
+  },
+  {
+    "id": "ch6.erste3",
+    "speaker": "erste",
+    "text": "Lügen. Erinnerungen. Für mich ist das dasselbe."
+  },
+  {
+    "id": "mem.ys.1",
+    "speaker": "ysolde",
+    "text": "„… und wenn der Mond erwacht, mein Kind, dann sing ihn in den Brunnen zurück.“"
+  },
+  {
+    "id": "mem.ys.2",
+    "speaker": "ysolde",
+    "text": "„Nicht mit Zorn und nicht mit Blut – nur mit dem, was du behältst.“"
+  },
+  {
+    "id": "mem.ys.3",
+    "speaker": "ysolde",
+    "text": "Jetzt weißt du alles, was ich weiß. Geh. Und vergib mir, dass ich dich so lange allein gelassen habe."
+  },
+  {
+    "id": "ch1_ruprecht.start",
+    "speaker": "verlorener",
+    "text": "… die Gläser … die Gläser müssen poliert sein, bevor der Herr kommt … bevor der Herr …"
+  },
+  {
+    "id": "ch1_ruprecht.wieder",
+    "speaker": "verlorener",
+    "text": "… poliert … alles muss poliert sein …"
+  },
+  {
+    "id": "ch1_ruprecht.name",
+    "speaker": "verlorener",
+    "text": "Ruprecht … ja. Der Kellermeister. Ich hatte eine Tochter. Wie hieß sie …? Er hat ihren Namen genommen. Er nimmt immer zuerst die Namen."
+  },
+  {
+    "id": "ch1_ruprecht.er",
+    "speaker": "verlorener",
+    "text": "Der unter dem Stein. Der, der vor dem Herrn da war. Er hat die Halle gegessen, junger Herr. Die ganze Halle, an einem einzigen Abend. Nur die Stühle sind übrig geblieben."
+  },
+  {
+    "id": "ch1_ruprecht.sami",
+    "speaker": "verlorener",
+    "text": "Junger Herr … Sami. Ihr wart freundlich zu mir. Ihr habt mich nie geschlagen. Die junge Herrin auch nicht. Die junge Herrin Mine."
+  },
+  {
+    "id": "ch1_ruprecht.sami2",
+    "speaker": "sami",
+    "text": "Mine. Der Name … liegt mir auf der Zunge wie ein Wort aus einem Traum."
+  },
+  {
+    "id": "ch1_ruprecht.kerze",
+    "speaker": "verlorener",
+    "text": "Sie kommt jede Nacht. Jede Nacht seit … seit immer. Sie zündet die Kerze an, unten bei Euch, und dann weint sie nicht. Sie weint nie. Ich weine für sie. Wenn ich mich erinnere, wie das geht."
+  },
+  {
+    "id": "ch1_ruprecht.nacht",
+    "speaker": "verlorener",
+    "text": "Der Herr hob das Glas. Dann ging er hinunter, mit dem jungen Herrn und der Herrin. Dann war es still. Und alle sind sitzen geblieben. Sitzen geblieben … ich warte, dass jemand aufsteht. Achtzig Jahre warte ich."
+  },
+  {
+    "id": "ch1_ruprecht.feed",
+    "speaker": "sami",
+    "text": "Sein Herz schlägt noch. Langsam. Wie ein Tropfen, der nie den Boden erreicht."
+  },
+  {
+    "id": "ch1_ruprecht.fed",
+    "speaker": "verlorener",
+    "text": "… danke, junger Herr … jetzt … darf ich aufstehen …"
+  },
+  {
+    "id": "ch1_ruprecht.abschied",
+    "speaker": "verlorener",
+    "text": "… Ruhe … ja. Wenn der Herr kommt. Wenn der Herr kommt, dann ruhe ich."
+  },
+  {
+    "id": "ch2_berta.start",
+    "speaker": "berta",
+    "text": "Bleib stehen. Lass mich dein Gesicht sehen. … Ja. Solche Augen hab ich schon einmal gesehen. Da war ich so klein wie meine Lene, und sie saßen auf dem Wagen des Grafen."
+  },
+  {
+    "id": "ch2_berta.luege",
+    "speaker": "berta",
+    "text": "Reisende kommen nicht nachts von der Burg herunter. Aber gut. Lüg mich an, wenn es dir hilft. Ich bin zu alt, um mich vor Lügen zu fürchten."
+  },
+  {
+    "id": "ch2_berta.wahr",
+    "speaker": "berta",
+    "text": "Drakenfels. Also ist der Junge doch nicht tot. Meine Mutter hat gesagt, die Gräfin hätte ihn in den Stein gelegt wie einen Schatz, den man vor Dieben versteckt."
+  },
+  {
+    "id": "ch2_berta.drohung",
+    "speaker": "berta",
+    "text": "Nicht sicher? Kind, hier ist seit zwanzig Nächten nichts mehr sicher. Ich bleibe am Brunnen, bis mein Paul zurückkommt. Du kannst mich beißen, wenn du willst. Aber du kannst mich nicht wegschicken."
+  },
+  {
+    "id": "ch2_berta.wieder",
+    "speaker": "berta",
+    "text": "Du bist noch da. Hast du meinen Paul gesehen?"
+  },
+  {
+    "id": "ch2_berta.hub",
+    "speaker": "berta",
+    "text": "Frag, was du fragen willst. Der Regen hört heute ohnehin nicht auf."
+  },
+  {
+    "id": "ch2_berta.paul",
+    "speaker": "berta",
+    "text": "Mein Urenkel. Neun Jahre. Vor zwei Nächten stand er am Fenster und hat gesummt, ein Lied, das ihm keiner beigebracht hat. Am Morgen war das Bett leer und die Tür offen. Seine Schwester Lene summt jetzt auch."
+  },
+  {
+    "id": "ch2_berta.ilyas",
+    "speaker": "berta",
+    "text": "Der Schreiberjunge. İlyas. Das hohe Haus im Westen, das mit dem Licht oben. Seine Familie hat schon für die Grafen geschrieben, als die Grafen noch Steuern genommen haben. Er wird dich mit seiner Armbrust begrüßen. Nimm es ihm nicht übel."
+  },
+  {
+    "id": "ch2_berta.kapelle",
+    "speaker": "berta",
+    "text": "Vater Gerold hält dort Messen. Nachts. Seit seine Adelheid tot ist, schläft er nicht mehr. Die Leute sagen, er spricht mit einem Heiligen. Ich sage, ein Heiliger würde keine Kinder rufen."
+  },
+  {
+    "id": "ch2_berta.hilfe",
+    "speaker": "berta",
+    "text": "… Ein Drakenfels, der einer alten Frau die Hand reicht. Meine Mutter würde es nicht glauben. Hier. Nimm die Kräuter. Für deine Wunden, falls Vampire welche haben."
+  },
+  {
+    "id": "ch2_berta.dank",
+    "speaker": "berta",
+    "text": "Lene … Du hast sie zurückgebracht. Paul ist auch zurück, aus dem Loch unter der Kapelle, mit Augen wie ein Fisch, aber er lebt. Was immer du bist, Drakenfels – heute warst du etwas Gutes."
+  },
+  {
+    "id": "ch2_konrad.start",
+    "speaker": "konrad",
+    "text": "Wir haben zu. Nachts wird nicht aufgemacht. Nicht für Reisende, nicht für Geld und nicht für das, was du bist."
+  },
+  {
+    "id": "ch2_konrad.wieder",
+    "speaker": "konrad",
+    "text": "Du schon wieder. Was willst du noch?"
+  },
+  {
+    "id": "ch2_konrad.reden",
+    "speaker": "konrad",
+    "text": "Reden. Gut. Durch das Holz hindurch redet es sich am besten mit deinesgleichen."
+  },
+  {
+    "id": "ch2_konrad.befehl",
+    "speaker": "konrad",
+    "text": "Ich … öffne … nein. NEIN. Raus aus meinem Kopf! Gott steh mir bei – was willst du?"
+  },
+  {
+    "id": "ch2_konrad.drohung",
+    "speaker": "konrad",
+    "text": "Versuch es. Hinter der Tür steht eine Axt, und meine Hände zittern nicht. … Was willst du?"
+  },
+  {
+    "id": "ch2_konrad.fragen",
+    "speaker": "konrad",
+    "text": "Frag schnell."
+  },
+  {
+    "id": "ch2_konrad.kapelle",
+    "speaker": "konrad",
+    "text": "Ich bin Kirchenvogt. War. Gerold hat mich vor zwei Wochen weggeschickt und abgeschlossen. Seitdem brennt da nachts Licht, aber keiner geht hinein. Nur heraus kommt keiner mehr."
+  },
+  {
+    "id": "ch2_konrad.fremde",
+    "speaker": "konrad",
+    "text": "Einer. Groß, Fell über den Schultern, roch nach Wald. Ein Wolfsbund-Späher, wenn du mich fragst. Hat nach der Kapelle gefragt und ist hinaufgegangen. Zurück kam er nicht."
+  },
+  {
+    "id": "ch2_konrad.schluesselfrage",
+    "speaker": "konrad",
+    "text": "Den Zweitschlüssel. Ja. Warum sollte ich ihn dir geben?"
+  },
+  {
+    "id": "ch2_konrad.schluessel",
+    "speaker": "konrad",
+    "text": "… Hier. Durch die Luke. Und wenn du da oben stirbst, dann bring wenigstens die anderen mit zurück."
+  },
+  {
+    "id": "ch2_konrad.schluesselDrohung",
+    "speaker": "konrad",
+    "text": "Nimm ihn. Nimm ihn und geh."
+  },
+  {
+    "id": "ch2_ilyas_window.start",
+    "speaker": "ilyas",
+    "text": "Keinen Schritt weiter. Die Armbrust ist mit Silber geladen, und ich habe lange geübt. Wer bist du, und warum riechst du nach Grabstein?"
+  },
+  {
+    "id": "ch2_ilyas_window.wahr",
+    "speaker": "ilyas",
+    "text": "… Drakenfels. Der Erbe. Mein Urgroßvater hat dein Gesicht beschrieben, aber er hat vergessen zu erwähnen, dass du so jung aussiehst. Warte. Ich komme hinunter. Wenn du mich beißt, verfolgt dich meine Familie bis ans Ende der Chronik."
+  },
+  {
+    "id": "ch2_ilyas_window.luege",
+    "speaker": "ilyas",
+    "text": "Berta schickt niemanden zu mir, ohne mir vorher Brot zu schicken. Aber sie würde dich nicht zu mir schicken, wenn sie dich für gefährlich hielte. Also lügst du nur halb. Ich komme hinunter."
+  },
+  {
+    "id": "ch2_ilyas_window.luege2",
+    "speaker": "ilyas",
+    "text": "Reisende kommen nicht nachts aus Richtung der Burg, und Reisende werfen im Laternenlicht einen Schatten. Du nicht. Versuch es noch einmal."
+  },
+  {
+    "id": "ch2_ilyas_window.drohung",
+    "speaker": "ilyas",
+    "text": "Nein."
+  },
+  {
+    "id": "ch2_ilyas_window.nachSchuss",
+    "speaker": "ilyas",
+    "text": "Das war eine Warnung. Silber brennt, nicht wahr? Gut. Jetzt weißt du, dass ich es ernst meine. Bleib da stehen. Ich komme hinunter, und wir reden wie zwei Leute, die einander nicht trauen."
+  },
+  {
+    "id": "ch2_ilyas.start",
+    "speaker": "ilyas",
+    "text": "Setz dich nicht. Ich habe nur einen Stuhl, und auf dem sitze ich. … Gut. Du willst wissen, was mit deinem Haus geschehen ist. Ich will wissen, warum Menschen in meinem Dorf verschwinden. Vielleicht ist das dieselbe Frage."
+  },
+  {
+    "id": "ch2_ilyas.wieder",
+    "speaker": "ilyas",
+    "text": "Noch etwas?"
+  },
+  {
+    "id": "ch2_ilyas.hub",
+    "speaker": "ilyas",
+    "text": "Frag."
+  },
+  {
+    "id": "ch2_ilyas.chronik",
+    "speaker": "ilyas",
+    "text": "Mein Urgroßvater Anselm war Schreiber in eurem Haus. Er kam in jener Nacht allein herunter, mit weißem Haar, und hat nie wieder geschlafen, ohne zu schreien. Er hat alles aufgeschrieben. Den Teil, auf den es ankommt, hat er verschlüsselt."
+  },
+  {
+    "id": "ch2_ilyas.chronik2",
+    "speaker": "ilyas",
+    "text": "Lies es. Und dann sag mir, warum ein alter Mann, der nichts mehr zu verlieren hatte, so große Angst davor hatte, dass jemand anderes als ein Drakenfels die Wahrheit liest."
+  },
+  {
+    "id": "ch2_ilyas.verschwunden",
+    "speaker": "ilyas",
+    "text": "Drei, seit der Mond rot wurde. Alle haben vorher gesummt. Alle wurden zuletzt an der Kapelle gesehen. Ich habe es aufgeschrieben, weil Aufschreiben das Einzige ist, was ich kann, wenn ich mich nicht traue, hinaufzugehen."
+  },
+  {
+    "id": "ch2_ilyas.erzaehlen",
+    "speaker": "ilyas",
+    "text": "Eine Frau, die an deinem Sarg kniet, und eine, die eine Kerze hält. … Anselm schrieb von einer Morwen. Einem Mündel im Haus, das nach jener Nacht spurlos verschwand. Wenn ich du wäre, würde ich herausfinden, ob sie noch lebt. Und warum sie dich nicht weckt, sondern Kerzen anzündet."
+  },
+  {
+    "id": "ch2_ilyas.wahlspruch",
+    "speaker": "ilyas",
+    "text": "Mond, Rabe, Krone, Blut. … Das ist der Schlüssel, aber nicht das Schloss. Anselm benutzte eine Chiffrierscheibe. Sie ist nicht hier. Er schrieb, er habe sie dort gelassen, ‚wo der Schreiber schrieb'. In der Burg also. Wenn du je zurückgehst, nimm mich mit."
+  },
+  {
+    "id": "ch2_ilyas.kapelle",
+    "speaker": "ilyas",
+    "text": "Dann geh. Und komm zurück, wenn du kannst. Ich will wissen, was du gefunden hast – nicht, was du mir erzählen willst. Das ist ein Unterschied."
+  },
+  {
+    "id": "ch2_ilyas.nachKapelle",
+    "speaker": "ilyas",
+    "text": "Du lebst. Und Lene … Berta wird es mir erzählen, bevor du es tust. Was war da unten?"
+  },
+  {
+    "id": "ch2_ilyas.wahrheit",
+    "speaker": "ilyas",
+    "text": "… Dann hat Anselm recht gehabt. Es ist nicht vorbei. Hier – meine Karte vom Schwarzen Forst. Wenn der Wolfsbund von seinem toten Späher erfährt, ist es besser, du erklärst es ihnen, bevor sie es selbst herausfinden. Ich gehe zur Burg, sobald ich den Mut habe. Vielleicht findest du mich dort."
+  },
+  {
+    "id": "ch2_ilyas.luege",
+    "speaker": "ilyas",
+    "text": "Ein verwirrter Priester, der Kinder in eine Grube führt. Gut. Dann behalte deine Wahrheit. Die Karte bekommst du trotzdem – nicht für dich, für Rabenfurt. Und wenn du mich je wieder brauchst, wirst du mir mehr erzählen müssen."
+  },
+  {
+    "id": "ch2_gerold.start",
+    "speaker": "gerold",
+    "text": "Du bist gekommen. Er hat gesagt, dass du kommst. Er hat gesagt, das Gefäß kehrt heim, und die Träumenden werden es tragen. Knie nieder, Erbe. Er hört dich."
+  },
+  {
+    "id": "ch2_gerold.wer",
+    "speaker": "gerold",
+    "text": "Meine Adelheid. Sie ist bei ihm. Er spricht mit ihrer Stimme, damit ich keine Angst habe. Hörst du? Sie lacht. Sie hat sieben Winter nicht gelacht."
+  },
+  {
+    "id": "ch2_gerold.kind",
+    "speaker": "gerold",
+    "text": "Gehen? Sie geht doch. Sie geht zu ihm. Alle gehen zu ihm, am Ende. Ich mache den Weg nur kürzer."
+  },
+  {
+    "id": "ch2_gerold.stolz",
+    "speaker": "gerold",
+    "text": "Nicht vor ihm? Er war vor deinem Blut da, Junge. Vor deinem Namen. Er war da, bevor jemand auf die Idee kam, die Dunkelheit zu benennen."
+  },
+  {
+    "id": "ch2_gerold.kern",
+    "speaker": "gerold",
+    "text": "Er braucht nur Träume. Ein wenig Vergessen. Ist das so viel? Für einen Gott?"
+  },
+  {
+    "id": "ch2_gerold.erkenntnis",
+    "speaker": "gerold",
+    "text": "Nein … nein, sie … sie hat gesagt, mein Name ist Gerold, aber Adelheid hat mich nie Gerold genannt. Sie hat … sie hat mich … Gott. Gott im Himmel. Was habe ich getan?"
+  },
+  {
+    "id": "ch2_gerold.verschonen",
+    "speaker": "gerold",
+    "text": "Leben … ja. Leben, damit ich mich erinnere. Das ist grausamer als alles, was er tun könnte. Geh. Nimm sie mit. Nimm sie alle mit."
+  },
+  {
+    "id": "ch2_gerold.toeten",
+    "speaker": "gerold",
+    "text": "Dann tu es. Er nimmt mich ohnehin. Er nimmt dich auch. Er hat dich schon …"
+  },
+  {
+    "id": "ch2_gerold.trinken",
+    "speaker": "gerold",
+    "text": "Ja … ja, trink. Er schmeckt mit dir. Er schmeckt durch dich …"
+  },
+  {
+    "id": "ch2_lene.start",
+    "speaker": "lene",
+    "text": "… tief im Brunnen schläft der Mond … Du bist das. Der Mann aus dem Lied. Er hat gesagt, du kommst und holst mich ab."
+  },
+  {
+    "id": "ch2_lene.wer",
+    "speaker": "lene",
+    "text": "Der mit der Stimme von deiner Mama. Er kennt das Lied. Aber nur die Hälfte. Er hat gesagt, die andere Hälfte hast du."
+  },
+  {
+    "id": "ch2_lene.heim",
+    "speaker": "lene",
+    "text": "… Mir ist kalt. Wo ist Paul?"
+  },
+  {
+    "id": "ch3_bassem_meet.start",
+    "speaker": "bassem",
+    "text": "Halt. Noch ein Schritt, und ich reiße dir die Kehle heraus, Blutsauger. Ich rieche dich schon seit dem ersten Grenzstein. Du riechst wie die Kammer, in der mein Vater gestorben ist."
+  },
+  {
+    "id": "ch3_bassem_meet.tarek",
+    "speaker": "bassem",
+    "text": "Tarek …? Gib her. … Sein Zahn. Und sein Brief. Er ist tot. Natürlich ist er tot. Und ausgerechnet ein Drakenfels bringt mir seinen Zahn. Warum?"
+  },
+  {
+    "id": "ch3_bassem_meet.ehrlich",
+    "speaker": "bassem",
+    "text": "Wenigstens lügst du nicht. Das ist mehr, als ich von deinem Haus erwartet habe."
+  },
+  {
+    "id": "ch3_bassem_meet.nicht",
+    "speaker": "bassem",
+    "text": "Das sagen Söhne immer. Bis sie die Ringe ihrer Väter tragen. Ich sehe einen an deiner Hand."
+  },
+  {
+    "id": "ch3_bassem_meet.durch",
+    "speaker": "bassem",
+    "text": "Durch. Zur Rabenwacht, nehme ich an. Es gibt nur einen Grund, warum ein Drakenfels dorthin will: den alten Gang deines Hauses."
+  },
+  {
+    "id": "ch3_bassem_meet.hund",
+    "speaker": "bassem",
+    "text": "Hund. … Sag das noch einmal, und du wirst herausfinden, wie schnell ein Hund sein kann."
+  },
+  {
+    "id": "ch3_bassem_meet.warum",
+    "speaker": "bassem",
+    "text": "Hör zu. Der Mond ist rot, und er bleibt rot. Meine Leute werden mondkrank – sie vergessen, wer sie sind, und dann vergessen sie, dass sie nicht nur Bestien sind. Und jetzt kommst du. Glaubst du an Zufälle?"
+  },
+  {
+    "id": "ch3_bassem_meet.eid",
+    "speaker": "bassem",
+    "text": "Der älteste Vertrag zwischen deinem Volk und meinem. Wir stammen aus demselben Dunkel, sagen die Ältesten. Ihr habt seinen Hunger geerbt, wir sein Fleisch. Und beide haben wir geschworen, es nicht zu wecken. Lies die Grenzsteine, wenn du mir nicht glaubst."
+  },
+  {
+    "id": "ch3_bassem_meet.glaube",
+    "speaker": "bassem",
+    "text": "… Dann sind wir uns in einer Sache einig. Das macht uns nicht zu Freunden."
+  },
+  {
+    "id": "ch3_bassem_meet.hilf",
+    "speaker": "bassem",
+    "text": "Ich helfe keinem Drakenfels. Aber ich töte dich heute nicht. Geh nach Westen, zum alten Lager meiner Sippe. Sieh dir an, was der Mond meinem Volk angetan hat. Dann reden wir weiter – wenn du dann noch reden willst."
+  },
+  {
+    "id": "ch3_bassem_camp.start",
+    "speaker": "bassem",
+    "text": "Du hast es gesehen. Ich erkenne es an deinem Gesicht. Der Zehnt. Silberketten, und ein Junge, der hinter dem Wagen herläuft, bis seine Füße bluten."
+  },
+  {
+    "id": "ch3_bassem_camp.leid",
+    "speaker": "bassem",
+    "text": "… Achtzig Jahre habe ich mir vorgestellt, was ich einem Drakenfels sage, wenn er das sagt. Jetzt weiß ich es nicht mehr."
+  },
+  {
+    "id": "ch3_bassem_camp.vater",
+    "speaker": "bassem",
+    "text": "Dein Vater. Dein Haus. Dein Ritual. Du lebst von dem, was er gestohlen hat. Aber gut – du warst noch nicht da. Oder du warst da und hast geschlafen."
+  },
+  {
+    "id": "ch3_bassem_camp.stolz",
+    "speaker": "bassem",
+    "text": "Nein. Ich will, dass du stehen bleibst und es aushältst. Das tun Wölfe. Vampire laufen weg in ihre Särge."
+  },
+  {
+    "id": "ch3_bassem_camp.nadira",
+    "speaker": "bassem",
+    "text": "Meine Schwester Nadira ist mondkrank. Die Ältesten wollen sie töten, bevor sie jemanden reißt. Ich habe sie zum Steinkreis im Osten gebracht, um sie zu reinigen. Sie hat die Ketten zerbrochen. Wenn du anders bist als dein Vater, dann hilf mir, sie zu finden, bevor die Ältesten es tun."
+  },
+  {
+    "id": "ch3_bassem_camp.ja",
+    "speaker": "bassem",
+    "text": "Dann komm zum Steinkreis. Und wenn sie dich angreift – töte sie nicht. Ich bitte dich. Ich habe noch nie einen Drakenfels um etwas gebeten."
+  },
+  {
+    "id": "ch3_bassem_camp.nein",
+    "speaker": "bassem",
+    "text": "Natürlich. Eigene Wege. Das sagen Drakenfels, wenn sie Nein meinen."
+  },
+  {
+    "id": "ch3_nadira.start",
+    "speaker": "nadira",
+    "text": "… Bruder? Es ist so laut. Der Mond singt die ganze Zeit. Aber dein Blut, Vampir … dein Blut ist still. Woher hast du die Stille?"
+  },
+  {
+    "id": "ch3_nadira.mutter",
+    "speaker": "nadira",
+    "text": "Dann hat sie dir etwas Seltenes gegeben. Etwas, das er nicht hören kann."
+  },
+  {
+    "id": "ch3_nadira.weiss",
+    "speaker": "nadira",
+    "text": "Behalt sie. Lass sie dir von niemandem nehmen."
+  },
+  {
+    "id": "ch3_bassem_end.freund",
+    "speaker": "bassem",
+    "text": "Die Rabenwacht. Hier haben sie meinen Vater angekettet, bevor sie ihn zu euch brachten. … Ich gehe nicht mit nach Ebon. Kein Wolf betritt diese Kathedrale. Aber hör zu: Wenn du zu deiner Burg zurückkehrst und das Ding darunter weckst – dann heul. Ich komme."
+  },
+  {
+    "id": "ch3_bassem_end.neutral",
+    "speaker": "bassem",
+    "text": "Die Rabenwacht. Dein Gang wartet. Ich halte dich nicht auf. Aber ich komme dir auch nicht nach. Was immer unter Vareth schläft – mach es nicht schlimmer."
+  },
+  {
+    "id": "ch3_bassem_end.feind",
+    "speaker": "bassem",
+    "text": "Da ist dein Turm. Geh hinein und komm nie wieder über die Grenze. Beim nächsten Mal frage ich nicht, wessen Sohn du bist."
+  },
+  {
+    "id": "ch4_mine.start",
+    "speaker": "mine",
+    "text": "Du bist schneller wach geworden, als ich gehofft habe. Und langsamer, als ich befürchtet habe."
+  },
+  {
+    "id": "ch4_mine.mauer",
+    "speaker": "mine",
+    "text": "Ja. Ich habe es nicht so gemeint, wie es klang. Oder doch. Ich weiß es selbst nicht mehr. Achtzig Jahre machen aus jedem Satz ein Rätsel."
+  },
+  {
+    "id": "ch4_mine.hunger",
+    "speaker": "mine",
+    "text": "Achtzig Jahre geschlafen, und das Erste, woran du denkst, ist, mich zu beißen? Vielleicht hätte ich doch tun sollen, was ich versprochen habe."
+  },
+  {
+    "id": "ch4_mine.wer",
+    "speaker": "mine",
+    "text": "Ich bin Mine. Aus dem Haus Morwen. Ich war Mündel bei euch, als du noch jünger warst, als du jetzt aussiehst. Dein Vater nannte uns eine Allianz. Du hast mich Mine genannt, weil du Minerva zu feierlich fandest. Erinnerst du dich?"
+  },
+  {
+    "id": "ch4_mine.kerze",
+    "speaker": "mine",
+    "text": "Jede Nacht. Achtzig Jahre lang. Es ist schwer, jemanden zu bewachen, den man nicht wecken darf. Man braucht ein Ritual, sonst verliert man den Verstand."
+  },
+  {
+    "id": "ch4_mine.ruprecht",
+    "speaker": "mine",
+    "text": "Ruprecht. Er hat mir jeden Abend gesagt, die Gläser seien poliert. Ich habe ihm jeden Abend gedankt. Es war das einzige Gespräch, das ich in all den Jahren geführt habe."
+  },
+  {
+    "id": "ch4_mine.ruprechtFed",
+    "speaker": "mine",
+    "text": "… Und du hast ihn ausgetrunken. Ich rieche es an dir. Vielleicht war es Gnade. Vielleicht war es Hunger. Ich hoffe, du weißt selbst, was davon."
+  },
+  {
+    "id": "ch4_mine.nichts",
+    "speaker": "mine",
+    "text": "Natürlich nicht. Etwas hat dir genug genommen, um dir auch das zu nehmen. Oder deine Mutter war gründlicher, als ich dachte."
+  },
+  {
+    "id": "ch4_mine.warum",
+    "speaker": "sami",
+    "text": "Warum wurde ich eingeschlossen? Ich will die Wahrheit, Mine."
+  },
+  {
+    "id": "ch4_mine.warum2",
+    "speaker": "mine",
+    "text": "Weil deine Mutter dich mehr geliebt hat als ihr Haus. Corvin wollte, dass etwas in dir wohnt – das, was unter Vareth schläft. Ysolde hat sein Ritual umgelenkt und dich versiegelt, bevor es ganz in dir war."
+  },
+  {
+    "id": "ch4_mine.mutter",
+    "speaker": "mine",
+    "text": "Hinabgestiegen. Unter die Burg, unter das Land. Mehr weiß ich nicht. Mehr wollte ich nie wissen."
+  },
+  {
+    "id": "ch4_mine.warum2b",
+    "speaker": "mine",
+    "text": "Frag, was du noch fragen willst. Aber nicht zu laut. Die Fenster hier haben Ohren."
+  },
+  {
+    "id": "ch4_mine.wecken",
+    "speaker": "mine",
+    "text": "Und dann? Dich wecken und abwarten, ob du es noch bist? Deine Mutter hat mir genau gesagt, was zu tun ist, wenn du erwachst. Ich habe es noch nicht getan. Das muss dir für heute genügen."
+  },
+  {
+    "id": "ch4_mine.versprechen",
+    "speaker": "mine",
+    "text": "… Das sage ich dir nicht hier. Nicht unter diesem Fenster."
+  },
+  {
+    "id": "ch4_mine.entscheidung",
+    "speaker": "mine",
+    "text": "Du wirst mir also vertrauen müssen. Oder nicht. Es ist deine Entscheidung, Sami. Ausnahmsweise."
+  },
+  {
+    "id": "ch4_mine.gut",
+    "speaker": "mine",
+    "text": "Du hast dich nicht verändert. Das ist entweder sehr gut oder sehr schlecht. Die Aufzeichnungen deiner Mutter liegen in der Bibliothek hinter dem Stammbaum. Die Häuser in der Ordnung ihres Blutes, Sami – wie die Kerzen, die wir als Kinder hier angezündet haben, um die Priester zu ärgern."
+  },
+  {
+    "id": "ch4_mine.neutral",
+    "speaker": "mine",
+    "text": "Das hast du schon immer gesagt. Meistens ohne mich. Die Bibliothek liegt hinter dem Stammbaum im Seitenschiff. Lies, bevor du zählst."
+  },
+  {
+    "id": "ch4_mine.kalt",
+    "speaker": "mine",
+    "text": "Vielleicht. Aber ich bin noch hier. Das ist mehr, als die meisten von uns von sich sagen können. Die Bibliothek ist hinter dem Stammbaum. Finde sie allein."
+  },
+  {
+    "id": "ch4_mine_seal.bereit",
+    "speaker": "mine",
+    "text": "Das Siegel will zwei Blutlinien. Drakenfels – und eine zweite, älter als eure Krone. Morwen ist älter. Gib mir deine Hand."
+  },
+  {
+    "id": "ch4_mine_seal.zoegern",
+    "speaker": "mine",
+    "text": "Das Siegel will zwei Blutlinien. Und du willst meine. Warum sollte ich dir helfen, dorthin hinabzusteigen, wohin sie gegangen ist?"
+  },
+  {
+    "id": "ch4_mine_seal.bitte",
+    "speaker": "sami",
+    "text": "Bitte, Mine. Ich steige nicht hinab, um ihn zu wecken. Ich steige hinab, um sie zu finden."
+  },
+  {
+    "id": "ch4_mine_seal.gibtZoegernd",
+    "speaker": "mine",
+    "text": "… Ich tue es nicht für dich. Ich tue es, weil sie es so gewollt hätte. Gib mir deine Hand, bevor ich es mir anders überlege."
+  },
+  {
+    "id": "ch4_mine_seal.gibt",
+    "speaker": "mine",
+    "text": "Halt still. Es brennt nur kurz. … Siehst du? Unser Blut erkennt sich noch."
+  },
+  {
+    "id": "ch4_mine_seal.nein",
+    "speaker": "mine",
+    "text": "Nein. Hol es dir beim Prior. Er hat ohnehin zu viel davon."
+  },
+  {
+    "id": "ch4_mine_seal.drohung",
+    "speaker": "mine",
+    "text": "Versuch es, und du wirst herausfinden, warum deine Mutter ausgerechnet mir den Dorn gegeben hat. … Geh zum Prior. Ich sehe zu."
+  },
+  {
+    "id": "ch4_mine_seal.prior",
+    "speaker": "sami",
+    "text": "Malachias sitzt im Chorgestühl. Sein Blut ist das älteste in dieser Kirche."
+  },
+  {
+    "id": "ch4_malachias.start",
+    "speaker": "malachias",
+    "text": "Wir vergessen für ihn. Wir vergessen für ihn. Wir vergessen … ah. Das Gefäß. Er hat uns gebeten, dich zu grüßen."
+  },
+  {
+    "id": "ch4_malachias.wieder",
+    "speaker": "malachias",
+    "text": "Das Gefäß kehrt zurück. Wie ein Krug zum Brunnen."
+  },
+  {
+    "id": "ch4_malachias.hub",
+    "speaker": "malachias",
+    "text": "Frag, Kind. Wir haben Zeit. Wir haben alle Zeit, die je vergessen wurde."
+  },
+  {
+    "id": "ch4_malachias.wer",
+    "speaker": "malachias",
+    "text": "Wir waren Malachias. Prior von Ebon. Jetzt sind wir das, was er von Malachias übrig gelassen hat. Ein Mund. Viele Münder. Hörst du sie? Sie sind alle sehr höflich."
+  },
+  {
+    "id": "ch4_malachias.ritual",
+    "speaker": "malachias",
+    "text": "Wir haben es gelehrt. Corvin hat zugehört. Ysolde hat besser zugehört. Sie hat verstanden, dass man ein Tor in beide Richtungen öffnen kann. Und dass man es von innen zuhalten kann, wenn man bereit ist, dahinter zu bleiben."
+  },
+  {
+    "id": "ch4_malachias.erste",
+    "speaker": "malachias",
+    "text": "Was zuerst war. Bevor es Namen gab. Er ist alles, was je vergessen wurde, und er hat Hunger, weil die Welt so viel vergisst. Euer Blut ist sein Hunger. Das Blut der Wölfe ist sein Fleisch. Ihr seid seine Kinder, die vergessen haben, wessen Kinder sie sind."
+  },
+  {
+    "id": "ch4_malachias.blut",
+    "speaker": "malachias",
+    "text": "Nimm es. Wenn du kannst. Die Kinder werden dich daran hindern wollen. Sie lieben uns. Sie lieben ihn."
+  },
+  {
+    "id": "ch5_mine_arrive.start",
+    "speaker": "mine",
+    "text": "Ich habe gesagt, wir reden in Drakenfels. Hier bin ich. Die Burg hat sich verändert, seit du fort bist. Oder sie zeigt endlich, was sie immer war."
+  },
+  {
+    "id": "ch5_mine_arrive.gefolgt",
+    "speaker": "mine",
+    "text": "Ich folge dir seit achtzig Jahren. Ich habe nur gewartet, dass du dich bewegst."
+  },
+  {
+    "id": "ch5_mine_arrive.alles",
+    "speaker": "mine",
+    "text": "Wenn du weißt, was in jener Nacht geschah. Nicht vorher. Die Gemächer deiner Mutter liegen hinter dem Kinderzimmer. Ich habe die Tür nie geöffnet. Ich konnte es nicht."
+  },
+  {
+    "id": "ch5_reconstruct.start",
+    "speaker": "sami",
+    "text": "Vier Erinnerungen an jene Nacht. Eine davon gehört nicht mir. Welche ist falsch?"
+  },
+  {
+    "id": "ch5_reconstruct.echt1",
+    "speaker": "sami",
+    "text": "Nein. Das Glas, Anselms Becher, das Lachen der Gäste – das habe ich gesehen, in diesem Saal, mit Blut auf dem Tischtuch."
+  },
+  {
+    "id": "ch5_reconstruct.echt2",
+    "speaker": "sami",
+    "text": "Nein. Diese Kälte kann man nicht erfinden. Sie sitzt noch heute in meinen Knochen."
+  },
+  {
+    "id": "ch5_reconstruct.echt3",
+    "speaker": "sami",
+    "text": "Nein. Ihre Hände waren warm. Und die Wunden waren echt – ich habe sie gespürt, als sie mich in den Stein legte."
+  },
+  {
+    "id": "ch5_reconstruct.falsch",
+    "speaker": "sami",
+    "text": "In dieser Erinnerung sind ihre Hände unversehrt. Sie hat das Siegel nie berührt. Das kann nicht sein. Er hat sie mir gegeben, damit ich Mine hasse."
+  },
+  {
+    "id": "ch5_mine.start",
+    "speaker": "sami",
+    "text": "Ich habe eine Erinnerung gesehen, Mine. Du stehst über mir, den Dolch an meiner Kehle. Und meine Mutter liegt tot zu deinen Füßen."
+  },
+  {
+    "id": "ch5_mine.frage",
+    "speaker": "mine",
+    "text": "… Und du glaubst ihr?"
+  },
+  {
+    "id": "ch5_mine.falsch",
+    "speaker": "mine",
+    "text": "Er kennt mich gut. Er hat achtzig Jahre lang zugehört, wie ich an deinem Sarg geredet habe. … Ja, es gibt einen Dolch. Aber deine Mutter lag nie zu meinen Füßen. Sie stand. Bis zum Schluss."
+  },
+  {
+    "id": "ch5_mine.sag",
+    "speaker": "mine",
+    "text": "Es gibt einen Dolch. Den Schlafdorn. Deine Mutter hat ihn mir gegeben."
+  },
+  {
+    "id": "ch5_mine.drohung",
+    "speaker": "mine",
+    "text": "Dann versuch es. Ich habe achtzig Jahre lang überlegt, ob ich es kann. Vielleicht nimmst du mir die Entscheidung ab."
+  },
+  {
+    "id": "ch5_mine.lied",
+    "speaker": "mine",
+    "text": "„… wo kein Wind die Wasser kämmt.“ Du erinnerst dich. Er hätte das nicht gewusst. Nicht so. Nicht mit diesem Gesicht."
+  },
+  {
+    "id": "ch5_mine.weg",
+    "speaker": "mine",
+    "text": "Nein. Den bekommt niemand, der so fragt. Ich gehe hinab, Sami – vor dir. Und wenn er dort mit deiner Stimme spricht, werde ich ihn erkennen."
+  },
+  {
+    "id": "ch5_mine.wahrheit",
+    "speaker": "mine",
+    "text": "Ich habe ihr versprochen: Wenn du erwachst und er in dir ist, beende ich es. Darum stand ich auf der Mauer. Darum habe ich gesagt, du hättest niemals aufwachen dürfen. Weil ich dann wählen müsste."
+  },
+  {
+    "id": "ch5_mine.inmir",
+    "speaker": "mine",
+    "text": "Ein Splitter. Ich sehe ihn manchmal in deinen Augen, wenn du hungrig bist. Aber du bist noch da. Du hast nach mir gefragt, nicht nach Macht. Das hätte er nicht getan."
+  },
+  {
+    "id": "ch5_mine.schlief",
+    "speaker": "mine",
+    "text": "Dann hätte ich nie erfahren, ob du es noch bist. Und ich wollte es wissen. Mehr als alles andere."
+  },
+  {
+    "id": "ch5_mine.gibt",
+    "speaker": "mine",
+    "text": "Nimm ihn. Wenn jemand ihn führen soll, dann du. Deine Mutter schrieb, das Band könne gelöst werden. Vielleicht braucht man dazu eine Klinge, die nicht schneidet, sondern trennt."
+  },
+  {
+    "id": "ch5_mine.mit",
+    "speaker": "mine",
+    "text": "Natürlich komme ich mit. Ich zünde seit achtzig Jahren Kerzen für dich an. Eine mehr macht keinen Unterschied."
+  },
+  {
+    "id": "ch5_mine.zoegert",
+    "speaker": "mine",
+    "text": "Den Dorn behalte ich. Noch. Wenn wir unten sind und er mit deiner Stimme spricht, dann will ich ihn in der Hand haben."
+  },
+  {
+    "id": "ch5_mine.nein",
+    "speaker": "mine",
+    "text": "Nicht heute. Frag mich unten noch einmal. Wenn du dann noch du bist."
+  },
+  {
+    "id": "ch5_mine.versteh",
+    "speaker": "mine",
+    "text": "Gut. Dann gehen wir. Du zuerst. Ich bleibe hinter dir. Das war schon immer mein Platz."
+  },
+  {
+    "id": "ch5_ilyas.mutig",
+    "speaker": "ilyas",
+    "text": "Ich habe den Mut gefunden. Er lag zwischen Rabenfurt und deinem Tor, ungefähr auf halber Strecke, unter einem toten Baum."
+  },
+  {
+    "id": "ch5_ilyas.anselm",
+    "speaker": "ilyas",
+    "text": "Ich bin nicht deinetwegen hier. Ich bin wegen Anselm hier. Er hat achtzig Jahre darauf gewartet, dass jemand seine Seiten liest."
+  },
+  {
+    "id": "ch5_ilyas.wieder",
+    "speaker": "ilyas",
+    "text": "Die Scheibe. Wo der Schreiber schrieb. Such weiter."
+  },
+  {
+    "id": "ch5_ilyas.scheibe",
+    "speaker": "ilyas",
+    "text": "„Wo der Schreiber schrieb.“ Anselm schrieb hier, am Tisch deines Vaters. Er hasste diesen Tisch, steht in der Chronik. Er hat einmal eine Feder hineingerammt, so wütend war er."
+  },
+  {
+    "id": "ch5_ilyas.erwartung",
+    "speaker": "ilyas",
+    "text": "Eine Entschuldigung, glaube ich. Dafür, dass er überlebt hat. Menschen, die überleben, schreiben immer Entschuldigungen."
+  },
+  {
+    "id": "ch5_ilyas.danach",
+    "speaker": "ilyas",
+    "text": "„Nicht vernichten. Nicht beherrschen. Lösen.“ … Weißt du, was das heißt, Sami? Ich nicht. Aber ich weiß, dass es niemand je versucht hat."
+  },
+  {
+    "id": "ch5_ilyas.mitJa",
+    "speaker": "ilyas",
+    "text": "Jemand muss aufschreiben, was dort unten geschieht. Und jemand muss die Worte lesen, die dort in den Stein geschrieben sind – Anselm schreibt von Inschriften, älter als jede Sprache, die ihr Vampire kennt."
+  },
+  {
+    "id": "ch5_ilyas.mitNein",
+    "speaker": "ilyas",
+    "text": "Mit dir? Nach allem, was du mir verschwiegen hast? Nein. Ich bleibe hier und schreibe auf, dass du gegangen bist. Das ist mehr, als die meisten Drakenfels von einem Menschen bekommen."
+  },
+  {
+    "id": "ch5_ilyas.bleib",
+    "speaker": "ilyas",
+    "text": "Gefährlich. Als ob es hier oben sicher wäre. … Gut. Ich schreibe auf, dass du gegangen bist. Und ich schreibe deinen Namen dazu, nicht nur deinen Titel."
+  },
+  {
+    "id": "ch5_bassem.versprochen",
+    "speaker": "bassem",
+    "text": "Du hast geheult. Ich habe es bis zur Grenze gehört. Der Wolfsbund steht vor deinem Tor, Drakenfels – zum ersten Mal ohne Fackeln."
+  },
+  {
+    "id": "ch5_bassem.ja",
+    "speaker": "bassem",
+    "text": "Dann halten wir sie dir vom Leib. Aber hör zu: Wenn du ihm nachgibst, reißen wir dich in Stücke. Das ist kein Vertrag. Das ist ein Versprechen."
+  },
+  {
+    "id": "ch5_bassem.allein",
+    "speaker": "bassem",
+    "text": "Ich bin allein gekommen. Die Ältesten wissen nicht, dass ich hier bin. Sie würden mir das Fell abziehen. Also: Warum sollte ich bleiben?"
+  },
+  {
+    "id": "ch5_bassem.nein",
+    "speaker": "bassem",
+    "text": "Nein. Kannst du nicht. … Ich warte am Tor. Wenn das Ding herauskommt, bin ich da. Aber hinunter gehe ich nicht. Nicht für einen Drakenfels."
+  },
+  {
+    "id": "ch5_ruprecht.start",
+    "speaker": "verlorener",
+    "text": "Junger Herr … der Herr ist zurück. Er sitzt unter dem Stein und fragt nach Euch. Er hat Euren Namen vergessen. Er fragt trotzdem."
+  },
+  {
+    "id": "ch6_pruefung.start",
+    "speaker": "ysolde",
+    "text": "Sami. Mein Sohn. Du bist gekommen. Komm zu mir – nicht zu ihr. Sie ist nicht ich."
+  },
+  {
+    "id": "ch6_pruefung.zweite",
+    "speaker": "stimme",
+    "text": "„Sami. Hör nicht auf sie. Ich bin deine Mutter. Sie ist nur das, was er aus meinem Gesicht gemacht hat.“"
+  },
+  {
+    "id": "ch6_pruefung.hub",
+    "speaker": "sami",
+    "text": "Zwei Frauen mit ihrem Gesicht. Zwei Stimmen mit ihrer Stimme. Eine von ihnen hat achtzig Jahre lang die Tür zugehalten."
+  },
+  {
+    "id": "ch6_pruefung.ersteStrophe",
+    "speaker": "stimme",
+    "text": "Beide singen, im selben Atem: „Tief im Brunnen schläft der Mond, wo kein Wind die Wasser kämmt …“ Er kennt die erste Strophe. Er hat sie durch Lene gesungen."
+  },
+  {
+    "id": "ch6_pruefung.zweiteStrophe",
+    "speaker": "ysolde",
+    "text": "Links: „… und wenn der Mond erwacht, mein Kind, dann sing ihn in den Brunnen zurück.“ – Rechts schweigt. Dann, zu schnell: „Es gab nur eine Strophe, mein Liebling. Du erinnerst dich falsch.“"
+  },
+  {
+    "id": "ch6_pruefung.haende",
+    "speaker": "sami",
+    "text": "Die Linke hebt die Hände – die Handflächen voller alter, offener Narben. Die Rechte lächelt und zeigt glatte, weiße Haut. Wie in der falschen Erinnerung."
+  },
+  {
+    "id": "ch6_pruefung.richtig",
+    "speaker": "ysolde",
+    "text": "Du hast mich gefunden. Dann hör zu, Sami, solange er wütend ist und nicht hinsieht. Das ist die zweite Strophe. Ich habe sie achtzig Jahre lang vor ihm versteckt – in mir, wo er nicht hinsehen kann."
+  },
+  {
+    "id": "ch6_pruefung.falsch",
+    "speaker": "stimme",
+    "text": "„Ja … ja, mein Kind. Komm.“ Die Rechte lächelt breiter, als ein Gesicht lächeln kann. Und die Linke schreit deinen Namen, während der Boden sie verschluckt."
+  },
+  {
+    "id": "ch6_inschrift.ilyas",
+    "speaker": "ilyas",
+    "text": "Diese Zeichen … Anselm hat sie abgezeichnet, am Rand seiner Seiten. Er konnte sie nicht lesen. Ich kann es – ein wenig. Es ist kein Fluch, Sami. Es ist eine Anleitung."
+  },
+  {
+    "id": "ch6_inschrift.ilyas2",
+    "speaker": "ilyas",
+    "text": "„Was zuerst war, ist an das gebunden, was zuletzt kam. Wer sich selbst erkennt, kann das Band lösen – nicht mit Blut, sondern mit dem, was er behält.“ Was du behältst, Sami. Nicht, was du gibst."
+  },
+  {
+    "id": "ch6_inschrift.allein",
+    "speaker": "sami",
+    "text": "Zeichen, älter als jede Schrift, die ich kenne. Ich kann sie nicht lesen. Aber eines erkenne ich: zwei Kreise, die sich berühren – und eine Hand, die sie trennt."
+  },
+  {
+    "id": "ch6_mine_heart.zweifel",
+    "speaker": "mine",
+    "text": "Er spricht mit deiner Stimme, Sami. Mit deinem Gesicht. Wie soll ich wissen, welcher von euch beiden du bist?"
+  },
+  {
+    "id": "ch6_mine_heart.gefangen",
+    "speaker": "mine",
+    "text": "Bleib weg! Ich habe dich gesehen – du hast sie getötet, du hast sie unter den Stein gestoßen, ich habe es gesehen …"
+  },
+  {
+    "id": "ch6_mine_heart.halb",
+    "speaker": "mine",
+    "text": "… Das Lied. Ja. Aber er kennt die erste Strophe. Ich brauche mehr als das, Sami."
+  },
+  {
+    "id": "ch6_mine_heart.glaubt",
+    "speaker": "mine",
+    "text": "Die zweite Strophe. Niemand kannte sie. Nicht einmal ich. … Du bist es. Hier – nimm den Dorn. Er gehört in die Hand dessen, der sich selbst erkennt."
+  },
+  {
+    "id": "ch6_mine_heart.vertrauen",
+    "speaker": "mine",
+    "text": "Vertrauen … Ich habe dir achtzig Jahre lang vertraut. Du hast geschlafen. … Ich behalte den Dorn. Aber ich werde ihn nicht gegen dich erheben. Das ist alles, was ich dir geben kann."
+  },
+  {
+    "id": "ch6_final.start",
+    "speaker": "erste",
+    "text": "Hier sind wir also. Am Grund des Hauses. Du und ich, Erbe."
+  },
+  {
+    "id": "ch6_final.hub",
+    "speaker": "erste",
+    "text": "Frag. Ich habe Zeit. Ich bin aus Zeit gemacht, die niemand mehr will."
+  },
+  {
+    "id": "ch6_final.wer",
+    "speaker": "erste",
+    "text": "Ich bin, was zuerst war. Alles, was dein Volk vergessen hat, damit es leben konnte. Ich bin dein Hunger. Ich bin das Fleisch der Wölfe. Ich bin du – der Teil von dir, der in diesem Stein wartet, seit dein Vater dich mir versprochen hat."
+  },
+  {
+    "id": "ch6_final.was",
+    "speaker": "erste",
+    "text": "Ein Haus. Einen Namen. Ich habe so viele gefressen und keinen behalten. Sie zerfallen in mir wie Salz im Wasser. Deiner würde halten. Dein Vater hat ihn für mich gemacht."
+  },
+  {
+    "id": "ch6_final.vater",
+    "speaker": "erste",
+    "text": "Hier. Überall. Er schreit manchmal, wenn ich mich an ihn erinnere. Soll ich dir seine Stimme leihen? „Mein Sohn. Heute Nacht wirst du mehr sein als ich.“ Hörst du? Er hatte recht."
+  },
+  {
+    "id": "ch6_final.wahl",
+    "speaker": "sami",
+    "text": "Er wartet. Hinter mir die Treppe, über mir das Land, unter mir alles, was je vergessen wurde. Ich muss entscheiden."
+  },
+  {
+    "id": "ch6_final.e1",
+    "speaker": "erste",
+    "text": "Dein Blut? Dein ganzes Haus? … Das ist kein Geschenk. Das ist Gift. NEIN –"
+  },
+  {
+    "id": "ch6_final.e2",
+    "speaker": "erste",
+    "text": "Endlich. Endlich ein Haus, das die Tür von innen öffnet."
+  },
+  {
+    "id": "ch6_final.e3",
+    "speaker": "erste",
+    "text": "Lösen? Was ist das? Was … was tust du? Das ist keine Waffe. Das ist ein LIED –"
+  }
+]

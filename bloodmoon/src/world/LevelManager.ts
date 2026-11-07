@@ -136,10 +136,10 @@ export class LevelManager {
     fog.density = e.fogDensity * (1 - nv * 0.45);
     L.scene.background = this.fogColor.clone().multiplyScalar(0.6);
     L.ambient.color.set(target.ambientColor);
-    L.ambient.intensity = e.ambientIntensity * (1 + nv * 2.2);
+    L.ambient.intensity = e.ambientIntensity * 1.6 * (1 + nv * 2.2);
     L.hemi.color.set(target.hemiSky);
     L.hemi.groundColor.set(target.hemiGround);
-    L.hemi.intensity = e.hemiIntensity * (1 + nv * 3);
+    L.hemi.intensity = e.hemiIntensity * 1.5 * (1 + nv * 3);
     if (L.moon) L.moon.intensity = e.moonIntensity;
     G.renderer.baseExposure = e.exposure;
     if (L.rain) L.rain.opacity = e.rain;

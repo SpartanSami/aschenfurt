@@ -1,0 +1,27 @@
+{
+  "_hinweis": "Zuordnung Figur -> ElevenLabs-Stimme. Die IDs sind Beispiele aus der ElevenLabs-Stimmenbibliothek; ersetze sie bei Bedarf durch Stimmen aus deinem Konto (Voice Library -> 'ID kopieren'). Modell eleven_multilingual_v2 spricht Deutsch.",
+  "model_id": "eleven_multilingual_v2",
+  "default": { "voice_id": "onwK4e9ZLuTAKqWW03F9", "stability": 0.5, "similarity_boost": 0.75, "style": 0.2 },
+  "speakers": {
+    "sami": { "voice_id": "onwK4e9ZLuTAKqWW03F9", "stability": 0.55, "similarity_boost": 0.8, "style": 0.25 },
+    "mine": { "voice_id": "XB0fDUnXU5powFXDhCwa", "stability": 0.6, "similarity_boost": 0.8, "style": 0.3 },
+    "bassem": { "voice_id": "N2lVS1w4EtoT3dr4eOWO", "stability": 0.45, "similarity_boost": 0.8, "style": 0.35 },
+    "ilyas": { "voice_id": "JBFqnCBsd6RMkjVDRZzb", "stability": 0.6, "similarity_boost": 0.75, "style": 0.15 },
+    "ysolde": { "voice_id": "Xb7hH8MSUJpSbSDYk0k2", "stability": 0.6, "similarity_boost": 0.8, "style": 0.3 },
+    "erste": { "voice_id": "pNInz6obpgDQGcFmaJgB", "stability": 0.3, "similarity_boost": 0.6, "style": 0.6 },
+    "corvin": { "voice_id": "nPczCjzI2devNBz1zQrb", "stability": 0.5, "similarity_boost": 0.8, "style": 0.4 },
+    "anselm": { "voice_id": "pqHfZKP75CvOlQylNhV4", "stability": 0.5, "similarity_boost": 0.7, "style": 0.2 },
+    "berta": { "voice_id": "XrExE9yKIg1WjnnlVkGX", "stability": 0.55, "similarity_boost": 0.75, "style": 0.2 },
+    "konrad": { "voice_id": "2EiwWnXFnvU5JabPnv8n", "stability": 0.5, "similarity_boost": 0.75, "style": 0.3 },
+    "lene": { "voice_id": "pFZP5JQG7iQjIQuC4Bku", "stability": 0.6, "similarity_boost": 0.75, "style": 0.1 },
+    "gerold": { "voice_id": "pqHfZKP75CvOlQylNhV4", "stability": 0.35, "similarity_boost": 0.7, "style": 0.5 },
+    "malachias": { "voice_id": "VR6AewLTigWG4xSOukaG", "stability": 0.3, "similarity_boost": 0.6, "style": 0.5 },
+    "nadira": { "voice_id": "EXAVITQu4vr4xnSDxMaL", "stability": 0.45, "similarity_boost": 0.75, "style": 0.3 },
+    "stimme": { "voice_id": "XB0fDUnXU5powFXDhCwa", "stability": 0.4, "similarity_boost": 0.7, "style": 0.4 },
+    "erzaehler": { "voice_id": "onwK4e9ZLuTAKqWW03F9", "stability": 0.7, "similarity_boost": 0.7, "style": 0.1 },
+    "dorf": { "voice_id": "2EiwWnXFnvU5JabPnv8n", "stability": 0.5, "similarity_boost": 0.7, "style": 0.2 },
+    "wolf": { "voice_id": "N2lVS1w4EtoT3dr4eOWO", "stability": 0.4, "similarity_boost": 0.7, "style": 0.4 },
+    "kultist": { "voice_id": "VR6AewLTigWG4xSOukaG", "stability": 0.5, "similarity_boost": 0.7, "style": 0.2 },
+    "verlorener": { "voice_id": "pqHfZKP75CvOlQylNhV4", "stability": 0.25, "similarity_boost": 0.6, "style": 0.3 }
+  }
+}

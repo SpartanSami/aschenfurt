@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { settings, qualityProfiles } from "../core/Settings";
 
 /** Umrechnung der Level-Intensitäten in physikalische Einheiten von Three.js */
-export const LIGHT_SCALE = 5;
+export const LIGHT_SCALE = 8;
 
 export interface LightSource {
   pos: THREE.Vector3;

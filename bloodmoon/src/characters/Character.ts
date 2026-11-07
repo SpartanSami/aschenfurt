@@ -67,8 +67,11 @@ interface Joints {
 type JKey = keyof Joints;
 type PoseDef = Partial<Record<JKey, [number, number, number]>> & { hipY?: number; hipZ?: number };
 
+/** Haut wird leicht abgedunkelt, damit sie unter Kerzenlicht nicht überstrahlt */
+export const SKIN_SCALE = 0.74;
+
 const POSES: Record<Pose, PoseDef> = {
-  stand: { shL: [0, 0, 0.08], shR: [0, 0, -0.08], elL: [-0.12, 0, 0], elR: [-0.12, 0, 0] },
+  stand: { shL: [-0.06, 0.05, 0.1], shR: [-0.06, -0.05, -0.1], elL: [-0.32, 0.1, 0], elR: [-0.28, -0.1, 0], hdL: [0, 0.3, 0.1], hdR: [0, -0.3, -0.1], spine: [0.02, 0, 0], neck: [0.04, 0, 0] },
   sit: { hipY: -0.48, thL: [-1.5, 0, 0.05], thR: [-1.5, 0, -0.05], knL: [1.5, 0, 0], knR: [1.5, 0, 0], shL: [-0.35, 0, 0.1], shR: [-0.35, 0, -0.1], elL: [-0.9, 0, 0], elR: [-0.9, 0, 0], spine: [0.08, 0, 0] },
   kneel: { hipY: -0.5, thL: [-1.4, 0, 0.06], thR: [0.1, 0, -0.04], knL: [1.4, 0, 0], knR: [1.6, 0, 0], spine: [0.15, 0, 0], shL: [-0.2, 0, 0.1], shR: [-0.2, 0, -0.1], elL: [-0.5, 0, 0], elR: [-0.5, 0, 0] },
   lie: { hipY: -0.82, hipZ: 0, spine: [-1.55, 0, 0], thL: [1.5, 0, 0.05], thR: [1.5, 0, -0.05], shL: [0, 0, 0.2], shR: [0, 0, -0.2] },
@@ -155,9 +158,9 @@ export function updateSharedMaterials(t: number): void {
   }
 }
 
-function lathe(profile: [number, number][], seg = 20, depth = 0.72, folds = 0, foldAmp = 0): THREE.BufferGeometry {
+function lathe(profile: [number, number][], seg = 20, depth = 0.72, folds = 0, foldAmp = 0, phiStart = 0, phiLength = Math.PI * 2): THREE.BufferGeometry {
   const pts = profile.map(([r, y]) => new THREE.Vector2(Math.max(0.001, r), y));
-  const g = new THREE.LatheGeometry(pts, seg);
+  const g = new THREE.LatheGeometry(pts, seg, phiStart, phiLength);
   const p = g.getAttribute("position") as THREE.BufferAttribute;
   const ymin = profile[0][1], ymax = profile[profile.length - 1][1];
   for (let i = 0; i < p.count; i++) {
@@ -216,6 +219,7 @@ export class Character {
   eyeGlow = 0;
   private scaleH: number;
   skirt: THREE.Mesh | null = null;
+  cape: THREE.Mesh | null = null;
   lantern: THREE.Object3D | null = null;
   disposed = false;
   /** zusätzliche Kopfneigung (z. B. für Horror: „Kopf schief“) */
@@ -242,9 +246,10 @@ export class Character {
     if (this.isVoid) return voidMaterial();
     const s = this.preset.handSkin ?? this.preset.face.skin;
     const p = this.preset.face.pallor ?? 0;
+    const k = SKIN_SCALE;
     const m = new THREE.MeshStandardMaterial({
-      color: new THREE.Color(s[0] * (1 - p * 0.12) + p * 0.07, s[1] * (1 - p * 0.08) + p * 0.05, s[2] + p * 0.08),
-      roughness: 0.6,
+      color: new THREE.Color((s[0] * (1 - p * 0.12) + p * 0.07) * k, (s[1] * (1 - p * 0.08) + p * 0.05) * k, (s[2] + p * 0.08) * k),
+      roughness: 0.74,
     });
     this.mats.push(m);
     return m;
@@ -294,8 +299,8 @@ export class Character {
     j.hips.add(pelvis);
     // Rumpf
     const torsoProf: [number, number][] = [
-      [0.135 * broad, -0.02], [0.13 * broad - fem * 0.015, 0.08], [0.145 * broad, 0.18],
-      [0.16 * broad + fem * 0.01, 0.28], [shoulderW * 0.95, 0.4], [shoulderW * 0.7, 0.47], [0.06, 0.5],
+      [0.135 * broad, -0.02], [0.122 * broad - fem * 0.02, 0.07], [0.138 * broad - fem * 0.004, 0.17],
+      [0.152 * broad + fem * 0.008, 0.27], [shoulderW * 0.9, 0.38], [shoulderW * 0.62, 0.455], [0.055, 0.5],
     ];
     const torso = new THREE.Mesh(lathe(torsoProf, 22, 0.66), top);
     torso.castShadow = true;
@@ -400,9 +405,9 @@ export class Character {
     }
     // Schulterkugeln
     for (const side of [1, -1]) {
-      const s = new THREE.Mesh(new THREE.SphereGeometry(0.062 * broad, 12, 10), top);
-      s.position.set(side * shoulderW * 0.96, 0.13, -0.01);
-      s.scale.set(1.1, 0.85, 1);
+      const s = new THREE.Mesh(new THREE.SphereGeometry(0.056 * broad, 12, 10), top);
+      s.position.set(side * shoulderW * 0.93, 0.125, -0.01);
+      s.scale.set(1.05, 0.8, 0.95);
       s.castShadow = true;
       j.chest.add(s);
     }
@@ -427,32 +432,82 @@ export class Character {
 
     // Rock / Mantelschoß
     if (o.skirt > 0) {
-      const len = 0.15 + o.skirt * 0.83;
-      const flare = o.top === "dress" ? 0.34 : o.top === "robe" ? 0.3 : 0.24;
+      const len = 0.12 + o.skirt * 0.86;
+      const isDress = o.top === "dress";
+      const isCoat = o.top === "coat";
+      const flare = isDress ? 0.36 : o.top === "robe" ? 0.3 : isCoat ? 0.27 : 0.2;
+      const r0 = (0.122 - fem * 0.02) * broad;
+      const hip = (0.158 + fem * 0.022) * broad;
       const prof: [number, number][] = [];
-      for (let i = 0; i <= 10; i++) {
-        const t = i / 10;
-        prof.push([0.15 * broad + fem * 0.02 + t * t * (flare - 0.15) + t * 0.04, 0.05 - t * len]);
+      const top = isDress ? 0.15 : 0.08;
+      for (let i = 0; i <= 14; i++) {
+        const t = i / 14;
+        const y = top - t * (len + top);
+        // Hüfte, dann Ausstellung bis zum Saum
+        const hipCurve = r0 + (hip - r0) * Math.min(1, t * 4);
+        const flareCurve = hip + (flare - hip) * Math.pow(Math.max(0, (t - 0.2) / 0.8), 1.4);
+        prof.push([(t < 0.2 ? hipCurve : flareCurve) + 0.004, y]);
       }
       prof.reverse();
       const sm = this.mat(o.skirtMat ?? o.topMat, o.skirtTint ?? o.topTint);
-      const sk = new THREE.Mesh(lathe(prof, 28, 0.85, o.top === "dress" ? 14 : 9, o.top === "dress" ? 0.06 : 0.05), sm);
+      const geo = isCoat
+        ? lathe(prof, 30, 0.86, 10, 0.05, 0.42, Math.PI * 2 - 0.84)
+        : lathe(prof, 30, isDress ? 0.9 : 0.84, isDress ? 16 : 9, isDress ? 0.05 : 0.04);
+      const sk = new THREE.Mesh(geo, sm);
       (sk.material as THREE.Material).side = THREE.DoubleSide;
       sk.castShadow = true;
       sk.receiveShadow = true;
       j.hips.add(sk);
       this.skirt = sk;
+      if (isDress) {
+        // Mieder-Saum
+        const band = new THREE.Mesh(new THREE.TorusGeometry(r0 + 0.008, 0.012, 5, 24), trim ?? this.mat("leather"));
+        band.rotation.x = Math.PI / 2;
+        band.scale.set(1, 0.9, 1);
+        band.position.y = top + 0.0;
+        j.hips.add(band);
+      }
     }
-    // Umhang / Mantel über den Schultern
+    // Umhang über den Schultern (hängt hinten herab)
     if (o.mantle && o.mantle !== "none") {
-      const mm = o.mantle === "fur" ? this.mat("fur") : this.mat(o.mantleMat ?? "clothDark");
-      const cape = new THREE.Mesh(new THREE.CylinderGeometry(shoulderW * 1.15, shoulderW * 1.7, o.mantle === "fur" ? 0.3 : 0.9, 20, 4, true, Math.PI * 0.6, Math.PI * 0.8), mm);
-      cape.rotation.y = Math.PI;
-      cape.position.set(0, o.mantle === "fur" ? 0.32 : -0.0, -0.06);
-      if (o.mantle !== "fur") cape.geometry.translate(0, -0.1, 0);
-      (cape.material as THREE.Material).side = THREE.DoubleSide;
-      cape.castShadow = true;
-      j.chest.add(cape);
+      if (o.mantle === "fur") {
+        const mm = this.mat("fur");
+        const ring = new THREE.Mesh(new THREE.TorusGeometry(shoulderW * 0.8, 0.06, 8, 26), mm);
+        ring.rotation.x = Math.PI / 2;
+        ring.scale.set(1.08, 0.7, 1.2);
+        ring.position.set(0, 0.43, -0.01);
+        ring.castShadow = true;
+        j.spine.add(ring);
+        const back = new THREE.Mesh(new THREE.CylinderGeometry(shoulderW * 0.95, shoulderW * 1.15, 0.42, 18, 3, true, Math.PI - 1.2, 2.4), mm);
+        back.position.set(0, 0.24, -0.02);
+        (back.material as THREE.Material).side = THREE.DoubleSide;
+        j.spine.add(back);
+      } else {
+        const mm = this.mat(o.mantleMat ?? "clothDark");
+        const capeLen = 1.05;
+        const g = new THREE.CylinderGeometry(shoulderW * 1.02, shoulderW * 1.55, capeLen, 22, 8, true, Math.PI - 1.3, 2.6);
+        const p = g.getAttribute("position") as THREE.BufferAttribute;
+        for (let i = 0; i < p.count; i++) {
+          const x = p.getX(i), y = p.getY(i), z = p.getZ(i);
+          const t = (capeLen / 2 - y) / capeLen;
+          const a = Math.atan2(x, z);
+          const f = 1 + Math.sin(a * 9) * 0.05 * t;
+          p.setXYZ(i, x * f, y, z * f * 0.85 - t * 0.06);
+        }
+        g.computeVertexNormals();
+        g.translate(0, -capeLen / 2, 0);
+        const cape = new THREE.Mesh(g, mm);
+        cape.position.set(0, 0.47, -0.015);
+        (cape.material as THREE.Material).side = THREE.DoubleSide;
+        cape.castShadow = true;
+        j.spine.add(cape);
+        this.cape = cape;
+        // Schließe am Hals
+        const clasp = new THREE.Mesh(new THREE.TorusGeometry(shoulderW * 0.42, 0.02, 5, 18, Math.PI), trim ?? this.mat("iron"));
+        clasp.position.set(0, 0.46, 0.0);
+        clasp.rotation.x = Math.PI / 2 + 0.3;
+        j.spine.add(clasp);
+      }
     }
     if (o.belt) {
       const b = new THREE.Mesh(new THREE.TorusGeometry(0.145 * broad, 0.018, 4, 22), this.mat("leatherBrown"));
@@ -618,6 +673,7 @@ export class Character {
       }
       j.hips.position.y = 0.97 + (POSES[this.pose].hipY ?? 0) + Math.abs(Math.cos(this.walkPhase)) * 0.025;
       if (this.skirt) this.skirt.rotation.x = s * 0.05;
+      if (this.cape) this.cape.rotation.x = 0.08 + Math.abs(s) * 0.06 + this.walkSpeed * 0.04;
     } else if (this.poseT >= 1 && standLike) {
       // Gewichtsverlagerung
       const sway = Math.sin(t * 0.4) * 0.02;
@@ -629,6 +685,7 @@ export class Character {
       j.knL.rotation.x += ((pd.knL?.[0] ?? 0) - j.knL.rotation.x) * Math.min(1, dt * 5);
       j.knR.rotation.x += ((pd.knR?.[0] ?? 0) - j.knR.rotation.x) * Math.min(1, dt * 5);
       if (this.skirt) this.skirt.rotation.x *= 0.9;
+      if (this.cape) this.cape.rotation.x += (0.02 + Math.sin(t * 0.7) * 0.015 - this.cape.rotation.x) * Math.min(1, dt * 3);
     }
     // Atmen
     const br = Math.sin(t * 1.5) * 0.012 * this.breathe;

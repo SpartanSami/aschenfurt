@@ -306,6 +306,29 @@ export class Game {
       },
       unfade: () => (G.renderer.uniforms.uFade.value = 0),
       state: () => G.state.data,
+      lineup: async (names?: string[]) => {
+        const { Character } = await import("../characters/Character");
+        const { PRESETS } = await import("../characters/Presets");
+        const list = names ?? ["sami", "mine", "bassem", "ilyas", "ysolde", "corvin", "berta", "gerold", "lene", "hollow"];
+        const cam = G.camera;
+        const fwd = new THREE.Vector3();
+        cam.getWorldDirection(fwd);
+        fwd.y = 0;
+        fwd.normalize();
+        const right = new THREE.Vector3(-fwd.z, 0, fwd.x);
+        const base = G.player.position.clone().addScaledVector(fwd, 3.2);
+        const lamp = new THREE.PointLight(0xffe2c8, 14, 14, 1.4);
+        lamp.position.copy(base).addScaledVector(fwd, -1.6).add(new THREE.Vector3(0.8, 2.6, 0));
+        G.level!.scene.add(lamp);
+        list.forEach((n, i) => {
+          const c = new Character(PRESETS[n]);
+          c.root.position.copy(base).addScaledVector(right, (i - (list.length - 1) / 2) * 0.85);
+          c.root.rotation.y = Math.atan2(-fwd.x, -fwd.z);
+          c.faceTarget = cam.position;
+          G.level!.scene.add(c.root);
+          G.level!.updaters.push((dt, t) => c.update(dt, t));
+        });
+      },
       noclip: false,
     };
   }

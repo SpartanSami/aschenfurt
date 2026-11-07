@@ -161,10 +161,11 @@ function paintFace(p: FaceParams, hair: HairParams): THREE.CanvasTexture {
   const [c, ctx] = canvas(W, H);
   const rng = new Rng(p.seed ?? 3);
   const pallor = p.pallor ?? 0;
+  const k = 0.74;
   const skin: [number, number, number] = [
-    p.skin[0] * (1 - pallor * 0.15) + pallor * 0.08,
-    p.skin[1] * (1 - pallor * 0.1) + pallor * 0.06,
-    p.skin[2] * (1 - pallor * 0.02) + pallor * 0.1,
+    (p.skin[0] * (1 - pallor * 0.15) + pallor * 0.08) * k,
+    (p.skin[1] * (1 - pallor * 0.1) + pallor * 0.06) * k,
+    (p.skin[2] * (1 - pallor * 0.02) + pallor * 0.1) * k,
   ];
   ctx.fillStyle = rgb(skin);
   ctx.fillRect(0, 0, W, H);
@@ -199,7 +200,7 @@ function paintFace(p: FaceParams, hair: HairParams): THREE.CanvasTexture {
   for (const sx of [-1, 1]) {
     const [cx, cy] = P(sx * 0.33, 0.13, 0.93);
     const g = ctx.createRadialGradient(cx, cy + 4, 2, cx, cy + 4, 26);
-    const a = 0.12 + (p.liner ?? 0) * 0.35 + (p.vampire ? 0.12 : 0) + (p.age ?? 0) * 0.15;
+    const a = 0.07 + (p.liner ?? 0) * 0.22 + (p.vampire ? 0.08 : 0) + (p.age ?? 0) * 0.12;
     g.addColorStop(0, `rgba(40,20,30,${a})`);
     g.addColorStop(1, "rgba(0,0,0,0)");
     ctx.fillStyle = g;
@@ -416,7 +417,7 @@ export function buildHead(p: FaceParams, hair: HairParams, opts: { ghostMat?: TH
 
   const faceTex = p.faceless ? null : paintFace(p, hair);
   const skinMat = (opts.ghostMat as THREE.MeshStandardMaterial) ?? (opts.voidMat as THREE.MeshStandardMaterial) ?? new THREE.MeshStandardMaterial({
-    map: faceTex, roughness: 0.62, metalness: 0,
+    map: faceTex, roughness: 0.72, metalness: 0,
   });
   const mesh = new THREE.SkinnedMesh(geo, skinMat);
   mesh.add(root);
@@ -452,7 +453,7 @@ export function buildHead(p: FaceParams, hair: HairParams, opts: { ghostMat?: TH
       pivot.add(ball);
       group.add(pivot);
       eyes.push(pivot);
-      const lid = new THREE.Mesh(new THREE.SphereGeometry(eyeR * 1.12, 14, 8, 0, Math.PI * 2, 0, Math.PI * 0.5), skinMat instanceof THREE.MeshStandardMaterial && !opts.ghostMat ? new THREE.MeshStandardMaterial({ color: new THREE.Color(...p.skin).multiplyScalar(0.8), roughness: 0.7 }) : skinMat);
+      const lid = new THREE.Mesh(new THREE.SphereGeometry(eyeR * 1.12, 14, 8, 0, Math.PI * 2, 0, Math.PI * 0.5), skinMat instanceof THREE.MeshStandardMaterial && !opts.ghostMat ? new THREE.MeshStandardMaterial({ color: new THREE.Color(...p.skin).multiplyScalar(0.58), roughness: 0.75 }) : skinMat);
       lid.position.copy(pivot.position);
       lid.rotation.x = -0.75;
       group.add(lid);
@@ -461,7 +462,7 @@ export function buildHead(p: FaceParams, hair: HairParams, opts: { ghostMat?: TH
     }
     // Ohren
     for (const sx of [1, -1]) {
-      const ear = new THREE.Mesh(new THREE.SphereGeometry(0.03, 10, 8), skinMat instanceof THREE.MeshStandardMaterial && !opts.ghostMat && !opts.voidMat ? new THREE.MeshStandardMaterial({ color: new THREE.Color(...p.skin).multiplyScalar(0.85), roughness: 0.65 }) : skinMat);
+      const ear = new THREE.Mesh(new THREE.SphereGeometry(0.03, 10, 8), skinMat instanceof THREE.MeshStandardMaterial && !opts.ghostMat && !opts.voidMat ? new THREE.MeshStandardMaterial({ color: new THREE.Color(...p.skin).multiplyScalar(0.62), roughness: 0.72 }) : skinMat);
       const ep = featurePos(p, sx * 0.98, 0.02, -0.08);
       ear.position.copy(ep);
       ear.scale.set(0.35, 1.05, 0.7);
