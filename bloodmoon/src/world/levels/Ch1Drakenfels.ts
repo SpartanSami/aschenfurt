@@ -224,12 +224,7 @@ export class Ch1Drakenfels extends Level {
     // Blutphiole in einer Nische
     this.pickupVial("vial1", [-4.35, 0.42, 6.2]);
     // Erinnerungsblut
-    this.decal(materials.hidden("pool", 41, "", undefined), [0, 0.025, 2.75], 1.3, 1.1);
-    const memGlow = this.decal(materials.basic("memGlow", () => new THREE.MeshBasicMaterial({ color: new THREE.Color(2, 1.1, 0.4), transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending })), [0, 0.03, 2.75], 0.7, 0.6);
-    this.onUpdate((_dt, t) => {
-      (memGlow.material as THREE.MeshBasicMaterial).opacity = G.state.hasMemory("m_siegel") ? 0 : G.abilities.bloodSightLevel * (0.4 + Math.sin(t * 3) * 0.2);
-    });
-    this.interact({ id: "mem_siegel", pos: v([0, 0.2, 2.75]), radius: 2.3, prompt: "Bluterinnerung berühren", angle: 0.5, bloodSightOnly: true, enabled: () => !G.state.hasMemory("m_siegel"), onInteract: () => this.memSiegel() });
+    this.memorySpot("mem_siegel", "m_siegel", [0, 0.005, 2.75], () => this.memSiegel(), 1.3);
     // Mondlicht durch einen Luftschacht
     this.box(materials.surface("iron"), [0, 6.0, -6], [0.8, 0.05, 0.8], { collide: false });
     moonShaft(this, new THREE.Vector3(0, 6, -6), new THREE.Vector3(0.4, 0, -5), 0.8, 0x8a4a50, 0.07);
@@ -671,6 +666,7 @@ export class Ch1Drakenfels extends Level {
       if (G.abilities.bloodSightLevel > 0.5) {
         G.story.readDocument("kamin_inschrift_blut");
         G.quests.task("q_wappen", "inschrift");
+        G.state.set("mottoKnown");
         if (!this.st.mottoBlood) {
           this.st.mottoBlood = true;
           setTimeout(() => G.story.say("ch1.mottoBlood"), 300);
@@ -737,6 +733,7 @@ export class Ch1Drakenfels extends Level {
     });
     if (!ok) return;
     this.st.chestOpen = true;
+    G.state.set("mottoKnown");
     G.quests.task("q_wappen", "truhe");
     const lid = this.chest.userData.lid as THREE.Object3D;
     G.audio.sfx("doorCreak", v([12.2, 8.5, -17.4]), 0.6);
@@ -919,8 +916,7 @@ export class Ch1Drakenfels extends Level {
     // Erinnerung am Kopf der Tafel
     this.decal(materials.blood("pool", 88), [-16.3, y + 0.84, -14.3], 0.7, 0.5);
     P.goblet(this, [-16.2, y + 0.83, -14.5], true);
-    this.decal(materials.hidden("pool", 89), [-16.3, y + 0.85, -14.3], 0.9, 0.7);
-    this.interact({ id: "mem_fest", pos: v([-16.3, y + 1.0, -14.3]), radius: 2.4, prompt: "Bluterinnerung berühren", angle: 0.55, bloodSightOnly: true, enabled: () => !G.state.hasMemory("m_festmahl"), onInteract: () => this.memFeast() });
+    this.memorySpot("mem_fest", "m_festmahl", [-16.3, y + 0.83, -14.3], () => this.memFeast(), 0.9);
     // Ruprecht, der Kellermeister
     if (!G.state.is("ruprechtGone")) {
       const r = new Character(PRESETS.hollow);

@@ -1,3 +1,32 @@
 import type { LineDef } from "../types";
 
-export const LINES_CH3: Record<string, LineDef> = {};
+export const LINES_CH3: Record<string, LineDef> = {
+  "ch3.enter": { s: "sami", t: "Der Schwarze Forst. Die Bäume stehen so dicht, dass der Mond nur zwischen ihnen hindurchsickert." },
+  "ch3.stone1": { s: "sami", t: "Ein Grenzstein. Alte Schrift. Und Blut – zwei Arten Blut, auf demselben Stein." },
+  "ch3.stones": { s: "sami", t: "Wolf und Vampir aus demselben Ursprung. Das hat mir niemand je erzählt." },
+  "ch3.eyes": { s: "sami", t: "Augen. Zwischen den Stämmen. Sie folgen mir." },
+  "ch3.shape": { s: "sami", t: "Etwas Großes. Es bewegt sich auf vier Beinen – und dann auf zwei." },
+  "ch3.tracks": { s: "sami", t: "Wolfsspuren. Und Blut darin. Sie führen nach Westen." },
+  "ch3.camp": { s: "sami", t: "Ein Lager. Verlassen. Die Zelte sind von innen aufgerissen worden." },
+  "ch3.campBodies": { s: "sami", t: "Sie haben einander zerrissen. Der Mond hat sie vergessen lassen, wer sie sind." },
+  "ch3.chains": { s: "sami", t: "Ketten aus Silber, aufgebrochen. Hier wurde jemand gehalten." },
+  "ch3.circle": { s: "sami", t: "Der Steinkreis. Etwas atmet auf dem Altar." },
+  "ch3.nadiraCalm": { s: "sami", t: "Ruhig. Ruhig … hör auf mein Blut, nicht auf den Mond." },
+  "ch3.nadiraCalmed": { s: "sami", t: "Das Fell weicht zurück. Darunter: ein Gesicht, das Bassems Augen hat." },
+  "ch3.nadiraKilled": { s: "sami", t: "Es ist vorbei. Und unter dem Fell war eine junge Frau." },
+  "ch3.nadiraFled": { s: "sami", t: "Sie ist fort. In den Bergen wird man ihr Heulen hören." },
+  "ch3.bassemGrief": { s: "bassem", t: "Nadira … nein. NEIN!" },
+  "ch3.bassemThanks": { s: "bassem", t: "Du hast ihr dein Blut gegeben. Ein Drakenfels. Ich werde es den Ältesten erzählen, und sie werden es nicht glauben." },
+  "ch3.tower": { s: "sami", t: "Die Rabenwacht. Unser Wappen über dem Tor – und Kratzspuren darunter, tief wie Gräben." },
+  "ch3.hatch": { s: "sami", t: "Eine Luke mit einem Blutsiegel. Es kennt mein Blut." },
+  "ch3.hatchOpen": { s: "sami", t: "Ein Gang nach Süden. Nach Ebon." },
+  "ch3.notYet": { s: "sami", t: "Noch nicht. Der Wald hat mir noch etwas zu zeigen." },
+  "ch3.transform": { s: "sami", t: "Er verwandelt sich. Knochen, die brechen und neu wachsen, in einem einzigen Atemzug." },
+  // Erinnerungen
+  "mem.zehnt.1": { s: "corvin", t: "Silber an Hals und Handgelenke. Er soll unterwegs nicht sterben. Er ist für die Krone." },
+  "mem.zehnt.2": { s: "wolf", t: "Vater! VATER!" },
+  "mem.zehnt.3": { s: "corvin", t: "Notier: ein Lebender, Sippe Harun. Und haltet den Jungen fern. Wir sind keine Ungeheuer." },
+  "mem.eid.1": { s: "wolf", t: "Bei dem, was zuerst war, und bei dem, was nach uns kommt." },
+  "mem.eid.2": { s: "ysolde", t: "Wir wecken ihn nicht. Weder für Macht noch für Rache noch für Liebe." },
+  "mem.eid.3": { s: "wolf", t: "Bis der Mond blutet." },
+};

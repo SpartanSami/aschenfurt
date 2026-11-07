@@ -1,3 +1,32 @@
 import type { LineDef } from "../types";
 
-export const LINES_CH2: Record<string, LineDef> = {};
+export const LINES_CH2: Record<string, LineDef> = {
+  "ch2.arrive": { s: "sami", t: "Rabenfurt. Die Häuser stehen noch. Die Menschen haben gelernt, ihre Türen zu verriegeln." },
+  "ch2.square": { s: "sami", t: "Ein Brunnen, eine Laterne – und jemand, der im Regen wartet." },
+  "ch2.ilyasHouse": { s: "sami", t: "Das hohe Haus mit dem Licht oben. Dort wohnt der Schreiber." },
+  "ch2.ilyasDoor": { s: "sami", t: "Verriegelt. Oben bewegt sich ein Vorhang." },
+  "ch2.innDoor": { s: "sami", t: "Hinter der Tür atmet jemand. Er hält den Atem an, seit ich hier stehe." },
+  "ch2.bolt": { s: "sami", t: "Silber. Es brennt wie Erinnerung." },
+  "ch2.lene1": { s: "sami", t: "Ein Kind. Barfuß, mitten in der Nacht. Und sie summt …" },
+  "ch2.lene2": { s: "sami", t: "Das ist das Lied meiner Mutter." },
+  "ch2.leneFollow": { s: "sami", t: "Sie geht zur Kapelle. Ich darf sie nicht verlieren." },
+  "ch2.chapelLocked": { s: "sami", t: "Die Kapelle ist verschlossen. Der Kirchenvogt wird einen Schlüssel haben." },
+  "ch2.chapelEnter": { s: "sami", t: "Kerzen brennen. Für niemanden. Und es riecht nach dem Atem eines Hundes." },
+  "ch2.footprints": { s: "sami", t: "Nackte Füße. Viele. Sie enden hinter dem Altar." },
+  "ch2.trapdoor": { s: "sami", t: "Eine Falltür. Von unten kommt Wärme. Und ein Summen." },
+  "ch2.crypt": { s: "sami", t: "Sie knien vor einem Riss im Boden. Und sie träumen alle dasselbe." },
+  "ch2.crack": { s: "sami", t: "Rotes Licht aus dem Stein. Wie das Auge, von dem die Chronik schrieb." },
+  "ch2.scout": { s: "sami", t: "Ein Wolf in Menschengestalt. Tot. Seine Krallen haben sich in den Stein gegraben, bevor er starb." },
+  "ch2.stealth": { s: "sami", t: "Diese zwei träumen nicht. Sie bewachen. Leise jetzt." },
+  "ch2.voice": { s: "erste", t: "Komm nach Hause, Erbe." },
+  "ch2.afterVoice": { s: "sami", t: "Das war nicht Gerolds Gott. Das war das, was meine Familie geweckt hat." },
+  "ch2.villagersWake": { s: "sami", t: "Sie wachen auf. Gut. Lasst uns gehen, bevor er wieder anfängt zu reden." },
+  "ch2.leneOut": { s: "sami", t: "Bring sie zu Berta. Und dann zu İlyas." },
+  "ch2.toForest": { s: "sami", t: "Der Weg nach Norden. Dahinter beginnt der Schwarze Forst – und das Land des Wolfsbundes." },
+  "ch2.notYet": { s: "sami", t: "Noch nicht. Rabenfurt ist nicht fertig mit mir." },
+  // Erinnerung in der Gruft
+  "mem.kap.1": { s: "gerold", t: "Adelheid? Bist du das? Ich höre dich … ich höre dich unter dem Stein." },
+  "mem.kap.2": { s: "erste", t: "„Gerold. Mein Lieber. Es ist so dunkel hier, und ich habe Hunger.“" },
+  "mem.kap.3": { s: "gerold", t: "Was soll ich tun? Sag es mir. Ich tue alles." },
+  "mem.kap.4": { s: "erste", t: "„Bring sie mir. Sie träumen ohnehin schon von mir.“" },
+};

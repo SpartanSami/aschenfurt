@@ -132,16 +132,32 @@ export function windowBars(L: Level, pos: [number, number, number], rotY: number
   }
 }
 
-/** Gewölbe über rechteckigem Raum. axis = Längsachse. */
-export function vault(L: Level, mat: THREE.Material, x0: number, z0: number, x1: number, z1: number, y: number, rise: number, axis: "x" | "z" = "z", pointed = true): void {
+/** Gewölbe über rechteckigem Raum. axis = Längsachse. Die Stirnseiten werden geschlossen. */
+export function vault(L: Level, mat: THREE.Material, x0: number, z0: number, x1: number, z1: number, y: number, rise: number, axis: "x" | "z" = "z", pointed = true, cap = true, ends = true): void {
   const w = axis === "z" ? x1 - x0 : z1 - z0;
   const l = axis === "z" ? z1 - z0 : x1 - x0;
   const g = pointed ? pointedVaultGeo(w, l, rise, 12) : barrelVaultGeo(w, l, rise, 18);
   const cx = (x0 + x1) / 2, cz = (z0 + z1) / 2;
-  L.geo(g, mat, [cx, y, cz], [0, axis === "z" ? 0 : Math.PI / 2, 0], 1, { cast: true });
+  const ry = axis === "z" ? 0 : Math.PI / 2;
+  L.geo(g, mat, [cx, y, cz], [0, ry, 0], 1, { cast: true });
   g.dispose();
+  if (ends) {
+    const pts = pointed ? pointedArchPoints(w, rise, 0, 12) : roundArchPoints(w, 0, 16).map((p) => new THREE.Vector2(p.x, p.y * (rise / (w / 2))));
+    const shape = new THREE.Shape(pts.map((p) => new THREE.Vector2(p.x * 1.01, p.y * 1.01)));
+    const sg = new THREE.ShapeGeometry(shape, 8);
+    scaleUV(sg, 1, 1);
+    for (const sgn of [-1, 1]) {
+      // Stirnseite liegt am Ende der Längsachse und zeigt nach innen
+      const off = (l / 2 - 0.01) * sgn;
+      const px = axis === "z" ? cx : cx + off;
+      const pz = axis === "z" ? cz + off : cz;
+      const rot = axis === "z" ? (sgn < 0 ? 0 : Math.PI) : (sgn < 0 ? Math.PI / 2 : -Math.PI / 2);
+      L.geo(sg, mat, [px, y, pz], [0, rot, 0], 1, { cast: true });
+    }
+    sg.dispose();
+  }
   // Dachfläche darüber schließen (verhindert Lichtlecks)
-  L.box(materials.dark(), [cx, y + rise + 0.3, cz], [x1 - x0 + 0.4, 0.2, z1 - z0 + 0.4], { collide: false, cast: false });
+  if (cap) L.box(materials.dark(), [cx, y + rise + 0.3, cz], [x1 - x0 + 0.4, 0.2, z1 - z0 + 0.4], { collide: false, cast: false });
 }
 
 /** Gewölberippen quer zur Längsachse. */

@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { CollisionWorld, Blocker } from "./Collision";
 import { StaticBatch, boxGeo, planeGeo } from "./builders/Geo";
-import { FlameSystem, Sky, CameraParticles, Rain, FogBanks } from "../graphics/Effects";
+import { FlameSystem, Sky, CameraParticles, Rain, FogBanks, smokeTexture } from "../graphics/Effects";
 import { LightPool, LightSource } from "../graphics/Lighting";
 import { materials, SurfaceName } from "../graphics/Materials";
 import { G } from "../core/Context";
@@ -466,6 +466,21 @@ export abstract class Level {
   addFogBanks(f: FogBanks): void {
     this.fogBanks = f;
     this.scene.add(f.mesh);
+  }
+
+  /** Erinnerungsblut: unter Blutsicht golden-rot pulsierend, mit [E] erlebbar. */
+  memorySpot(id: string, memId: string, pos: [number, number, number], onInteract: () => void, size = 1.2, normal: "up" | "x" | "-x" | "z" | "-z" = "up"): void {
+    this.decal(materials.hidden("pool", 400 + id.length * 7), [pos[0], pos[1] + 0.02, pos[2]], size, size * 0.85, 0, normal);
+    const glow = this.decal(materials.basic("memGlowSoft", () => new THREE.MeshBasicMaterial({
+      map: smokeTexture(), color: new THREE.Color(2.2, 1.2, 0.45), transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending,
+    })).clone() as THREE.Material, [pos[0], pos[1] + 0.03, pos[2]], size * 0.9, size * 0.9, 0, normal);
+    this.onUpdate((_dt, t) => {
+      (glow.material as THREE.MeshBasicMaterial).opacity = G.state.hasMemory(memId) ? 0 : G.abilities.bloodSightLevel * (0.55 + Math.sin(t * 3) * 0.25);
+    });
+    this.interact({
+      id, pos: new THREE.Vector3(pos[0], pos[1] + 0.25, pos[2]), radius: 2.4, prompt: "Bluterinnerung berühren", angle: 0.5, bloodSightOnly: true,
+      enabled: () => !G.state.hasMemory(memId) && !G.story.busy, onInteract,
+    });
   }
 
   /** Bedingung: Spieler sieht auf Punkt (im Sichtkegel und nicht verdeckt). */

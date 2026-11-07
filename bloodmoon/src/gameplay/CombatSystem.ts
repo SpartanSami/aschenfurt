@@ -30,6 +30,7 @@ export interface EnemyOpts {
   aggressive?: boolean;
   leash?: number;
   scale?: number;
+  takedownLabel?: string;
 }
 
 const _v = new THREE.Vector3();
@@ -366,7 +367,7 @@ export class CombatSystem {
     // Überwältigen
     const td = can ? this.takedownTarget() : null;
     this.takedown = td;
-    if (td) G.ui.hud.setPrompt(td.opts.human ? "Überwältigen (verschonen)" : "Überwältigen");
+    if (td) G.ui.hud.setPrompt(td.opts.takedownLabel ?? (td.opts.human ? "Überwältigen (verschonen)" : "Überwältigen"));
     if (td && input.wasPressed("KeyE")) {
       input.consume("KeyE");
       this.doTakedown(td);
