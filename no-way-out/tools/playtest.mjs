@@ -15,6 +15,7 @@ const srv = http.createServer((req, res) => { const p = path.join(root, decodeUR
 const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--autoplay-policy=no-user-gesture-required'] });
 const page = await browser.newPage({ viewport: { width: 480, height: 270 } });
 await page.addInitScript(() => localStorage.setItem('nwo.settings.v1', JSON.stringify({ quality: 'low', difficulty: 'normal' })));
+await page.addInitScript(() => window.addEventListener('unhandledrejection', (e) => console.error('UNHANDLED ' + (e.reason && e.reason.stack || e.reason))));
 const errs = [];
 page.on('pageerror', (e) => errs.push('PAGEERROR ' + e.message + ' ' + (e.stack || '').split('\n').slice(0, 3).join(' | ')));
 page.on('console', (m) => { if (m.type() === 'error') errs.push('CONSOLE ' + m.text()); if (m.text().startsWith('[AUTO]')) console.log(m.text()); });
@@ -104,12 +105,14 @@ await page.evaluate(() => {
   A.state = () => { const gm = g(); return { ch: gm.chapter?.id, mode: gm.mode, pmode: gm.player.mode, hp: Math.round(gm.player.hp), x: +gm.player.pos.x.toFixed(1), z: +gm.player.pos.z.toFixed(1), obj: gm.phone.data.objective, flags: Object.keys(gm.state.flags).filter((k) => !k.startsWith('read:') && !k.startsWith('used:')).join(',') }; };
 });
 
-async function runChapter(ch) {
+const SEQ = args.includes('--seq');
+async function runChapter(ch, first = true) {
   const route = ROUTES[ch];
   if (!route) { console.log('Keine Route für', ch); return false; }
   console.log(`\n=== ${ch} ===`);
-  await page.evaluate((c) => { window.NWO.startChapter(c); }, ch);
-  await page.waitForFunction(() => window.NWO.mode === 'play', null, { timeout: 60000 });
+  if (!SEQ || first) await page.evaluate((c) => { window.NWO.startChapter(c); }, ch);
+  await page.waitForFunction((c) => window.NWO.mode === 'play' && window.NWO.chapter && window.NWO.chapter.id === c, ch, { timeout: 90000 });
+  if (SEQ && !first) { const st = await page.evaluate(() => ({ frags: window.NWO.state.fragments.size, serum: window.NWO.inventory.has('serum'), flags: Object.keys(window.NWO.state.flags).filter((k) => !k.startsWith('read:') && !k.startsWith('used:')).length, hp: window.NWO.player.hp, npcs: window.NWO.npcs.filter((n) => n.active).map((n) => n.id) })); console.log('Übernommener Zustand:', JSON.stringify(st)); }
   await page.evaluate((god) => { window.NWO.godMode = god; window.NWO.godInvisible = god; window.NWO.noAutoPause = true; }, args.includes('--god'));
   let ok = true;
   for (const [k, step] of route.entries()) {
@@ -124,7 +127,7 @@ async function runChapter(ch) {
 
 const list = which === 'all' ? Object.keys(ROUTES) : [which];
 let allOk = true;
-for (const ch of list) { const ok = await runChapter(ch); allOk = allOk && ok; }
+for (const [i, ch] of list.entries()) { const ok = await runChapter(ch, i === 0); allOk = allOk && ok; if (!ok && SEQ) break; }
 console.log('\nFehler:', errs.length ? '\n' + errs.slice(0, 20).join('\n') : 'keine');
 console.log(allOk && !errs.length ? 'ERGEBNIS: OK' : 'ERGEBNIS: PROBLEME');
 await browser.close(); srv.close();

@@ -9,10 +9,10 @@ export default {
   id: 'ch5', name: 'Die Stadt', tagline: 'Varnheim · 05:40 Uhr · Kontrollpunkt Nord',
   w: 64, h: 96,
   opts: { floor: 'asphalt', wall: 'facade1', ceil: null, height: 12 },
-  env: { fog: 0x0b0f16, fogDensity: 0.035, hemi: 0.06, hemiSky: 0x5a6a90, hemiGround: 0x101010, exposure: 1.1, tint: 0xe4ecff, reverb: [2.2, 3.0], reverbMix: 0.28, rain: true, noiseMul: 0.72, sleeve: 0x8fb0c4 },
+  env: { fog: 0x141c2a, fogDensity: 0.028, hemi: 0.55, hemiSky: 0x6a7aa8, hemiGround: 0x141414, exposure: 1.2, tint: 0xe4ecff, reverb: [2.2, 3.0], reverbMix: 0.28, rain: true, noiseMul: 0.72, sleeve: 0x8fb0c4 },
 
   build(L) {
-    const out = { outdoor: true, ambient: 0.075, tint: 0x6a7ab0, wet: true };
+    const out = { outdoor: true, ambient: 0.2, tint: 0x7a8ac0, wet: true };
     // Straße + Gehwege
     L.room('Lindenstraße', 12, 46, 8, 48, { ...out, floor: 'asphalt', wall: 'facade1' });
     L.room('Gehweg West', 9, 46, 3, 48, { ...out, floor: 'pavement', floorY: 0.12, wall: 'facade2' });

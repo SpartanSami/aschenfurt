@@ -268,7 +268,7 @@ export class Game {
     for (const d of this.level.doors) doors[d.id] = { locked: d.locked, open: d.target > 0.5, broken: d.broken };
     return {
       chapter: this.chapter.id, checkpoint: cp, difficulty: this.difficulty.id,
-      flags: JSON.parse(JSON.stringify(this.state.flags)), done: [...this.state.done], picked: [...this.state.picked],
+      flags: JSON.parse(JSON.stringify(this.state.flags, (k, v) => (v && typeof v === 'object' && (v.isObject3D || v.root || v.model)) ? undefined : v)), done: [...this.state.done], picked: [...this.state.picked],
       doors, power: { ...this.state.power }, removed: [...this.state.removed], hasPhone: this.state.hasPhone,
       fragments: [...this.state.fragments],
       inventory: this.inventory.serialize(), hp: Math.max(this.player.hp, cp === 'start' ? this.player.hp : 1), phone: this.phone.serialize(), clock: this.phone.clock,
@@ -579,6 +579,7 @@ export class Game {
   // ---------------- Hauptschleife ----------------
   _loop(now) {
     requestAnimationFrame(this._loop);
+    if (this.simulating) { this.last = now; return; }
     let dt = (now - this.last) / 1000;
     this.last = now;
     if (dt > 0.1) dt = 0.1;
@@ -726,7 +727,10 @@ export class Game {
   // Wie simulate, aber Promise-Fortsetzungen (Story-Skripte) laufen zwischen den Frames
   async simulateAsync(seconds, step = 1 / 30, each = null) {
     const n = Math.ceil(seconds / step);
+    this.simulating = true;
+    try {
     for (let i = 0; i < n; i++) {
+      if (i % 6 === 0) await new Promise((r) => setTimeout(r, 0)); // Netz/Audio-Promises (Makrotasks) zulassen
       this.input.beginFrame();
       if (each) { const r = each(this, i * step); if (r === 'stop') { this.input.endFrame(); return i * step; } }
       this.update(step);
@@ -734,6 +738,7 @@ export class Game {
       for (let k = 0; k < 4; k++) await null;
       if (this._simAbort) { this._simAbort = false; return i * step; }
     }
+    } finally { this.simulating = false; this.last = performance.now(); }
     return seconds;
   }
   keyDown(code) { this.input.keys.add(code); this.input.pressedThisFrame.add(code); }

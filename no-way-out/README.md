@@ -1,0 +1,83 @@
+# NO WAY OUT
+
+**First-Person-Survival-Horror.** Du kannst nicht kämpfen. Du kannst nur überleben.
+
+Sami erwacht ohne Erinnerung in einem Krankenhaus. In seiner Akte steht kein Name, nur **„Proband 017“**. Ein Unbekannter ruft ihn an und kennt den Weg nach draußen. Darunter liegt ein Forschungsinstitut, dessen Experiment **PROJECT EVE** die Stadt in eine Quarantänezone verwandelt hat. Bis 06:00 Uhr bleibt Zeit, um 06:00 Uhr wird der Sektor „sterilisiert“.
+
+---
+
+## ▶️ Spielen
+
+| Variante | So geht's |
+|---|---|
+| **Einzeldatei** | `NoWayOut.html` per Doppelklick öffnen. Alles ist enthalten, inklusive Sprachaufnahmen, und läuft offline. |
+| **Projektordner** | `index.html` öffnen (lädt `dist/game.js`). Über einen lokalen Webserver (`npx http-server .`) werden die Sprachaufnahmen aus `assets/audio/` geladen. |
+| **Online** | Den Ordner zum Beispiel über GitHub Pages veröffentlichen und `…/no-way-out/` aufrufen. |
+
+**Voraussetzungen:** ein aktueller Desktop-Browser (Chrome, Edge oder Firefox) mit WebGL 2, Maus und Tastatur (Gamepad: Grundfunktionen). Kopfhörer werden dringend empfohlen.
+
+Der Fortschritt wird automatisch an Checkpoints im Browser gespeichert (localStorage).
+
+## 🎮 Steuerung (frei belegbar unter Einstellungen → Steuerung)
+
+| Aktion | Taste |
+|---|---|
+| Bewegen | W A S D |
+| Rennen (begrenzte Ausdauer) | Shift |
+| Schleichen / Ducken | C (umschaltbar oder halten) |
+| Interagieren · Tür · Verstecken | E |
+| Klettern · im Versteck: Atem anhalten | Leertaste |
+| Smartphone | Q oder Tab |
+| Taschenlampe | F |
+| Heilen | H |
+| Werfen (Ablenkung) | G oder linke Maustaste |
+| Losreißen, wenn gepackt | A und D abwechselnd |
+| Pause | Esc oder P |
+
+## 🧟 Was das Spiel ausmacht
+
+- **Keine Waffen, kein Kampf.** Sami kann rennen, schleichen, sich verstecken, klettern, Türen schließen und Zombies mit Würfen ablenken.
+- **Zombie-KI mit sieben Kernzuständen** (Ruhe, Patrouille, Untersuchen, Alarm, Verfolgung, Suche, Rückkehr) sowie Angriff, Packen, Taumeln, Tür einschlagen, Versteck prüfen, Schlafen und Aufstehen. Die Wahrnehmung hängt von Sichtfeld, Entfernung, Licht, Bewegung, Haltung und der Taschenlampe ab. Geräusche breiten sich entlang der Gänge aus, Wände und Türen dämpfen sie.
+- **Verstecke ohne Garantie:** Spinde, unter Betten, hinter Fahrzeugen und Containern. Wer beim Verstecken gesehen wird oder zu laut atmet, wird herausgezogen.
+- **Verletzungssystem** mit den Zuständen Gesund, Verletzt und Schwer verletzt. Es bremst, kürzt die Ausdauer und trübt die Sicht. Heilmittel sind knapp, Wunden heilen nicht von selbst.
+- **Smartphone in der Hand** mit Taschenlampe, Nachrichten, Sprachmemos, Notizen (Ziel, Dokumente, Erkenntnisse), Fotos, Anrufliste und Zustand. Der Akku ist unbegrenzt.
+- **Fünf Kapitel:** Krankenhaus → Forschungseinrichtung PROJECT EVE → Parkhaus → U-Bahn → Stadt. Jedes Kapitel hat eigene Mechaniken, zum Beispiel Notstrom, Dekon-Schleuse, Sterilisation mit zeitgesteuerten Toren, Autoalarme, einen Zug voller „Fahrgäste“, Regen, der Schritte verschluckt, und einen Totmannschalter.
+- **Figuren:** Mine und İlyas müssen gefunden werden. Beide haben Geheimnisse.
+- **Entscheidungen und drei Enden:** **Hoffnung**, **Tragödie** und **Geheimnis**. Die Hinweise dazu sind über das ganze Spiel verteilt.
+- **Drei Schwierigkeitsgrade:** Leicht, Mittel (Standard) und Schwer. Sie ändern Heilmittel, Reaktionsfenster, Gegnertempo, Wahrnehmung und Schaden. Die Geschichte bleibt gleich.
+- **Häufige automatische Checkpoints**, Kapitelauswahl und Fortsetzen.
+- **Einstellungen:** Mausempfindlichkeit, Y-Achse, Sichtfeld, Kopfbewegung, Grafikqualität, Renderauflösung, Vollbild, Helligkeit, Bloom, Filmkörnung, Lautstärken (Gesamt, Musik, Effekte, Stimmen), Untertitel und Untertitelgröße sowie die Tastenbelegung.
+
+## 🔧 Technik in Kürze
+
+- **Engine:** three.js (WebGL 2) mit eigener Spiel-Architektur in modularem JavaScript. Mit esbuild wird daraus eine Datei gebündelt. Unreal Engine 5 ließ sich in der Cloud-Entwicklungsumgebung nicht betreiben. Die Browser-Lösung ist außerdem ohne Installation sofort spielbar.
+- **Alles prozedural:** Texturen (PBR mit Normal- und Rauheitsmaps), Möbel, Fahrzeuge, Figuren, Animationen, Soundeffekte und die dynamische Musik entstehen zur Laufzeit. Es gibt keine externen Grafik- oder Sounddateien.
+- **Licht:** Ein Pool echter Punktlichter wird den relevantesten Leuchten zugewiesen. Ein Shader-Patch prüft jede Lampe über das Weltraster gegen Wände, sodass kein Licht durch Mauern dringt. Dazu kommt weiches Umgebungslicht pro Raum, und die Taschenlampe wirft Schatten.
+- **Sprachaufnahmen:** Alles, was Sami über Geräte hört (Anrufe, Diktiergerät, Lautsprecher), ist vertont (ElevenLabs, nachbearbeitet mit ffmpeg). Gespräche mit Mine und İlyas laufen über Untertitel.
+
+Mehr dazu in [`docs/ARCHITEKTUR.md`](docs/ARCHITEKTUR.md), Testergebnisse in [`docs/QA.md`](docs/QA.md). Die Story-Bibel mit allen Auflösungen steht in [`docs/STORY.md`](docs/STORY.md) und enthält **Spoiler**.
+
+## 🛠️ Entwicklung
+
+```bash
+cd no-way-out
+npm install                 # three + esbuild
+npm run build               # dist/game.js + NoWayOut.html (minifiziert)
+node tools/build.mjs --dev  # Entwicklungs-Build mit Sourcemap
+node tools/playtest.mjs ch1 --god              # automatischer Durchspieltest eines Kapitels
+node tools/playtest.mjs all --god --seq        # gesamte Kampagne am Stück
+CHOICE=hope node tools/playtest.mjs ch5 --god  # Finale mit bestimmter Entscheidung (hope|ilyas|sami|call)
+node tools/map.mjs ch3      # Draufsicht eines Levels als PNG (tools/out)
+```
+
+Debug-Modus: `index.html?debug` öffnet das Spiel mit F3 (Statistik), F4 (unverwundbar), F7 (unsichtbar) und F8 (nächstes Kapitel).
+
+## ⚠️ Ehrliche Einordnung
+
+- Die Grafik ist **atmosphärisch, aber nicht fotorealistisch**. Alle Modelle bestehen aus prozeduralen Grundkörpern, die Animationen sind prozedural statt per Motion-Capture. Die Systeme sind so gebaut, dass sich echte 3D-Modelle (glTF) und Sounddateien später einsetzen lassen.
+- Die Spielzeit liegt je nach Spielweise bei etwa **60–90 Minuten** und damit unter den angestrebten 2–3 Stunden.
+- Die vertonten Stimmen stammen von englischsprachigen ElevenLabs-Stimmen, die über das mehrsprachige Modell Deutsch sprechen. Ein leichter Akzent ist möglich.
+- Begleiter werden von Zombies bewusst ignoriert, damit keine frustrierenden Eskortpassagen entstehen. Gefahr für sie entsteht nur durch die Inszenierung.
+- Touch-Steuerung für Smartphones ist nicht enthalten. Das Spiel ist für Desktop mit Maus und Tastatur oder Gamepad ausgelegt.
+
+Alle Personen, Firmen und Orte sind frei erfunden.

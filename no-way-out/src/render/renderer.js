@@ -17,7 +17,7 @@ class DualRenderPass extends Pass {
     renderer.setRenderTarget(this.renderToScreen ? null : readBuffer);
     renderer.setClearColor(this.clearColor || 0x000000, 1);
     renderer.clear(true, true, true);
-    if (this.scene && this.camera) renderer.render(this.scene, this.camera);
+    if (this.scene && this.camera) { renderer.render(this.scene, this.camera); this.stats = { calls: renderer.info.render.calls, tris: renderer.info.render.triangles }; }
     if (this.vmScene && this.vmCamera) { renderer.clearDepth(); renderer.render(this.vmScene, this.vmCamera); }
     renderer.autoClear = oldAuto;
   }

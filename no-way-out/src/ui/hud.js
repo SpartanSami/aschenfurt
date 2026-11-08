@@ -157,7 +157,7 @@ export class HUD {
   _debug() {
     const g = this.game, p = g.player;
     const zs = g.zombies.filter((z) => z.alive).map((z) => `${z.id}: ${z.stateName} s=${z.suspicion.toFixed(2)} d=${Math.hypot(z.pos.x - p.pos.x, z.pos.z - p.pos.z).toFixed(1)}`).join('<br>');
-    this.debugEl.innerHTML = `pos ${p.pos.x.toFixed(1)}, ${p.pos.z.toFixed(1)} y=${p.pos.y.toFixed(2)} yaw ${p.yaw.toFixed(2)}<br>hp ${p.hp.toFixed(0)} st ${p.stamina.toFixed(0)} vis ${p.visibility().toFixed(2)} licht ${g.level.lights.lightLevelAt(p.pos.x, p.pos.z).toFixed(2)}<br>threat ${g.threatLevel} fps ${g.fps.toFixed(0)} calls ${g.renderer.r.info.render.calls} tris ${g.renderer.r.info.render.triangles}<br>${zs}`;
+    this.debugEl.innerHTML = `pos ${p.pos.x.toFixed(1)}, ${p.pos.z.toFixed(1)} y=${p.pos.y.toFixed(2)} yaw ${p.yaw.toFixed(2)}<br>hp ${p.hp.toFixed(0)} st ${p.stamina.toFixed(0)} vis ${p.visibility().toFixed(2)} licht ${g.level.lights.lightLevelAt(p.pos.x, p.pos.z).toFixed(2)}<br>threat ${g.threatLevel} fps ${g.fps.toFixed(0)} calls ${g.renderer.scenePass.stats?.calls} tris ${g.renderer.scenePass.stats?.tris}<br>${zs}`;
   }
 }
 

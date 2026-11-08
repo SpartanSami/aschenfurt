@@ -9,7 +9,7 @@ export const GRID_UNIFORMS = {
   uCamWorld: { value: new THREE.Matrix4() },
   uGridOn: { value: 1 },
   uAmbTex: { value: null },
-  uAmbScale: { value: 1.0 },
+  uAmbScale: { value: 2.2 },
 };
 
 const GLSL_FUNC = /* glsl */`

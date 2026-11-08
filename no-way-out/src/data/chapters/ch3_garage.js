@@ -14,7 +14,7 @@ function carRow(L, xs, z, rot, o = {}) {
 export default {
   id: 'ch3', name: 'Das Parkhaus', tagline: 'Parkhaus Am Klinikum · Ebenen −3 bis −1',
   w: 100, h: 62,
-  opts: { floor: 'concrete_floor', wall: 'concrete_wall', ceil: 'concrete', height: 2.7 },
+  opts: { floor: 'concrete_floor', wall: 'concrete_wall', ceil: 'concrete', height: 2.7, ambient: 0.05 },
   env: { fog: 0x060605, fogDensity: 0.05, hemi: 0.02, exposure: 1.05, tint: 0xf4eee2, reverb: [2.6, 2.0], reverbMix: 0.45, sleeve: 0x8fb0c4 },
 
   build(L) {
@@ -158,14 +158,14 @@ export default {
     if (!c.get('ilyas_joined')) { const n = c.addNpc('ilyas', 61.6, 4.6, { mode: 'idle', yaw: PI }); n.forceCrouch = true; }
     else if (!c.npc('ilyas')) c.addNpc('ilyas', g.player.pos.x + 1, g.player.pos.z + 1, { mode: 'follow' });
     // Eingeschlossener im Auto (Deko)
-    c.flags._trap = g.decor({ x: 65.0, z: 28.6, yaw: PI, pose: 'sitting', outfit: 'civilian', skin: 'zombie2', hair: 0x2a2a2a, hairStyle: 'short' });
-    c.flags._trap.root.position.y = 1.5 + 0.38;
+    g.level._trap = g.decor({ x: 65.0, z: 28.6, yaw: PI, pose: 'sitting', outfit: 'civilian', skin: 'zombie2', hair: 0x2a2a2a, hairStyle: 'short' });
+    g.level._trap.root.position.y = 1.5 + 0.38;
     if (c.get('power3')) { const d = c.door('shutter'); if (d) { d.setLocked(false); d.amount = d.target = 1; d._place(); d._applyFlags(); } }
     void g;
   },
 
   update(c, dt) {
-    const t = c.flags._trap;
+    const t = c.g.level._trap;
     if (t && t._anim > 0) { t._anim -= dt; t.mode = 'bash'; t.poseBlend = 0.45; t.update(dt); if (t._anim <= 0) { t.mode = 'idle'; t.poseBlend = 1; t.update(0.05); } }
   },
 
@@ -203,7 +203,7 @@ export default {
     },
     {
       id: 'c3_trap', when: 'enter:trapcar', do: async (c) => {
-        const t = c.flags._trap;
+        const t = c.g.level._trap;
         c.sound('door_bash', [65.0, 2.5, 28.6], { vol: 1 });
         c.sound('glass_break', [65.0, 2.5, 28.6], { vol: 0.4, rate: 1.4 });
         c.g.audio.zombie('attack', { x: 65, y: 2.6, z: 28.6 }, 1);

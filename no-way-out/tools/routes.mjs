@@ -29,6 +29,7 @@ export const ROUTES = {
     S('OP-Flur nach Süden (geduckt, Licht aus)', "NWO.player.crouched = true; NWO.player.flashlight=false; await AUTO.goto(26.5, 44); return await AUTO.goto(27.2, 49.4);"),
     S('Versorgungsflur', "NWO.player.crouched = false; return await AUTO.goto(30.5, 51.5);"),
     S('Sicherheitsbüro + Kameras', "await AUTO.goto(42.5, 46.2); const r = AUTO.interact('sec_monitors'); await AUTO.wait(1); return r;"),
+    S('Ruheraum: Aufnahme 1', "await AUTO.goto(42.5, 48.5); await AUTO.goto(49.5, 50.8); await AUTO.goto(49.5, 47.3); AUTO.interact('frag1'); await AUTO.wait(18); await AUTO.goto(49.5, 50.8); return NWO.state.fragments.has('frag1');"),
     S('Technikraum', go(34.7, 55.6)),
     S('Notstrom starten', "AUTO.interact('gen'); await AUTO.wait(3); return NWO.state.flags.power_on === true;"),
     S('Zum Aufzug rennen', go(52.0, 51.3, { sprint: true })),

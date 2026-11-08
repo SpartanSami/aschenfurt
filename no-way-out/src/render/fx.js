@@ -41,7 +41,7 @@ export class FX {
         pos.set([x, y, z, x + 0.02, y - 0.35, z + 0.01], i * 6);
       }
       const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-      this.rain = new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color: 0x9fb0c8, transparent: true, opacity: 0.28, depthWrite: false }));
+      this.rain = new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color: 0x9fb0c8, transparent: true, opacity: 0.14, depthWrite: false }));
       this.rain.frustumCulled = false;
       this.game.scene.add(this.rain);
     } else if (!on && this.rain) { this.game.scene.remove(this.rain); this.rain.geometry.dispose(); this.rain = null; }
