@@ -1,0 +1,16 @@
+{
+  "name": "no-way-out",
+  "version": "1.0.0",
+  "private": true,
+  "description": "NO WAY OUT – First-Person Survival Horror (Three.js/WebGL)",
+  "type": "module",
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "test": "node tools/test-logic.mjs",
+    "playtest": "node tools/playtest.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.10",
+    "three": "^0.180.0"
+  }
+}
