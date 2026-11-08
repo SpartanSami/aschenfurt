@@ -87,6 +87,7 @@ export function house(L: Level, cx: number, cz: number, w: number, d: number, y0
   const doorWall = facing === "n" ? z0 : facing === "s" ? z1 : facing === "e" ? x1 : x0;
   const door = facing === "n" || facing === "s" ? new THREE.Vector3(cx, y0, doorWall) : new THREE.Vector3(doorWall, y0, cz);
   const doorYaw = facing === "n" || facing === "s" ? 0 : Math.PI / 2;
+  if (opts.interior) L.markRoom(x0, z0, x1, z1, { floorY: y0 });
   if (!opts.interior) {
     // geschlossene Tür als Blende
     const panel = new THREE.Mesh(planeGeo(1.15, 2.2), materials.surface("woodOld"));

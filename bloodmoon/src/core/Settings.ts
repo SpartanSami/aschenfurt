@@ -94,8 +94,8 @@ export const qualityProfiles: Record<Quality, {
   particles: number;
   antialias: boolean;
 }> = {
-  niedrig: { pixelRatio: 0.75, shadows: false, shadowSize: 512, pointShadows: false, bloom: false, lightPool: 4, texSize: 256, particles: 0.4, antialias: false },
-  mittel: { pixelRatio: 1, shadows: true, shadowSize: 1024, pointShadows: false, bloom: true, lightPool: 6, texSize: 512, particles: 0.7, antialias: true },
-  hoch: { pixelRatio: 1, shadows: true, shadowSize: 2048, pointShadows: true, bloom: true, lightPool: 8, texSize: 512, particles: 1, antialias: true },
-  ultra: { pixelRatio: 1.5, shadows: true, shadowSize: 2048, pointShadows: true, bloom: true, lightPool: 10, texSize: 1024, particles: 1.3, antialias: true },
+  niedrig: { pixelRatio: 0.75, shadows: false, shadowSize: 512, pointShadows: false, bloom: false, lightPool: 5, texSize: 256, particles: 0.4, antialias: false },
+  mittel: { pixelRatio: 1, shadows: true, shadowSize: 1024, pointShadows: false, bloom: true, lightPool: 8, texSize: 512, particles: 0.7, antialias: true },
+  hoch: { pixelRatio: 1, shadows: true, shadowSize: 2048, pointShadows: true, bloom: true, lightPool: 10, texSize: 512, particles: 1, antialias: true },
+  ultra: { pixelRatio: 1.5, shadows: true, shadowSize: 2048, pointShadows: true, bloom: true, lightPool: 12, texSize: 1024, particles: 1.3, antialias: true },
 };

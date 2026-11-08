@@ -13,7 +13,7 @@ export class FlameSystem {
   private geo: THREE.InstancedBufferGeometry;
   material: THREE.ShaderMaterial;
 
-  constructor(cap = 600) {
+  constructor(cap = 1500) {
     this.cap = cap;
     const base = new THREE.PlaneGeometry(1, 1, 1, 4);
     base.translate(0, 0.5, 0);
@@ -110,6 +110,119 @@ export class FlameSystem {
     if (i < 0) return;
     this.params[i * 4 + 2] = v;
     (this.geo.getAttribute("aParams") as THREE.InstancedBufferAttribute).needsUpdate = true;
+  }
+
+  update(time: number): void {
+    this.material.uniforms.uTime.value = time;
+  }
+
+  dispose(): void {
+    this.geo.dispose();
+    this.material.dispose();
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Lichtschein ohne Lichtquelle: warme Lichtpfütze am Boden und weicher Hof um Kerzen.
+// Sichtbar unabhängig vom Licht-Pool, damit auch entfernte Raumecken nicht schwarz wirken.
+// ---------------------------------------------------------------------------
+export class GlowSystem {
+  mesh: THREE.Mesh;
+  private offsets: Float32Array;
+  private params: Float32Array; // Größe, Phase, Art (0 = Boden, 1 = Hof), Stärke
+  private clips: Float32Array; // Begrenzung der Lichtpfütze (x0, z0, x1, z1) – endet an Wänden
+  private count = 0;
+  private geo: THREE.InstancedBufferGeometry;
+  material: THREE.ShaderMaterial;
+
+  constructor(private cap = 800) {
+    const base = new THREE.PlaneGeometry(1, 1);
+    this.geo = new THREE.InstancedBufferGeometry();
+    this.geo.index = base.index;
+    this.geo.setAttribute("position", base.getAttribute("position"));
+    this.geo.setAttribute("uv", base.getAttribute("uv"));
+    this.offsets = new Float32Array(cap * 3);
+    this.params = new Float32Array(cap * 4);
+    this.clips = new Float32Array(cap * 4);
+    this.geo.setAttribute("aOffset", new THREE.InstancedBufferAttribute(this.offsets, 3));
+    this.geo.setAttribute("aParams", new THREE.InstancedBufferAttribute(this.params, 4));
+    this.geo.setAttribute("aClip", new THREE.InstancedBufferAttribute(this.clips, 4));
+    this.geo.instanceCount = 0;
+    this.material = new THREE.ShaderMaterial({
+      uniforms: { uTime: { value: 0 }, uIntensity: { value: 1 } },
+      vertexShader: /* glsl */ `
+        attribute vec3 aOffset;
+        attribute vec4 aParams;
+        attribute vec4 aClip;
+        varying vec4 vClip;
+        varying vec3 vWorld;
+        varying vec2 vUv;
+        varying float vPhase;
+        varying float vStrength;
+        varying float vKind;
+        void main() {
+          vUv = uv;
+          vClip = aClip;
+          vPhase = aParams.y;
+          vKind = aParams.z;
+          vStrength = aParams.w;
+          float s = aParams.x;
+          vec3 p;
+          if (aParams.z < 0.5) {
+            p = aOffset + vec3(position.x * s, 0.0, -position.y * s);
+          } else {
+            vec3 toCam = normalize(cameraPosition - aOffset);
+            vec3 right = normalize(cross(vec3(0.0, 1.0, 0.0), toCam + vec3(1e-4)));
+            vec3 up = cross(toCam, right);
+            p = aOffset + (right * position.x + up * position.y) * s;
+          }
+          vWorld = p;
+          gl_Position = projectionMatrix * viewMatrix * vec4(p, 1.0);
+        }
+      `,
+      fragmentShader: /* glsl */ `
+        uniform float uTime;
+        uniform float uIntensity;
+        varying vec2 vUv;
+        varying float vPhase;
+        varying float vStrength;
+        varying float vKind;
+        varying vec4 vClip;
+        varying vec3 vWorld;
+        void main() {
+          float r = length(vUv - 0.5) * 2.0;
+          if (r > 1.0) discard;
+          if (vKind < 0.5 && (vWorld.x < vClip.x || vWorld.z < vClip.y || vWorld.x > vClip.z || vWorld.z > vClip.w)) discard;
+          float t = uTime + vPhase;
+          float flick = 0.86 + 0.08 * sin(t * 9.7) + 0.06 * sin(t * 23.1);
+          float fall = vKind < 0.5 ? pow(1.0 - r, 2.2) : exp(-r * r * 5.0) * (1.0 - r);
+          vec3 col = vKind < 0.5 ? vec3(1.0, 0.52, 0.2) : vec3(1.0, 0.62, 0.3);
+          float a = fall * flick * vStrength * uIntensity;
+          gl_FragColor = vec4(col * a, a);
+        }
+      `,
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      toneMapped: false,
+      polygonOffset: true,
+      polygonOffsetFactor: -2,
+      polygonOffsetUnits: -2,
+    });
+    this.mesh = new THREE.Mesh(this.geo, this.material);
+    this.mesh.frustumCulled = false;
+    this.mesh.renderOrder = 9;
+  }
+
+  /** kind 0: Lichtpfütze am Boden (size = Durchmesser), kind 1: Hof um die Flamme. */
+  add(pos: THREE.Vector3, size: number, kind: 0 | 1, strength: number, clip: [number, number, number, number] = [-1e5, -1e5, 1e5, 1e5]): void {
+    if (this.count >= this.cap) return;
+    const i = this.count++;
+    this.offsets.set([pos.x, pos.y, pos.z], i * 3);
+    this.params.set([size, Math.random() * 100, kind, strength], i * 4);
+    this.clips.set(clip, i * 4);
+    this.geo.instanceCount = this.count;
+    for (const n of ["aOffset", "aParams", "aClip"]) (this.geo.getAttribute(n) as THREE.InstancedBufferAttribute).needsUpdate = true;
   }
 
   update(time: number): void {

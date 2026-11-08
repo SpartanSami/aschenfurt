@@ -291,3 +291,9 @@ body.touch #clickToPlay { display: none; }
   .screen .row { font-size: 15px; padding: 5px 0; }
 }
 body.touch #menu .foot span:last-child { visibility: hidden; }
+
+/* Schließen-Knopf für Inventar, Tagebuch und Fähigkeiten (auch ohne Tastatur) */
+.screen .modal-x { position: absolute; top: max(14px, env(safe-area-inset-top)); right: max(16px, env(safe-area-inset-right)); z-index: 5;
+  width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(200,168,104,.5); background: rgba(12,8,10,.75);
+  color: #eadfcf; font-size: 22px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.screen .modal-x:hover, .screen .modal-x:focus-visible { background: rgba(142,14,24,.6); outline: none; }

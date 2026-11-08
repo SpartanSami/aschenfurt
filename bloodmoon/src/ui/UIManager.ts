@@ -189,6 +189,19 @@ export class UIManager {
     this.modal = name;
     this.modalEl = el;
     el.classList.add("interactive");
+    if (name === "inventory" || name === "journal" || name === "abilities") {
+      // Schließen ohne Tastatur: ✕-Knopf und Tippen neben das Buch
+      const x = h("button", "modal-x", "✕");
+      x.setAttribute("aria-label", "Schließen");
+      x.addEventListener("click", (e) => {
+        e.stopPropagation();
+        this.closeModal();
+      });
+      el.appendChild(x);
+      el.addEventListener("click", (e) => {
+        if (e.target === el) this.closeModal();
+      });
+    }
     this.root.appendChild(el);
     G.game.paused = !this.inMenu;
     input.enabled = false;
@@ -559,7 +572,7 @@ export class UIManager {
       const cat: Record<string, string> = { schluessel: "Schlüssel", dokument: "Dokument", artefakt: "Artefakt", phiole: "Blutphiole", quest: "Questgegenstand", heilung: "Heilung" };
       book.innerHTML = `<div class="tabs"><div class="tab on">Inventar</div></div>
         <div class="content"><div class="items-grid"></div><div class="detail"></div></div>
-        <div class="footer">Tab – schließen · J – Tagebuch · K – Fähigkeiten</div>`;
+        <div class="footer">✕ oder Tab – schließen · J – Tagebuch · K – Fähigkeiten</div>`;
       const grid = book.querySelector(".items-grid")!;
       if (!items.length) grid.appendChild(h("div", "empty", "Deine Taschen sind leer."));
       for (const it of items) {
@@ -608,7 +621,7 @@ export class UIManager {
     const render = () => {
       book.innerHTML = `<div class="tabs">${tabs.map(([k, t]) => `<div class="tab ${k === this.journalTab ? "on" : ""}" data-t="${k}">${t}</div>`).join("")}</div>
         <div class="content"><div class="list"></div><div class="detail"></div></div>
-        <div class="footer">J – schließen · Tab – Inventar · K – Fähigkeiten</div>`;
+        <div class="footer">✕ oder J – schließen · Tab – Inventar · K – Fähigkeiten</div>`;
       book.querySelectorAll(".tab").forEach((t) =>
         t.addEventListener("click", () => {
           this.journalTab = (t as HTMLElement).dataset.t!;
@@ -699,7 +712,7 @@ export class UIManager {
     el.appendChild(book);
     const render = () => {
       const order = ["bloodsight", "nightvision", "shadowrun", "bloodmemory", "bloodhunger", "bloodpush", "regen"];
-      book.innerHTML = `<div class="tabs"><div class="tab on">Fähigkeiten des Blutes</div></div><div class="list" style="overflow-y:auto;padding:10px 30px"></div><div class="footer">Klicke auf eine aktive Fähigkeit, um sie auf [Q] zu legen · K – schließen</div>`;
+      book.innerHTML = `<div class="tabs"><div class="tab on">Fähigkeiten des Blutes</div></div><div class="list" style="overflow-y:auto;padding:10px 30px"></div><div class="footer">Tippe oder klicke auf eine aktive Fähigkeit, um sie auf [Q] zu legen · ✕ oder K – schließen</div>`;
       const list = book.querySelector(".list")!;
       for (const id of order) {
         const a = ABILITIES[id];
@@ -734,7 +747,7 @@ export class UIManager {
     const paper = h("div", "doc", `<h2>${esc(doc.title)}</h2>${doc.author ? `<div class="author">${esc(doc.author)}</div>` : ""}${doc.body
       .split("\n\n")
       .map((p) => (p.startsWith("~") ? `<p class="torn">${esc(p.slice(1))}</p>` : `<p>${esc(p)}</p>`))
-      .join("")}<div class="close">E · Escape · Klick – schließen</div>`);
+      .join("")}<div class="close">Tippen, Klick, E oder Escape – schließen</div>`);
     el.appendChild(paper);
     const close = () => {
       this.docClose = null;

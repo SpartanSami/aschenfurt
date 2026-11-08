@@ -106,6 +106,7 @@ export class Ch6Erste extends Level {
   private buildLoop(): void {
     const fl = materials.surface("flesh");
     this.floor(materials.surface("rockDark"), -2, -56, 2, -15, YB);
+    this.markRoom(-2, -56, 2, -15, { floorY: YB });
     // Ostwand durchgehend, Westwand mit (verborgener) Öffnung bei z ≈ -33
     this.fleshWall([2, YB, -56], [3, YB + 5, -15]);
     this.fleshWall([-3, YB, -56], [-2, YB + 5, -34.6]);
@@ -179,6 +180,7 @@ export class Ch6Erste extends Level {
     this.box(fl, [-11, YB + 5.2, -33], [18, 0.4, 5], { collide: true, cast: false });
     // Halle
     this.floor(materials.surface("rockDark"), -28, -56, -20, -10, YB);
+    this.markRoom(-62, -56, -20, -10, { floorY: YB });
     this.floor(materials.surface("rockDark"), -62, -56, -44, -10, YB);
     this.floor(materials.surface("flesh"), -44, -56, -28, -46, YB);
     this.floor(materials.surface("flesh"), -44, -20, -28, -10, YB);
@@ -316,6 +318,7 @@ export class Ch6Erste extends Level {
   private buildWolfCave(): void {
     const fl = materials.surface("flesh");
     this.floor(materials.surface("rockDark"), -92, -40, -62, -26, YB);
+    this.markRoom(-92, -40, -62, -26, { floorY: YB });
     this.fleshWall([-92, YB, -41], [-62, YB + 8, -40]);
     this.fleshWall([-92, YB, -26], [-62, YB + 8, -25]);
     this.box(fl, [-77, YB + 8.2, -33], [30, 0.4, 16], { collide: false, cast: false });

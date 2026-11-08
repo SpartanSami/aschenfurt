@@ -3,6 +3,7 @@ import { G } from "../core/Context";
 import { events } from "../core/EventBus";
 import { Level, EnvPreset, defaultEnv } from "./Level";
 import { materials } from "../graphics/Materials";
+import { placeRoomCandles } from "./RoomCandles";
 
 type LevelCtor = () => Level;
 
@@ -46,7 +47,7 @@ export class LevelManager {
     prog(0.7, `${level.location} wird errichtet …`);
     await new Promise((r) => setTimeout(r, 10));
     await level.build();
-    level.finalize();
+    level.finalize(placeRoomCandles);
     prog(0.9, "Schatten werden gesetzt …");
     G.level = level;
     level.scene.add(G.camera);

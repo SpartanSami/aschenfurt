@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { CollisionWorld, Blocker } from "./Collision";
 import { StaticBatch, boxGeo, planeGeo } from "./builders/Geo";
-import { FlameSystem, Sky, CameraParticles, Rain, FogBanks, smokeTexture } from "../graphics/Effects";
+import { FlameSystem, GlowSystem, Sky, CameraParticles, Rain, FogBanks, smokeTexture } from "../graphics/Effects";
 import { LightPool, LightSource } from "../graphics/Lighting";
 import { materials, SurfaceName } from "../graphics/Materials";
 import { G } from "../core/Context";
@@ -232,6 +232,17 @@ export class Door {
 }
 
 /** Basisklasse aller Spielbereiche. */
+export interface RoomRect {
+  x0: number;
+  z0: number;
+  x1: number;
+  z1: number;
+  /** Unterkante der Decke bzw. Kämpferhöhe des Gewölbes */
+  top?: number;
+  /** Bodenhöhe, falls die Decke unbekannt ist */
+  floorY?: number;
+}
+
 export abstract class Level {
   abstract readonly id: string;
   abstract readonly chapter: number;
@@ -245,7 +256,10 @@ export abstract class Level {
   col = new CollisionWorld();
   batch = new StaticBatch();
   flames = new FlameSystem();
+  glows = new GlowSystem();
   lightPool = new LightPool();
+  /** Überdachte Räume (aus Decken, Gewölben und Innenräumen) – für automatische Eckkerzen. */
+  rooms: RoomRect[] = [];
   interactables: Interactable[] = [];
   triggers: Trigger[] = [];
   zones: Zone[] = [];
@@ -268,6 +282,7 @@ export abstract class Level {
     this.scene.add(this.hemi);
     this.scene.add(this.lightPool.group);
     this.scene.add(this.flames.mesh);
+    this.scene.add(this.glows.mesh);
     this.scene.fog = new THREE.FogExp2(0x000000, 0.05);
   }
 
@@ -285,15 +300,26 @@ export abstract class Level {
   /** Wird nach dem Laden aufgerufen (Quests, Skripte). */
   abstract start(spawnId: string, fresh: boolean): void;
 
-  finalize(): void {
-    this.batch.build(this.root);
+  /**
+   * Abschluss nach build(): Kollision aufbauen, dann optional weitere Ausstattung
+   * (z. B. Eckkerzen, die Strahltests gegen die fertige Kollision brauchen), dann Geometrie zusammenfassen.
+   */
+  finalize(afterCollision?: (level: Level) => void): void {
     this.col.build();
+    afterCollision?.(this);
+    this.batch.build(this.root);
+  }
+
+  /** Raum für automatische Eckkerzen vormerken. Entweder Deckenhöhe (top) oder Bodenhöhe (floorY) angeben. */
+  markRoom(x0: number, z0: number, x1: number, z1: number, h: { top?: number; floorY?: number }): void {
+    this.rooms.push({ x0: Math.min(x0, x1), z0: Math.min(z0, z1), x1: Math.max(x0, x1), z1: Math.max(z0, z1), ...h });
   }
 
   update(dt: number, t: number): void {
     for (const d of this.doors) d.update(dt);
     for (const u of this.updaters) u(dt, t);
     this.flames.update(t);
+    this.glows.update(t);
   }
 
   dispose(): void {
@@ -302,6 +328,7 @@ export abstract class Level {
       if (m.geometry) m.geometry.dispose();
     });
     this.flames.dispose();
+    this.glows.dispose();
     this.col.dispose();
     this.sky?.dispose();
     this.particles.forEach((p) => p.dispose());
@@ -345,6 +372,7 @@ export abstract class Level {
   }
 
   ceiling(mat: THREE.Material, x0: number, z0: number, x1: number, z1: number, y: number, thickness = 0.4): void {
+    this.markRoom(x0, z0, x1, z1, { top: y });
     this.box(mat, [(x0 + x1) / 2, y + thickness / 2, (z0 + z1) / 2], [x1 - x0, thickness, z1 - z0], { collide: true, cast: true });
   }
 

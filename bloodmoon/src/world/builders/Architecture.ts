@@ -134,6 +134,7 @@ export function windowBars(L: Level, pos: [number, number, number], rotY: number
 
 /** Gewölbe über rechteckigem Raum. axis = Längsachse. Die Stirnseiten werden geschlossen. */
 export function vault(L: Level, mat: THREE.Material, x0: number, z0: number, x1: number, z1: number, y: number, rise: number, axis: "x" | "z" = "z", pointed = true, cap = true, ends = true): void {
+  L.markRoom(x0, z0, x1, z1, { top: y });
   const w = axis === "z" ? x1 - x0 : z1 - z0;
   const l = axis === "z" ? z1 - z0 : x1 - x0;
   const g = pointed ? pointedVaultGeo(w, l, rise, 12) : barrelVaultGeo(w, l, rise, 18);
