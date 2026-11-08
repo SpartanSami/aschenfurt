@@ -17,6 +17,7 @@ import { Hands } from './player/hands.js';
 import { NoiseSystem } from './ai/noise.js';
 import { Zombie, ZS } from './ai/zombie.js';
 import { NPC } from './ai/npc.js';
+import { Humanoid } from './ai/humanoid.js';
 import { Level } from './world/level.js';
 import { LevelDef } from './world/leveldef.js';
 import { HUD } from './ui/hud.js';
@@ -335,6 +336,17 @@ export class Game {
     this.menu.showMain();
   }
 
+  // Statische Figur als Dekoration (z. B. auf einer Überwachungskamera)
+  decor(o) {
+    const h = new Humanoid({ outfit: o.outfit || 'mine', skin: o.skin || 'human', hair: o.hair ?? 0x1a110c, hairStyle: o.hairStyle || 'long', scale: o.scale || 0.95, limp: 0 });
+    h.setPose(o.pose || 'sitting', true);
+    for (let i = 0; i < 30; i++) h.update(0.05);
+    h.root.position.set(o.x, this.level.grid.heightAt(o.x, o.z), o.z);
+    h.root.rotation.y = o.yaw || 0;
+    this.level.root.add(h.root);
+    return h;
+  }
+
   // ---------------- Begleiter ----------------
   npc(id) { return this.npcs.find((n) => n.id === id && n.active); }
   addNpc(id, x, z, o = {}) {
@@ -646,6 +658,52 @@ export class Game {
       if (each) { const r = each(this, i * step); if (r === 'stop') { this.input.endFrame(); return i * step; } }
       this.update(step);
       this.input.endFrame();
+    }
+    return seconds;
+  }
+  // Draufsicht des Levels als PNG-DataURL (Debug/QA)
+  debugMap(sc = 8) {
+    const g = this.level.grid, c = document.createElement('canvas');
+    c.width = g.w * sc; c.height = g.h * sc;
+    const x = c.getContext('2d');
+    x.fillStyle = '#111'; x.fillRect(0, 0, c.width, c.height);
+    for (let j = 0; j < g.h; j++) for (let i = 0; i < g.w; i++) {
+      const v = g.f[g.idx(i, j)];
+      if (!(v & 2) || (v & 1)) continue;
+      let col = '#556';
+      if (v & 4) col = (v & 1024) ? '#a33' : '#3a3';
+      else if (v & 32) col = '#4aa';
+      else if (v & 64) col = '#753';
+      else if (v & 256) col = '#aa4';
+      else if (v & 8) col = (v & 16) ? '#866' : '#665';
+      else if (v & 16) col = '#646';
+      const fy = g.floorY[g.idx(i, j)];
+      x.fillStyle = col; x.fillRect(i * sc, j * sc, sc - 1, sc - 1);
+      if (fy !== 0) { x.fillStyle = 'rgba(255,255,255,' + Math.min(0.5, Math.abs(fy) * 0.1) + ')'; x.fillRect(i * sc, j * sc, sc - 1, sc - 1); }
+    }
+    x.font = (sc * 1.2) + 'px sans-serif';
+    for (const r of this.level.def.rooms) { x.fillStyle = 'rgba(255,255,255,.5)'; x.fillText(r.name, r.x * sc + 2, r.y * sc + sc * 1.2); }
+    for (const t of this.level.triggers) { x.strokeStyle = 'rgba(255,200,0,.6)'; x.strokeRect(t.x * sc, t.y * sc, t.w * sc, t.h * sc); }
+    for (const f of this.level.lights.fixtures) { x.fillStyle = f.group === 'main' ? '#ff8' : '#f80'; x.fillRect(f.x * sc - 1, f.z * sc - 1, 3, 3); }
+    for (const it of this.level.items) { x.fillStyle = '#0ff'; x.beginPath(); x.arc(it.pos.x * sc, it.pos.z * sc, sc * 0.3, 0, 7); x.fill(); }
+    for (const ia of this.level.interacts) if (ia.kind !== 'item') { x.fillStyle = '#f0f'; x.fillRect(ia.pos.x * sc - 2, ia.pos.z * sc - 2, 4, 4); }
+    for (const h of this.level.hides) { x.strokeStyle = '#0f0'; x.strokeRect(h.x * sc - 3, h.z * sc - 3, 6, 6); }
+    for (const z of this.zombies) if (z.alive) { x.fillStyle = '#f33'; x.beginPath(); x.arc(z.pos.x * sc, z.pos.z * sc, sc * 0.4, 0, 7); x.fill(); x.strokeStyle = '#f33'; x.beginPath(); x.moveTo(z.pos.x * sc, z.pos.z * sc); x.lineTo((z.pos.x - Math.sin(z.yaw)) * sc, (z.pos.z - Math.cos(z.yaw)) * sc); x.stroke(); }
+    for (const cp of Object.values(this.level.def.checkpoints)) { x.fillStyle = '#fff'; x.fillText('★' + cp.id, cp.x * sc, cp.z * sc); }
+    const p = this.player.pos; x.fillStyle = '#4f4'; x.beginPath(); x.arc(p.x * sc, p.z * sc, sc * 0.45, 0, 7); x.fill();
+    return c.toDataURL('image/png');
+  }
+
+  // Wie simulate, aber Promise-Fortsetzungen (Story-Skripte) laufen zwischen den Frames
+  async simulateAsync(seconds, step = 1 / 30, each = null) {
+    const n = Math.ceil(seconds / step);
+    for (let i = 0; i < n; i++) {
+      this.input.beginFrame();
+      if (each) { const r = each(this, i * step); if (r === 'stop') { this.input.endFrame(); return i * step; } }
+      this.update(step);
+      this.input.endFrame();
+      for (let k = 0; k < 4; k++) await null;
+      if (this._simAbort) { this._simAbort = false; return i * step; }
     }
     return seconds;
   }

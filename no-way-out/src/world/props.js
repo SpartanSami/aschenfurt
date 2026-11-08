@@ -362,3 +362,10 @@ PROPS.crate = (c, o) => {
   c.box(1.22 * s, 0.06, 0.82 * s, 'plastic_yellow', 0, 0.65 * s, 0);
   c.col(-0.6 * s, -0.4 * s, 0.6 * s, 0.4 * s, 0, 0.8 * s, { vault: s <= 1, cover: true });
 };
+
+PROPS.tv = (c, o) => {
+  const y = o.y || 2.0;
+  c.box(1.1, 0.66, 0.07, 'plastic_dark', 0, y, 0.04);
+  c.box(1.0, 0.56, 0.01, screenMat('text', { text: o.text || '+++ EILMELDUNG +++\nKLINIKUM ABGERIEGELT\nKRISENSTAB TAGT', color: '#ffffff', bg: '#7a0d0d' }), 0, y, 0.08);
+  c.lights.push({ x: 0, z: 0.6, y, color: 0xff7a6a, intensity: 1.0, range: 3.2, noMesh: true, mode: 'flicker' });
+};

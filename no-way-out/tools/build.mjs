@@ -6,6 +6,12 @@ import path from 'node:path';
 
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
 const watch = process.argv.includes('--watch');
+// Sprach-Manifest erzeugen
+{
+  const vdir0 = path.join(root, 'assets/audio');
+  const ids = fs.existsSync(vdir0) ? fs.readdirSync(vdir0).filter((f) => f.endsWith('.mp3')).map((f) => f.replace(/\.mp3$/, '')) : [];
+  fs.writeFileSync(path.join(root, 'src/data/story/voicemanifest.js'), '// Automatisch erzeugt (tools/build.mjs): verfügbare Sprachaufnahmen in assets/audio\nexport const VOICE_IDS = new Set(' + JSON.stringify(ids) + ');\n');
+}
 const opts = {
   entryPoints: [path.join(root, 'src/main.js')],
   bundle: true, format: 'iife', target: ['es2020'],

@@ -98,6 +98,7 @@ export class LevelDef {
     const g = this.grid;
     for (let j = y; j < y + h; j++) for (let i = x; i < x + w; i++) {
       const k = g.idx(i, j);
+      if (g.f[k] & F.DOOR) continue;
       const nbRoom = [g.room[g.idx(i - 1, j)], g.room[g.idx(i + 1, j)], g.room[g.idx(i, j - 1)], g.room[g.idx(i, j + 1)]].find((v) => v >= 0);
       g.f[k] = F.FLOOR | F.GLASS;
       if (nbRoom != null && nbRoom >= 0) { g.room[k] = nbRoom; g.floorY[k] = this.rooms[nbRoom].floorY; g.ceilY[k] = this.rooms[nbRoom].floorY + this.rooms[nbRoom].height; }

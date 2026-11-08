@@ -201,7 +201,12 @@ export class StoryCtx {
   }
   chase(ids) { for (const id of ids) { const z = this.zombie(id); if (z) z.forceChase(); } }
   despawn(id) { const z = this.zombie(id); if (z) { z.despawn(); this.game.state.removed.add(id); } }
-  wake(id, then = ZS.CHASE) { const z = this.zombie(id); if (z && z.state === ZS.DORMANT) { z.afterGetup = then; z.setState(ZS.GETUP); } }
+  wake(id, then = ZS.CHASE) {
+    const z = this.zombie(id); if (!z) return;
+    const p = this.game.player.pos;
+    z.lastKnown = { x: p.x, z: p.z }; z.lastSeenT = z.time; z.noiseTarget = { x: p.x, z: p.z };
+    if (z.state === ZS.DORMANT) { z.afterGetup = then; z.setState(ZS.GETUP); } else if (then === ZS.CHASE) z.forceChase();
+  }
   inZone(id) { const t = this.game.level.trigger(id); return !!(t && t.inside); }
   playerNear(x, z, r) { const p = this.game.player.pos; return Math.hypot(p.x - x, p.z - z) < r; }
   setClock(t) { this.game.phone.clock = t; this.game.phone.dirty = true; }

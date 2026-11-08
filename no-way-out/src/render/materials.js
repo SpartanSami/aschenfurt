@@ -145,6 +145,9 @@ export const MATERIAL_DEFS = {
   sheet_blood: () => texMat('cloth', { color: '#d9dcd8', dirt: 5, blood: 4 }),
   curtain: () => texMat('cloth', { color: '#7f9e93', pattern: true, dirt: 3 }, { side: THREE.DoubleSide }),
   fabric_dark: () => texMat('cloth', { color: '#3a3f46' }),
+  scrubs: () => texMat('cloth', { color: '#3f7a72', dirt: 8, blood: 3 }),
+  labcoat: () => texMat('cloth', { color: '#e2e4e2', dirt: 8, blood: 4 }),
+  gown: () => texMat('cloth', { color: '#8fb0c4', pattern: true, dirt: 8, blood: 2 }),
   fabric_seat: () => texMat('cloth', { color: '#3b4d7a', pattern: true, dirt: 8 }),
   wood: () => texMat('wood', {}),
   wood_light: () => texMat('wood', { color: '#b89a72' }),
@@ -183,6 +186,8 @@ export const UV_SCALE = {
 // Wände, deren Textur die volle Wandhöhe von 3 m abbildet (Sockelleiste unten)
 export const V_FULL = { h_wall: 3, h_wall_green: 3, h_wall_dirty: 3, l_wall: 3, l_wall_dark: 3, facade1: 12, facade2: 12, facade3: 12 };
 
+const safeName = (n) => String(n).replace(/[^A-Za-z0-9_:.#-]/g, '_').slice(0, 48);
+
 export function getMat(name) {
   if (lib.has(name)) return lib.get(name);
   const def = MATERIAL_DEFS[name];
@@ -198,7 +203,7 @@ export function colorMat(hex, rough = 0.5, metal = 0, extra = {}) {
   const key = `c:${hex}:${rough}:${metal}:${JSON.stringify(extra)}`;
   if (lib.has(key)) return lib.get(key);
   const m = std({ color: hex, roughness: rough, metalness: metal, ...extra });
-  m.name = key;
+  m.name = safeName(key);
   lib.set(key, m);
   return m;
 }
@@ -207,7 +212,7 @@ export function emissiveMat(hex, intensity = 2, base = 0x111111) {
   const key = `e:${hex}:${intensity}:${base}`;
   if (lib.has(key)) return lib.get(key);
   const m = std({ color: base, emissive: hex, emissiveIntensity: intensity, roughness: 0.4 });
-  m.name = key;
+  m.name = safeName(key);
   lib.set(key, m);
   return m;
 }
@@ -224,7 +229,7 @@ export function decalMat(kind) {
     const t = getTex('paper', {}, 128);
     m = std({ map: t.map, roughness: 0.9, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
   }
-  m.name = key;
+  m.name = safeName(key);
   lib.set(key, m);
   return m;
 }
@@ -234,7 +239,7 @@ export function signMat(text, opts = {}) {
   if (lib.has(key)) return lib.get(key);
   const t = getTex('sign', { text, ...opts }, opts.w || 256, opts.h || 64);
   const m = std({ map: t.map, emissiveMap: t.emissiveMap, emissive: opts.glow ? 0xffffff : 0x000000, emissiveIntensity: opts.glow ? (opts.intensity || 1.6) : 0, roughness: 0.5 });
-  m.name = key;
+  m.name = safeName(key);
   lib.set(key, m);
   return m;
 }
@@ -244,7 +249,7 @@ export function screenMat(kind, opts = {}) {
   if (lib.has(key)) return lib.get(key);
   const t = getTex('screen', { kind, ...opts }, 256);
   const m = std({ map: t.map, emissiveMap: t.emissiveMap, emissive: 0xffffff, emissiveIntensity: opts.intensity || 1.3, roughness: 0.2 });
-  m.name = key;
+  m.name = safeName(key);
   lib.set(key, m);
   return m;
 }

@@ -2,6 +2,7 @@
 // und hinter Wänden gedämpft. Dazu dynamische Musik in Schichten (Erkundung, Spannung, Jagd, Versteck).
 import * as THREE from 'three';
 import { clamp } from '../core/rng.js';
+import { VOICE_IDS } from '../data/story/voicemanifest.js';
 
 const SR = 44100;
 
@@ -92,6 +93,12 @@ const LIB = {
   chase_hit: (ctx) => buf(ctx, 1.2, (d) => { const lp = new OnePole(180); for (let i = 0; i < d.length; i++) { const t = i / SR; d[i] = lp.lp(rnd()) * 3 * env(t, 0.002, 0.25) + Math.sin(t * 2 * Math.PI * (60 - t * 30)) * env(t, 0.002, 0.4); } normalize(d, 0.9); }),
   fire_loop: (ctx) => buf(ctx, 3, (d) => { const lp = new OnePole(800); for (let i = 0; i < d.length; i++) { d[i] = lp.lp(rnd()) * 0.6 + (Math.random() < 0.002 ? rnd() * 2 : 0); } normalize(d, 0.6); }),
   rain_loop: (ctx) => buf(ctx, 4, (d, n, c) => { const hp = new Biquad('hp', 1200, 0.5), lp = new OnePole(6000); for (let i = 0; i < d.length; i++) { d[i] = lp.lp(hp.p(rnd())) * 0.5 + (Math.random() < 0.003 ? rnd() * 0.6 : 0); } fadeLoop(d); }, 2),
+  hvac_loop: (ctx) => buf(ctx, 6, (d, n, c) => { const lp = new OnePole(180), lp2 = new OnePole(900); for (let i = 0; i < d.length; i++) { const t = i / SR; d[i] = lp.lp(rnd()) * 2.2 + lp2.lp(rnd()) * 0.08 + Math.sin(t * 2 * Math.PI * 50) * 0.05 + Math.sin(t * 2 * Math.PI * 100.3) * 0.03; } fadeLoop(d); normalize(d, 0.5); }, 2),
+  lab_loop: (ctx) => buf(ctx, 6, (d, n, c) => { const lp = new OnePole(300), hp = new Biquad('bp', 4200, 3); for (let i = 0; i < d.length; i++) { const t = i / SR; d[i] = lp.lp(rnd()) * 1.4 + hp.p(rnd()) * 0.05 + Math.sin(t * 2 * Math.PI * 7000) * 0.004 + Math.sin(t * 2 * Math.PI * 120) * 0.04; } fadeLoop(d); normalize(d, 0.45); }, 2),
+  garage_loop: (ctx) => buf(ctx, 8, (d, n, c) => { const lp = new OnePole(90), lp2 = new OnePole(400); for (let i = 0; i < d.length; i++) { const t = i / SR; d[i] = lp.lp(rnd()) * 3 + lp2.lp(rnd()) * 0.2 * (0.5 + 0.5 * Math.sin(t * 0.7 + c)); } fadeLoop(d); normalize(d, 0.5); }, 2),
+  tunnel_loop: (ctx) => buf(ctx, 8, (d, n, c) => { const lp = new OnePole(60), bp = new Biquad('bp', 300, 0.6); for (let i = 0; i < d.length; i++) { const t = i / SR; d[i] = lp.lp(rnd()) * 4 * (0.7 + 0.3 * Math.sin(t * 0.4 + c * 2)) + bp.p(rnd()) * 0.06; } fadeLoop(d); normalize(d, 0.55); }, 2),
+  wind_loop: (ctx) => buf(ctx, 8, (d, n, c) => { const bp = new Biquad('bp', 500, 0.5), lp = new OnePole(120); for (let i = 0; i < d.length; i++) { const t = i / SR; bp.set('bp', 350 + 250 * Math.sin(t * 0.5 + c), 0.6); d[i] = bp.p(rnd()) * 0.5 * (0.6 + 0.4 * Math.sin(t * 0.3 + c)) + lp.lp(rnd()) * 1.5; } fadeLoop(d); normalize(d, 0.5); }, 2),
+  siren_far: (ctx) => buf(ctx, 6, (d) => { let ph = 0; for (let i = 0; i < d.length; i++) { const t = i / SR; const f = 600 + 250 * Math.sin(t * 2 * Math.PI * 0.25); ph += f / SR; d[i] = Math.sin(ph * 2 * Math.PI) * 0.15 * Math.sin(t / 6 * Math.PI); } }),
   buzz_loop: (ctx) => buf(ctx, 2, (d) => { for (let i = 0; i < d.length; i++) { const t = i / SR; d[i] = (Math.sin(t * 2 * Math.PI * 100) * 0.5 + Math.sin(t * 2 * Math.PI * 200) * 0.25 + Math.sin(t * 2 * Math.PI * 300) * 0.1) * 0.4 + rnd() * 0.02; } }),
   caralarm_idle: (ctx) => buf(ctx, 1.5, (d) => { for (let i = 0; i < d.length; i++) { const t = i / SR; d[i] = (t % 1.5) < 0.04 ? Math.sin(t * 2 * Math.PI * 2400) * 0.15 : 0; } }),
   train_far: (ctx) => buf(ctx, 6, (d) => { const lp = new OnePole(150); for (let i = 0; i < d.length; i++) { const t = i / SR; d[i] = lp.lp(rnd()) * 3 * Math.sin(t / 6 * Math.PI) + Math.sin(t * 2 * Math.PI * 220) * 0.08 * Math.sin(t / 6 * Math.PI) * (t > 2 && t < 4 ? 1 : 0); } normalize(d, 0.7); }),
@@ -285,6 +292,7 @@ export class AudioEngine {
   async loadVoice(id) {
     if (!this.ready) return null;
     if (this.voices.has(id)) return this.voices.get(id);
+    if (!VOICE_IDS.has(id) && !(window.NWO_VOICE && window.NWO_VOICE[id])) return null;
     const p = (async () => {
       try {
         let ab = null;

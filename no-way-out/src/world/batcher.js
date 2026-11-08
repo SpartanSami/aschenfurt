@@ -33,7 +33,7 @@ export class Batcher {
   }
   // Geometrie (bereits in Weltkoordinaten transformiert) hinzufügen
   geo(mat, geometry, worldX, worldZ) {
-    const name = typeof mat === 'string' ? mat : (mat.name || mat.uuid);
+    const name = typeof mat === 'string' ? mat : (mat.uuid);
     const key = name + '|' + Math.floor(worldX / CHUNK) + '|' + Math.floor(worldZ / CHUNK);
     let b = this.geos.get(key);
     if (!b) { b = { mat, list: [] }; this.geos.set(key, b); }
