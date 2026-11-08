@@ -15,6 +15,7 @@ const SPEAKERS = {
   fragment: { name: 'Aufnahme', color: '#ffd28a' },
   arendt: { name: 'Dr. Arendt', color: '#c8b8ff' },
   military: { name: 'Lautsprecher', color: '#e8d08a' },
+  news: { name: 'Nachrichten', color: '#cfd8e8' },
 };
 
 class Cancelled extends Error {}

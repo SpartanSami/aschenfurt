@@ -100,6 +100,53 @@ Bergmann sagt nichts mehr.`,
     body: `+++ EILMELDUNG +++ Klinikum St. Elisabeth weiträumig abgeriegelt +++ Krisenstab: „Lage unter Kontrolle“ +++ Anwohner im Umkreis von 2 km zum Verbleib in den Wohnungen aufgefordert +++ NEXARA Pharma AG weist Berichte über einen Zwischenfall in Forschungseinrichtung zurück +++ Bundeswehr unterstützt mit ABC-Abwehrkräften +++ Evakuierung über Kontrollpunkt Nord (Alte Brücke) +++`,
   },
   // ---------------- Kapitel 2 ----------------
+  // ---------------- Kapitel 1, Teil 2 ----------------
+  c1b_triage: {
+    title: 'Triage-Protokoll Zentrale Notaufnahme', where: 'Leitstelle Notaufnahme', kind: 'log',
+    body: `Di., 11.11.
+
+03:40 – 2 Pat. aus dem Halden-Institut (Haustechnik?), Bisswunden Unterarm, stark blutend. Kategorie GELB.
+03:55 – Pat. 1 krampft, dann **Atemstillstand**. Reanimation erfolgreich?? Pat. beißt Pflegerin Johanna in die Schulter.
+04:20 – 6 weitere Bissverletzungen. Fieber, Verwirrtheit, Aggression. Verdacht Tollwut – Labor sagt nein.
+04:31 – Anruf NEXARA-Sicherheit (Dr. **K. Brenner**): Keine Meldung an das Gesundheitsamt. Betroffene „bis zur Abholung“ in den Wartebereich.
+05:02 – Wartebereich voll. Tür von außen verriegelt. Die Leute schlagen gegen die Scheibe. Wir haben die Vorhänge zugezogen, damit wir sie nicht sehen müssen.
+05:40 – Johanna antwortet nicht mehr. Sie liegt in Kabine 3 und sitzt manchmal auf.
+
+> Darunter, andere Schrift:
+Niemand holt sie ab. Niemand kommt.`,
+  },
+  c1b_patho: {
+    title: 'Eingangsbuch Pathologie', where: 'Büro Pathologie · Keller', kind: 'file',
+    body: `# Eingänge Halden-Institut (Sonderverfahren NEXARA)
+Leichenschau entfällt. Totenschein wird **vorab** ausgestellt (Unterschrift Projektleitung, Dr. H. Arendt). Überführung durch NEXARA-Kurier.
+
+| Prob. 004 – K., Thomas – Herzversagen – Leichnam: ~~eingegangen~~ **nicht eingegangen**
+| Prob. 007 – S., Marta – Lungenembolie – Leichnam: **nicht eingegangen**
+| Prob. 009 – [[Y., Elif]] – Herzversagen – Leichnam: **nicht eingegangen**
+| Prob. 011 – B., Jonas – Hirnblutung – Leichnam: **nicht eingegangen**
+
+> Notiz Dr. Wiese, 12.11.:
+Seit Dienstag setzt bei den Toten aus der Notaufnahme keine Totenstarre ein. Ich habe die Kühlfächer verriegelt. Ich höre sie. Ich gehe nicht mehr runter.
+
+Wer schreibt Totenscheine für Menschen, die nie bei uns angekommen sind?`,
+  },
+  c1b_kurier: {
+    title: 'Auftrag – NEXARA Sicherheit', where: 'Tasche des Kuriers', kind: 'email',
+    body: `Von: Dr. K. Brenner (Leitung Sicherheit)
+An: Kurierdienst / R. Lenz
+Gesendet: Mi., 12.11., 23:48
+Betreff: Sicherstellung Material **017**
+
+Lenz,
+
+Sie holen **heute Nacht** sämtliche Proben und Unterlagen zu Proband 017 aus dem Kühlraum der Pathologie (Fach 12) und bringen sie nach U3. Die Zugangskarte ist bis 06:00 Uhr freigeschaltet.
+
+Der Proband selbst ist seit dem Zwischenfall verschwunden. Falls Sie ihn sehen: **nicht ansprechen**, sofort melden. Er ist für das Unternehmen von höchstem Wert. Lebend.
+
+Übergabe aller Funde am **Kontrollpunkt Nord**. Das Extraktionsteam ist informiert.
+
+– B.`,
+  },
   c2_eve: {
     title: 'PROJECT EVE – Projektübersicht (intern)', where: 'Labor B', kind: 'file',
     body: `NEXARA Pharma AG · Halden-Institut · VERTRAULICH
@@ -295,6 +342,35 @@ Sagt meiner Tochter, ich bin bis zum Schluss geblieben.
 Notausstieg Marktplatz: Treppe Stellwerk → Ausgang Lindenstraße.
 
 > Mit rotem Stift: „Kontrollpunkt Nord = Alte Brücke. 400 m. Bis 06:00!!“`,
+  },
+  // ---------------- Kapitel 4, Teil 2 ----------------
+  c4b_news: {
+    title: 'Eilmeldung – Varnheim 24', where: 'Fernsehwand · Elektro Max', kind: 'screen',
+    body: `# +++ EILMELDUNG +++
+**NEXARA: Sabotage im Halden-Institut – Techniker unter Verdacht**
+
+Die NEXARA Pharma AG macht einen eigenen Mitarbeiter für den Ausbruch rund um das Klinikum St. Elisabeth verantwortlich. Der Haustechniker **İlyas D. (41)** soll in der Nacht zum Dienstag um 03:17 Uhr die Sicherheitssysteme des Instituts abgeschaltet haben.
+
+„Unsere Forschung war zu jedem Zeitpunkt sicher. Wir bedauern, dass ein Einzelner das Vertrauen missbraucht hat“, so ein Sprecher.
+
+Nach Angaben des Krisenstabs wird der Sektor Klinikum um **06:00 Uhr** geräumt. Evakuierung ausschließlich über den **Kontrollpunkt Nord** an der Alten Brücke.
+
+> Laufband:
++++ Zahl der Infizierten unklar +++ Gesundheitsamt: „Keine Meldung erhalten“ +++ NEXARA-Aktie ausgesetzt +++`,
+  },
+  c4b_notiz: {
+    title: 'Handzettel – NEXARA Sicherheit', where: 'Kasse der Drogerie', kind: 'file',
+    body: `# VERMISST – BITTE UM HINWEISE
+[Foto: Mann, Mitte 30, dunkle Haare, Klinikarmband]
+
+**Sami Y.**, 34 Jahre, zuletzt gesehen im Klinikum St. Elisabeth.
+Der Gesuchte ist **krank und möglicherweise verwirrt**. Er erinnert sich eventuell nicht an seinen Namen.
+
+Bitte **nicht ansprechen**. Hinweise ausschließlich an die NEXARA-Sicherheit, **Kontrollpunkt Nord**.
+Für Hinweise, die zum Auffinden führen, ist eine Belohnung ausgesetzt.
+
+> Auf der Rückseite, Kugelschreiber:
+Die haben uns am Kontrollpunkt nach ihm gefragt. Nicht nach Kranken, nicht nach Kindern. Nur nach ihm. – T.`,
   },
   // ---------------- Kapitel 5 ----------------
   c5_zettel: {

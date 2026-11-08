@@ -86,10 +86,10 @@ export default {
     L.prop('boxes', 77.6, 23.3, { n: 2 });
     // Tunnel
     L.prop('rails', 91, 27.5, { len: 36, rot: PI / 2, y: -4.1, third: true });
-    L.prop('cable_tray', 91, 29.6, { len: 36, rot: PI / 2, y: -1.6 });
-    L.prop('pipe', 91, 25.2, { len: 36, rot: PI / 2, y: -1.0, r: 0.12 });
+    L.prop('cable_tray', 91, 29.6, { len: 36, rot: PI / 2, y: 2.5 });
+    L.prop('pipe', 91, 25.2, { len: 36, rot: PI / 2, y: 3.1, r: 0.12 });
     L.prop('crate', 99, 26.0, { rot: 0.2, y: -4.1, s: 0.9 });
-    L.prop('label', 92.97, 30.2, { text: 'QUERSCHLAG 3', w: 1.2, h: 0.25, y: -2.2, rot: PI, bg: '#e8e8e0', fg: '#222' });
+    L.prop('label', 92.97, 30.2, { text: 'QUERSCHLAG 3', w: 1.2, h: 0.25, y: 1.9, rot: PI, bg: '#e8e8e0', fg: '#222' });
     // Station Marktplatz
     L.prop('station_sign', 103, 20.04, { text: 'MARKTPLATZ', w: 4, y: 2.8 });
     L.prop('bench', 99, 20.5, { w: 2.2 });
@@ -302,9 +302,9 @@ export default {
     },
     {
       id: 'c4_exit', when: 'enter:exit', do: async (c) => {
-        c.msg('unknown', 'UNBEKANNT', 'Oben ist der Marktplatz. Dann die Brücke. Es ist bald sechs.');
-        c.setClock('05:38');
-        await c.endChapter('ch5');
+        c.msg('unknown', 'UNBEKANNT', 'Der Notausstieg führt in die Linden-Passage. Von dort hoch zur Lindenstraße.');
+        c.setClock('05:30');
+        await c.endChapter('ch4b');
       },
     },
   ],

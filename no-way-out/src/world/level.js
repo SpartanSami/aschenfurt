@@ -28,6 +28,8 @@ const LIGHT_KINDS = {
   green: { color: 0x3cff8a, intensity: 1.2, range: 3, mesh: 'none' },
 };
 
+const SELF_Y = new Set(['oplamp', 'poster', 'exit_sign', 'label', 'tv', 'station_sign', 'cable_tray', 'pipe']);
+
 export class Level {
   constructor(game, chapter, def) {
     this.game = game;
@@ -251,7 +253,9 @@ export class Level {
     if (!builder) { console.warn('Unbekanntes Requisit', p.type); return; }
     const c = new PropCtx(p.o);
     builder(c, { ...p.o, x: p.x, z: p.z });
-    const fy = p.o.y ?? this.grid.heightAt(p.x, p.z);
+    // Requisiten, die ihre Höhe selbst setzen (Lampen, Schilder, Rohre …), stehen immer auf dem örtlichen Boden;
+    // ihr o.y gilt relativ dazu. Bei allen anderen ist o.y eine absolute Höhe (z. B. Leiche auf einem Tisch).
+    const fy = SELF_Y.has(p.type) ? this.grid.heightAt(p.x, p.z) : (p.o.y ?? this.grid.heightAt(p.x, p.z));
     const m = new THREE.Matrix4().compose(new THREE.Vector3(p.x, fy, p.z), new THREE.Quaternion().setFromEuler(new THREE.Euler(0, p.rot, 0)), new THREE.Vector3(1, 1, 1));
     for (const part of c.parts) {
       part.geo.applyMatrix4(m);

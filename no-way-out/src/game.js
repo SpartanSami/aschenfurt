@@ -23,7 +23,7 @@ import { LevelDef } from './world/leveldef.js';
 import { HUD } from './ui/hud.js';
 import { DocViewer } from './ui/docs.js';
 import { Menu } from './ui/menu.js';
-import { CHAPTERS, CHAPTER_ORDER } from './data/chapters/index.js';
+import { CHAPTERS, CHAPTER_ORDER, CHAPTER_SEQ } from './data/chapters/index.js';
 import { RNG } from './core/rng.js';
 
 function freshState() {
@@ -297,7 +297,9 @@ export class Game {
     const ch = CHAPTERS[next];
     if (!ch) return;
     this.mode = 'loading';
-    await this.hud.titleCard(`KAPITEL ${idx + 1}`, ch.name, 3.6);
+    // Teilabschnitte eines Kapitels (z. B. ch1b) bekommen nur eine kurze Ortsangabe
+    if (ch.part) await this.hud.titleCard(ch.name.toUpperCase(), ch.partName || ch.tagline, 2.6);
+    else await this.hud.titleCard(`KAPITEL ${idx + 1}`, ch.name, 3.6);
     await this.loadChapter(next, 'start', null);
   }
 
@@ -797,7 +799,7 @@ export class Game {
     if (i.rawPressed('F3')) { this.hud.debugEl.classList.toggle('show'); }
     if (i.rawPressed('F4')) { this.godMode = !this.godMode; this.hud.toast('Unverwundbar: ' + (this.godMode ? 'an' : 'aus')); }
     if (i.rawPressed('F7')) { this.godInvisible = !this.godInvisible; this.hud.toast('Unsichtbar: ' + (this.godInvisible ? 'an' : 'aus')); }
-    if (i.rawPressed('F8') && this.chapter) { const k = CHAPTER_ORDER.indexOf(this.chapter.id); if (k < CHAPTER_ORDER.length - 1) this.loadChapter(CHAPTER_ORDER[k + 1], 'start', null); }
+    if (i.rawPressed('F8') && this.chapter) { const k = CHAPTER_SEQ.indexOf(this.chapter.id); if (k >= 0 && k < CHAPTER_SEQ.length - 1) this.loadChapter(CHAPTER_SEQ[k + 1], 'start', null); }
   }
 }
 

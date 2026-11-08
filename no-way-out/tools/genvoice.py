@@ -5,18 +5,21 @@ OUT = 'assets/audio'
 only = set(sys.argv[2:])
 lines = json.load(open('tools/out/voicelines.json'))
 # Vorgefertigte ElevenLabs-Stimmen (im Gratis-Tarif per API nutzbar), Modell multilingual v2 spricht Deutsch
-VOICE = {'fragment': 'cjVigY5qzO86Huf0OWal', 'unknown': 'cjVigY5qzO86Huf0OWal', 'pa': 'EXAVITQu4vr4xnSDxMaL', 'military': 'onwK4e9ZLuTAKqWW03F9'}
+VOICE = {'fragment': 'cjVigY5qzO86Huf0OWal', 'unknown': 'cjVigY5qzO86Huf0OWal', 'pa': 'EXAVITQu4vr4xnSDxMaL', 'military': 'onwK4e9ZLuTAKqWW03F9', 'news': 'Xb7hH8MSUJpSbSDYk0k2'}
 SET = {
   'fragment': {'stability': 0.42, 'similarity_boost': 0.8, 'style': 0.35, 'use_speaker_boost': True},
   'unknown': {'stability': 0.55, 'similarity_boost': 0.8, 'style': 0.15, 'use_speaker_boost': True},
   'pa': {'stability': 0.85, 'similarity_boost': 0.7, 'style': 0.0, 'use_speaker_boost': False},
   'military': {'stability': 0.7, 'similarity_boost': 0.75, 'style': 0.2, 'use_speaker_boost': True},
+  'news': {'stability': 0.75, 'similarity_boost': 0.75, 'style': 0.1, 'use_speaker_boost': True},
 }
 FX = {
   # verzerrte Stimme am Telefon: tiefer, Bandpass, Bitcrusher
   'unknown': 'asetrate=44100*0.84,aresample=44100,atempo=1.19,acrusher=bits=7:mode=log:aa=1:mix=0.3,highpass=f=280,lowpass=f=3300,volume=1.8',
   'fragment': 'highpass=f=110,lowpass=f=7500,acompressor=threshold=-18dB:ratio=3,volume=1.2',
   'pa': 'highpass=f=220,lowpass=f=5200,aecho=0.8:0.6:70|140:0.25|0.15,volume=1.3',
+  # Fernsehlautsprecher hinter Schaufensterglas
+  'news': 'highpass=f=180,lowpass=f=6500,acompressor=threshold=-20dB:ratio=3,volume=1.3',
   'military': 'highpass=f=480,lowpass=f=3600,acrusher=bits=10:mode=log:aa=1:mix=0.2,aecho=0.8:0.7:280|520:0.35|0.2,volume=1.6',
 }
 os.makedirs(OUT, exist_ok=True)

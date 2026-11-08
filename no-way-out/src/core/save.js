@@ -25,6 +25,13 @@ export class SaveManager {
     write(KEY, s);
     this.unlock(snapshot.chapter);
   }
+  // Schwierigkeitsgrad nachträglich ändern: gilt für den Spielstand und alle Kapitelstarts
+  setDifficulty(id) {
+    const s = this.get(); if (!s) return;
+    if (s.snapshot) s.snapshot.difficulty = id;
+    for (const k in (s.chapterStarts || {})) s.chapterStarts[k].difficulty = id;
+    this.mem = s; write(KEY, s);
+  }
   clear() { try { localStorage.removeItem(KEY); } catch (e) { /* */ } this.mem = null; }
   newRun() { const s = { version: 1, snapshot: null, chapterStarts: {}, updated: Date.now() }; this.mem = s; write(KEY, s); }
   chapterStart(id) { const s = this.get(); return s?.chapterStarts?.[id] || null; }

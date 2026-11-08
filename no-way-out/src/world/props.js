@@ -9,6 +9,7 @@ export const PROPS = {};
 // ---------- Geometrie-Helfer ----------
 export function boxGeo(w, h, d, uvs = 1) {
   const g = new THREE.BoxGeometry(w, h, d);
+  if (!uvs) return g; // Schilder/Bildschirme: Textur genau einmal pro Fläche
   const uv = g.attributes.uv;
   const spans = [[d, h], [d, h], [w, d], [w, d], [w, h], [w, h]];
   for (let f = 0; f < 6; f++) for (let k = 0; k < 4; k++) {
@@ -40,7 +41,9 @@ export class PropCtx {
   m(mat) { return typeof mat === 'string' ? getMat(mat) : mat; }
   // Quader, Mittelpunkt (x, y, z)
   box(w, h, d, mat, x, y, z, r = {}) {
-    const g = place(boxGeo(w, h, d, r.uvs || 1), x, y, z, r.rx || 0, r.ry || 0, r.rz || 0);
+    // Beschriftete Flächen (Schilder, Bildschirme) nicht kacheln, sondern einpassen
+    const fit = typeof mat !== 'string' && mat && /^(sign|screen):/.test(mat.name || '');
+    const g = place(boxGeo(w, h, d, fit ? 0 : (r.uvs || 1)), x, y, z, r.rx || 0, r.ry || 0, r.rz || 0);
     if (r.dyn) { const mesh = new THREE.Mesh(g, this.m(mat)); mesh.castShadow = true; mesh.receiveShadow = true; r.dyn.add(mesh); return mesh; }
     this.parts.push({ geo: g, mat });
     return g;

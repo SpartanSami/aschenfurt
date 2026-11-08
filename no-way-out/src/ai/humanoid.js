@@ -23,6 +23,10 @@ export const OUTFITS = {
   suit: { top: ['cloth', { color: '#24262c', dirt: 5, blood: 2 }], bottom: ['cloth', { color: '#24262c', dirt: 4 }] },
   hazmat: { top: ['cloth', { color: '#c8a020', dirt: 10, blood: 2 }], bottom: ['cloth', { color: '#c8a020', dirt: 10 }] },
   soldier: { top: ['cloth', { color: '#4a5236', dirt: 8, blood: 3 }], bottom: ['cloth', { color: '#4a5236', dirt: 8 }] },
+  // Schaufensterpuppen (Kapitel 4, Passage)
+  mannequin: { top: ['cloth', { color: '#3a3f5a', dirt: 1 }], bottom: ['cloth', { color: '#2a2a2e', dirt: 1 }], human: true },
+  mannequin2: { top: ['cloth', { color: '#8a2a3a', dirt: 1 }], bottom: ['cloth', { color: '#c8c0b0', dirt: 1 }], human: true },
+  mannequin3: { top: ['cloth', { color: '#d8d4c8', pattern: true, dirt: 1 }], bottom: ['cloth', { color: '#3a4a5a', dirt: 1 }], human: true, coat: true },
   // Begleiter
   mine: { top: ['cloth', { color: '#e8ecec', dirt: 3 }], bottom: ['cloth', { color: '#2c3440', dirt: 2 }], coat: true, human: true },
   ilyas: { top: ['cloth', { color: '#3a4a3e', dirt: 5 }], bottom: ['cloth', { color: '#2a2a30', dirt: 4 }], human: true },
@@ -34,6 +38,7 @@ const SKIN = {
   zombie3: ['skin', { color: '#a8988a', wounds: 4 }],
   human: ['skin', { color: '#c49a7c', wounds: 0 }],
   human2: ['skin', { color: '#b88a6a', wounds: 0 }],
+  plastic: ['metal', { color: '#d9d5cd', rough: 0.35, scratches: 3 }],
 };
 
 function limb(r, len, m) {

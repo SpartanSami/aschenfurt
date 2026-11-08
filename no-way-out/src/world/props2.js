@@ -260,3 +260,70 @@ PROPS.speaker_truck = (c) => {
   PROPS.military_truck(c, {});
   c.box(0.5, 0.5, 0.5, 'metal_dark', 0.6, 3.5, 2.0); c.box(0.5, 0.5, 0.5, 'metal_dark', -0.6, 3.5, 2.0);
 };
+
+// Kühlzellenwand der Pathologie: Raster aus Edelstahl-Schubladen. o.open = Index einer offenen Lade
+PROPS.morgue = (c, o) => {
+  const cols = o.cols || 3, rows = 3, w = cols * 0.8, h = 2.1;
+  c.box(w + 0.1, h + 0.1, 0.12, 'steel', 0, h / 2 + 0.05, -0.36);
+  for (let i = 0; i < cols; i++) for (let j = 0; j < rows; j++) {
+    const x = -w / 2 + 0.4 + i * 0.8, y = 0.4 + j * 0.68, k = i * rows + j;
+    if (k === o.open) {
+      // herausgezogene Lade mit Leichensack
+      c.box(0.66, 0.06, 1.7, 'steel', x, y - 0.24, 0.55);
+      c.box(0.5, 0.22, 1.5, colorMat(0x1b1d20, 0.6, 0.0), x, y - 0.1, 0.55);
+      c.box(0.7, 0.58, 0.04, 'steel', x, y, 1.4);
+    } else {
+      c.box(0.7, 0.58, 0.04, 'steel', x, y, -0.28);
+      c.box(0.2, 0.04, 0.05, 'chrome', x, y + 0.12, -0.24);
+      c.box(0.12, 0.08, 0.01, signMat(String(k + 1 + (o.base || 0)), { bg: '#e8e8e8', fg: '#222', w: 64, h: 40, fontPx: 26 }), x, y - 0.14, -0.255);
+    }
+  }
+  c.col(-w / 2 - 0.05, -0.45, w / 2 + 0.05, -0.2, 0, h, { tall: true });
+  if (o.open != null) { const i = Math.floor(o.open / rows); const x = -w / 2 + 0.4 + i * 0.8; c.col(x - 0.35, -0.2, x + 0.35, 1.45, 0, 0.8, { vault: false, cover: true }); }
+};
+// Kleiderständer mit Kleidung (Bekleidungsgeschäft)
+PROPS.rack = (c, o) => {
+  const w = o.w || 1.6;
+  const r = rngFrom2(o);
+  for (const x of [-w / 2, w / 2]) { c.box(0.04, 1.5, 0.04, 'chrome', x, 0.75, 0); c.box(0.04, 0.03, 0.5, 'chrome', x, 0.02, 0); }
+  c.box(w, 0.03, 0.03, 'chrome', 0, 1.48, 0);
+  const cols = [0x2a3a5a, 0x5a2a2a, 0x1a1a1a, 0x8a8070, 0x3a5a3a, 0xa0a0a8, 0x6a4a2a];
+  const n = Math.floor(w / 0.12);
+  for (let i = 0; i < n; i++) {
+    if (r() < 0.25) continue;
+    const x = -w / 2 + 0.08 + i * (w - 0.16) / Math.max(1, n - 1);
+    c.box(0.05, 0.7 + r() * 0.3, 0.42, colorMat(cols[Math.floor(r() * cols.length)], 0.9, 0), x, 1.08 - r() * 0.1, 0, { ry: (r() - 0.5) * 0.3 });
+  }
+  c.col(-w / 2, -0.25, w / 2, 0.25, 0, 1.5, { tall: true, cover: true });
+};
+// Supermarktregal (beidseitig bestückt)
+PROPS.market_shelf = (c, o) => {
+  const w = o.w || 3.0, d = 0.9, h = o.h || 1.8;
+  const r = rngFrom2(o);
+  c.box(w, h, 0.06, 'metal', 0, h / 2, 0);
+  c.box(w, 0.1, d, 'metal_dark', 0, 0.05, 0);
+  const cols = [0xc83a2a, 0x2a6ac8, 0xe8c020, 0x2a9a4a, 0xe8e8e0, 0x8a3ab0, 0xe87a20];
+  for (let i = 0; i < 4; i++) {
+    const y = 0.15 + i * (h - 0.25) / 3.6;
+    c.box(w, 0.03, d, 'metal', 0, y, 0);
+    for (const side of [-1, 1]) {
+      let x = -w / 2 + 0.1;
+      while (x < w / 2 - 0.15) {
+        const bw = 0.12 + r() * 0.2;
+        if (r() < (o.empty ?? 0.35)) { x += bw + 0.03; continue; }
+        const bh = 0.12 + r() * 0.22;
+        c.box(bw, bh, 0.3, colorMat(cols[Math.floor(r() * cols.length)], 0.6, 0), x + bw / 2, y + bh / 2 + 0.02, side * 0.24);
+        x += bw + 0.03;
+      }
+    }
+  }
+  c.box(w, 0.08, 0.02, signMat(o.text || '', { bg: '#f0f0f0', fg: '#c02020', w: 512, h: 32, fontPx: 22 }), 0, 0.12, d / 2 + 0.01);
+  c.col(-w / 2, -d / 2, w / 2, d / 2, 0, h, { tall: true });
+};
+function rngFrom2(o) { let s = Math.floor(((o.x || 0) * 73 + (o.z || 0) * 151) * 9301 + 49297) % 233280; return () => (s = (s * 9301 + 49297) % 233280) / 233280; }
+// Sockel einer Schaufensterpuppe (die Puppe selbst ist eine statische Figur)
+PROPS.mannequin_base = (c) => {
+  c.cyl(0.24, 0.26, 0.04, 'chrome', 0, 0.02, 0, { seg: 16 });
+  c.cyl(0.02, 0.02, 0.9, 'chrome', 0, 0.45, -0.05);
+  c.col(-0.2, -0.2, 0.2, 0.2, 0, 0.9, { noFlag: true });
+};

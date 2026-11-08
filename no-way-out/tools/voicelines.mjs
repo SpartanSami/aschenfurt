@@ -1,6 +1,6 @@
 // Sammelt alle Sprachzeilen (v-IDs) der Geräte-Stimmen aus den Kapiteln
 import fs from 'node:fs';
-const want = new Set(['unknown', 'fragment', 'pa', 'military']);
+const want = new Set(['unknown', 'fragment', 'pa', 'military', 'news']);
 const out = new Map();
 const walk = (o, seen = new Set()) => {
   if (!o || typeof o !== 'object' || seen.has(o)) return; seen.add(o);

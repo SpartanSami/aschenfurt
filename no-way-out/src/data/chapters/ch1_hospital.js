@@ -520,11 +520,9 @@ export default {
         c.loop('elev_motor', 'elevator_motor', [55.5, 1.5, 51.5], { vol: 0.8, bus: 'sfx' });
         c.shake(0.5);
         c.stopLoop('alarm', 3);
-        await c.wait(2.5);
-        c.msg('unknown', 'UNBEKANNT', 'Ebene U3. Halden-Institut. Du warst schon einmal hier.');
-        await c.wait(2.5);
-        c.setClock('04:38');
-        await c.endChapter('ch2');
+        await c.wait(3.0);
+        c.setClock('04:26');
+        await c.endChapter('ch1b');
       },
     },
   ],

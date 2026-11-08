@@ -11,9 +11,9 @@ import { ZOMBIE_TYPES } from '../data/zombietypes.js';
 export const ZS = {
   IDLE: 'idle', PATROL: 'patrol', DORMANT: 'dormant', GETUP: 'getup', INVESTIGATE: 'investigate', ALERT: 'alert',
   CHASE: 'chase', SEARCH: 'search', RETURN: 'return', ATTACK: 'attack', GRAB: 'grab', STAGGER: 'stagger',
-  BASH: 'bash', CHECKHIDE: 'checkhide', SCRIPT: 'script',
+  BASH: 'bash', CHECKHIDE: 'checkhide', SCRIPT: 'script', FALL: 'fall',
 };
-const STATE_DE = { idle: 'Ruhe', patrol: 'Patrouille', dormant: 'Schlafend', getup: 'Aufstehen', investigate: 'Untersuchen', alert: 'Alarmiert', chase: 'Verfolgung', search: 'Suche', return: 'Rückkehr', attack: 'Angriff', grab: 'Packt', stagger: 'Taumelt', bash: 'Tür', checkhide: 'Versteck prüfen', script: 'Skript' };
+const STATE_DE = { idle: 'Ruhe', patrol: 'Patrouille', dormant: 'Schlafend', getup: 'Aufstehen', investigate: 'Untersuchen', alert: 'Alarmiert', chase: 'Verfolgung', search: 'Suche', return: 'Rückkehr', attack: 'Angriff', grab: 'Packt', stagger: 'Taumelt', bash: 'Tür', checkhide: 'Versteck prüfen', script: 'Skript', fall: 'Gestürzt' };
 
 let ZID = 0;
 const tmpV = new THREE.Vector3();
@@ -216,6 +216,8 @@ export class Zombie {
     // in Kletterzellen verlangsamen
     const g = this.game.level.grid;
     const inVault = g.has(Math.floor(this.pos.x), Math.floor(this.pos.z), F.VAULT);
+    // Beim Hineinstolpern in ein Hindernis kann ein verfolgender Zombie stürzen
+    if (inVault && !this.climbing && this.state === ZS.CHASE && this.rng.chance(0.22)) { this.climbing = true; this.setState(ZS.FALL); return; }
     this.climbing = inVault;
     const sp = speed * align * (inVault ? 0.35 : 1);
     this.speed = sp;
@@ -302,6 +304,14 @@ export class Zombie {
       case ZS.BASH: this._bash(dt); break;
       case ZS.CHECKHIDE: this._checkHide(dt); break;
       case ZS.SCRIPT: this._script(dt); break;
+      case ZS.FALL: {
+        this.speed = 0;
+        const m2 = this.model;
+        if (this.stateT < dt * 1.5) { m2.setPose('lying'); m2.poseBlend = 0; game.audio.play('land', { pos: tmpV.set(this.pos.x, this.pos.y + 0.3, this.pos.z), vol: 0.7 }); game.noise.emit(this.pos.x, this.pos.z, 4, 'fall', { src: this }); }
+        if (this.stateT < 0.45) m2.poseBlend = Math.min(1, this.stateT / 0.45);
+        else if (this.stateT > 1.1) { this.afterGetup = ZS.CHASE; this.setState(ZS.GETUP); }
+        break;
+      }
     }
     // Reaktionen auf Sicht in ruhigen Zuständen
     if ([ZS.IDLE, ZS.PATROL, ZS.INVESTIGATE, ZS.RETURN, ZS.SEARCH].includes(this.state)) {

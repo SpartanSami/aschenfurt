@@ -2,7 +2,7 @@
 // Pause, Tod, Enden/Abspann. Atmosphärisch, aber schnell bedienbar.
 import { DIFFICULTY, ACTION_NAMES, DEFAULT_BINDINGS } from '../core/config.js';
 import { Input } from '../core/input.js';
-import { CHAPTERS, CHAPTER_ORDER } from '../data/chapters/index.js';
+import { CHAPTERS, CHAPTER_ORDER, CHAPTER_SEQ } from '../data/chapters/index.js';
 import { ENDINGS } from '../data/story/endings.js';
 
 const h = (html) => { const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstElementChild; };
@@ -61,6 +61,7 @@ export class Menu {
         <button data-a="cont" ${has ? '' : 'disabled'}>Fortsetzen</button>
         <button data-a="chapters">Kapitel laden</button>
         <button data-a="settings">Einstellungen</button>
+        <button data-a="difficulty">Schwierigkeitsgrad <small>${(DIFFICULTY[g.settings.difficulty] || DIFFICULTY.normal).name}</small></button>
         <button data-a="endings">Enden <small>${meta.endings.length}/3</small></button>
         <button data-a="credits">Mitwirkende</button>
         <button data-a="quit">Spiel verlassen</button>
@@ -74,6 +75,7 @@ export class Menu {
       if (a === 'cont') g.continueGame();
       if (a === 'chapters') this.showChapters();
       if (a === 'settings') this.showSettings(() => this.showMain());
+      if (a === 'difficulty') this.showDifficultySetting(() => this.showMain());
       if (a === 'endings') this.showEndings();
       if (a === 'credits') this.showCredits();
       if (a === 'quit') this.showQuit();
@@ -98,12 +100,38 @@ export class Menu {
     this._set(el);
   }
 
+  // Schwierigkeitsgrad ändern (Hauptmenü: für neue Spiele und den Spielstand; Pause: sofort)
+  showDifficultySetting(back) {
+    const g = this.game;
+    const cur = g.mode === 'paused' ? g.difficulty.id : (g.settings.difficulty || 'normal');
+    const el = h(`<div class="panel diff"><h2>Schwierigkeitsgrad</h2><p class="sub">${g.mode === 'paused' ? 'Gilt sofort für Gegner, Schaden und Reaktionsfenster. Die Menge der Heilmittel passt sich beim nächsten Laden eines Abschnitts an.' : 'Gilt für neue Spiele und für den gespeicherten Spielstand.'}</p>
+      <div class="cards">${Object.values(DIFFICULTY).map((d) => `<button class="card ${d.id === cur ? 'sel' : ''}" data-d="${d.id}"><b>${d.name}</b>${d.id === 'normal' ? '<em>empfohlen</em>' : ''}<span>${d.desc}</span></button>`).join('')}</div>
+      <div class="row"><button data-a="back">Zurück</button></div></div>`);
+    el.addEventListener('click', (e) => {
+      const c = e.target.closest('.card');
+      if (c) {
+        const id = c.dataset.d;
+        g.settings.difficulty = id; g.applySettings();
+        g.difficulty = DIFFICULTY[id];
+        g.save.setDifficulty(id);
+        if (g.lastSnapshot) g.lastSnapshot.difficulty = id;
+        el.querySelectorAll('.card').forEach((x) => x.classList.toggle('sel', x === c));
+        g.audio.play('ui', { vol: 0.5 });
+        return;
+      }
+      if (e.target.closest('button')?.dataset.a === 'back') back();
+    });
+    this._set(el, g.mode === 'menu' ? 'main' : 'overlay');
+  }
+
   showChapters() {
     const g = this.game;
     const meta = g.save.meta();
-    const el = h(`<div class="panel chapters"><h2>Kapitel laden</h2><div class="list">${CHAPTER_ORDER.map((id, i) => {
+    const el = h(`<div class="panel chapters"><h2>Kapitel laden</h2><div class="list">${CHAPTER_SEQ.map((id) => {
       const ch = CHAPTERS[id]; const ok = meta.unlocked.includes(id) || g.debug;
-      return `<button class="chap" data-c="${id}" ${ok ? '' : 'disabled'}><span>${i + 1}</span><b>${ok ? ch.name : '— gesperrt —'}</b><small>${ok ? ch.tagline || '' : 'Erreiche dieses Kapitel im Spiel'}</small></button>`;
+      const num = CHAPTER_ORDER.indexOf(id) >= 0 ? String(CHAPTER_ORDER.indexOf(id) + 1) : String(CHAPTER_ORDER.indexOf(id.replace(/b$/, '')) + 1) + '·2';
+      const name = ch.part ? `${ch.name} – ${ch.partName}` : ch.name;
+      return `<button class="chap" data-c="${id}" ${ok ? '' : 'disabled'}><span>${num}</span><b>${ok ? name : '— gesperrt —'}</b><small>${ok ? ch.tagline || '' : 'Erreiche diesen Abschnitt im Spiel'}</small></button>`;
     }).join('')}</div><div class="row"><button data-a="back">Zurück</button></div></div>`);
     el.addEventListener('click', (e) => {
       const c = e.target.closest('.chap'); if (c && !c.disabled) { g.startChapter(c.dataset.c); return; }
@@ -196,12 +224,13 @@ export class Menu {
     const g = this.game;
     const obj = g.phone.data.objective;
     const el = h(`<div class="panel pause"><h2>Pause</h2>${obj ? `<p class="obj"><small>ZIEL</small>${obj}</p>` : ''}
-      <nav><button data-a="resume" class="primary">Fortsetzen</button><button data-a="settings">Einstellungen</button><button data-a="cp">Letzten Checkpoint laden</button><button data-a="help">Steuerung</button><button data-a="menu">Hauptmenü</button></nav>
+      <nav><button data-a="resume" class="primary">Fortsetzen</button><button data-a="settings">Einstellungen</button><button data-a="difficulty">Schwierigkeitsgrad</button><button data-a="cp">Letzten Checkpoint laden</button><button data-a="help">Steuerung</button><button data-a="menu">Hauptmenü</button></nav>
       <p class="small">${CHAPTERS[g.chapter?.id]?.name || ''} · ${g.difficulty.name}</p></div>`);
     el.addEventListener('click', (e) => {
       const a = e.target.closest('button')?.dataset.a;
       if (a === 'resume') g.resume();
       if (a === 'settings') this.showSettings(() => this.showPause());
+      if (a === 'difficulty') this.showDifficultySetting(() => this.showPause());
       if (a === 'cp') { this.hideAll(); g.mode = 'play'; g.audio.resume(); g.reloadCheckpoint(); }
       if (a === 'help') this.showHelp();
       if (a === 'menu') g.toMainMenu();

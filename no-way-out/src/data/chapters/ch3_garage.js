@@ -84,7 +84,7 @@ export default {
     L.prop('concrete_barrier', 72.5, 38.4, { w: 2.4, rot: PI / 2 });
     L.prop('concrete_barrier', 84.5, 25.0, { w: 2.4, rot: 0.3 });
     L.prop('cone', 79.2, 46.2); L.prop('cone', 81.8, 46.3);
-    L.prop('label', 80.5, 46.97, { text: 'U-BAHN · VERBINDUNGSGANG', w: 2.6, h: 0.35, y: 2.75, rot: PI, bg: '#14365c', fg: '#ffffff', glow: true });
+    L.prop('label', 80.5, 46.97, { text: 'U-BAHN · VERBINDUNGSGANG', w: 2.6, h: 0.35, y: 2.3, rot: PI, bg: '#14365c', fg: '#ffffff', glow: true });
     L.prop('label', 89.97, 26, { text: 'EBENE −2', w: 1.6, h: 0.5, y: 1.9, rot: -PI / 2, bg: '#1a1a1a', fg: '#e8c040' });
     L.prop('body', 85.6, 37.6, { cloth: 'fabric_dark', rot: 0.5 });
     L.prop('cart_shop', 61.5, 39.5, { rot: 2 });

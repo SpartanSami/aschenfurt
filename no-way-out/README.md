@@ -45,10 +45,11 @@ Der Fortschritt wird automatisch an Checkpoints im Browser gespeichert (localSto
 - **Verletzungssystem** mit den Zuständen Gesund, Verletzt und Schwer verletzt. Es bremst, kürzt die Ausdauer und trübt die Sicht. Heilmittel sind knapp, Wunden heilen nicht von selbst.
 - **Smartphone in der Hand** mit Taschenlampe, Nachrichten, Sprachmemos, Notizen (Ziel, Dokumente, Erkenntnisse), Fotos, Anrufliste und Zustand. Der Akku ist unbegrenzt.
 - **Die unbekannte Kontaktperson** meldet sich über Textnachrichten, Anrufe, Sprachnachrichten, Lautsprecherdurchsagen, Überwachungskameras und Monitore des ARGUS-Systems sowie über alte Aufnahmen.
-- **Fünf Kapitel:** Krankenhaus → Forschungseinrichtung PROJECT EVE → Parkhaus → U-Bahn → Stadt. Jedes Kapitel hat eigene Mechaniken, zum Beispiel Notstrom, Dekon-Schleuse, Sterilisation mit zeitgesteuerten Toren, Autoalarme, einen Zug voller „Fahrgäste“, Regen, der Schritte verschluckt, und einen Totmannschalter.
+- **Zombies sind keine Statisten:** Sie stolpern bei Verfolgungen über Hindernisse und stürzen, schlagen Türen ein, prüfen Verstecke und rufen sich gegenseitig herbei.
+- **Fünf Kapitel in sieben Abschnitten:** Krankenhaus (Station 3, dann Notaufnahme und Pathologie) → Forschungseinrichtung PROJECT EVE → Parkhaus → U-Bahn (Tunnel, dann Linden-Passage) → Stadt. Jeder Abschnitt hat eigene Mechaniken, zum Beispiel Notstrom, ein Wartezimmer hinter Glas, Kühlfächer, Dekon-Schleuse, Sterilisation mit zeitgesteuerten Toren, Autoalarme, einen Zug voller „Fahrgäste“, Schaufensterpuppen, zwischen denen nicht nur Puppen stehen, einen Supermarkt voller Infizierter, Regen, der Schritte verschluckt, und einen Totmannschalter.
 - **Figuren:** Mine und İlyas müssen gefunden werden. Beide haben Geheimnisse.
 - **Entscheidungen und drei Enden:** **Hoffnung**, **Tragödie** und **Geheimnis**. Die Hinweise dazu sind über das ganze Spiel verteilt.
-- **Drei Schwierigkeitsgrade:** Leicht, Mittel (Standard) und Schwer. Sie ändern Heilmittel, Reaktionsfenster, Gegnertempo, Wahrnehmung und Schaden. Die Geschichte bleibt gleich.
+- **Drei Schwierigkeitsgrade:** Leicht, Mittel (Standard) und Schwer. Sie ändern Heilmittel, Reaktionsfenster, Gegnertempo, Wahrnehmung und Schaden. Die Geschichte bleibt gleich. Der Grad lässt sich jederzeit im Haupt- und Pausemenü ändern.
 - **Häufige automatische Checkpoints**, Kapitelauswahl und Fortsetzen.
 - **Einstellungen:** Mausempfindlichkeit, Y-Achse, Sichtfeld, Kopfbewegung, Grafikqualität, Renderauflösung, Vollbild, Helligkeit, Bloom, Filmkörnung, Lautstärken (Gesamt, Musik, Effekte, Stimmen), Untertitel und Untertitelgröße sowie die Tastenbelegung.
 
@@ -57,7 +58,7 @@ Der Fortschritt wird automatisch an Checkpoints im Browser gespeichert (localSto
 - **Engine:** three.js (WebGL 2) mit eigener Spiel-Architektur in modularem JavaScript. Mit esbuild wird daraus eine Datei gebündelt. Unreal Engine 5 ließ sich in der Cloud-Entwicklungsumgebung nicht betreiben. Die Browser-Lösung ist außerdem ohne Installation sofort spielbar.
 - **Alles prozedural:** Texturen (PBR mit Normal- und Rauheitsmaps), Möbel, Fahrzeuge, Figuren, Animationen, Soundeffekte und die dynamische Musik entstehen zur Laufzeit. Es gibt keine externen Grafik- oder Sounddateien.
 - **Licht:** Ein Pool echter Punktlichter wird den relevantesten Leuchten zugewiesen. Ein Shader-Patch prüft jede Lampe über das Weltraster gegen Wände, sodass kein Licht durch Mauern dringt. Dazu kommt weiches Umgebungslicht pro Raum, und die Taschenlampe wirft Schatten.
-- **Sprachaufnahmen:** Alles, was Sami über Geräte hört (Anrufe, Diktiergerät, Lautsprecher), ist vertont (ElevenLabs, nachbearbeitet mit ffmpeg). Gespräche mit Mine und İlyas laufen über Untertitel.
+- **Sprachaufnahmen:** Alles, was Sami über Geräte hört (Anrufe, Diktiergerät, Lautsprecher, Fernsehnachrichten), ist vertont: 45 Aufnahmen, erzeugt mit ElevenLabs und nachbearbeitet mit ffmpeg. Gespräche mit Mine und İlyas laufen über Untertitel.
 
 Mehr dazu in [`docs/ARCHITEKTUR.md`](docs/ARCHITEKTUR.md), Testergebnisse in [`docs/QA.md`](docs/QA.md). Die Story-Bibel mit allen Auflösungen steht in [`docs/STORY.md`](docs/STORY.md) und enthält **Spoiler**.
 
