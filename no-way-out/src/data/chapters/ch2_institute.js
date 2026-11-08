@@ -257,6 +257,9 @@ export default {
     }
     if (c.get('sterile')) { c.lightMode('lab', 'off'); c.power('qRed', true); }
     // Elif sitzt summend in ihrer Zelle
+    // Wandmonitor im Vorraum – ARGUS kann hier Nachrichten anzeigen
+    g.level._hallMon = c.g.makeScreen({ x: 56.03, y: 2.1, z: 34.5, rotY: PI / 2, w: 1.4, h: 0.8, text: 'SEKTION B · LEITSTAND\nZELLEN: VERRIEGELT\nSTERIL.: BEREIT', color: '#9fd3ff' });
+    if (c.get('mon_msg')) c.g.setScreen(g.level._hallMon, ARGUS_MSG, '#ff7a6a');
     const e = g.zombies.find((z) => z.id === 'z_elif');
     if (e) e.hearing = 0;
     void g;
@@ -352,6 +355,11 @@ export default {
         c.say('sami', 'Meine Zelle.', { d: 1.8 });
         await c.wait(2);
         c.objective('Zurück zum Leitstand.');
+        // Die Kontaktperson übernimmt den Monitor im Vorraum
+        c.flag('mon_msg');
+        c.g.setScreen(c.g.level._hallMon, ARGUS_MSG, '#ff7a6a');
+        c.sound('glitch', [56.3, 2.1, 34.5], { vol: 0.8 });
+        c.msg('unknown', 'UNBEKANNT', 'Sieh auf den Monitor im Vorraum.');
       },
     },
     { id: 'c2_wall', when: 'interact:wall017', do: async (c) => { c.photo('wall017', 'Zelle 017 – in die Wand geritzt'); c.say('sami', '„Nach vorne.“ … Das habe ich geschrieben?', { d: 3 }); c.fact('In Zelle 017 steht „NACH VORNE“ in der Wand. Derselbe Satz wie vom Anrufer.'); } },
@@ -438,6 +446,12 @@ export default {
         c.chase(['z_la1', 'z_la2', 'z_la3']);
         c.unlock('q2'); c.open('q2');
         c.lines([{ s: 'mine', t: 'Lauf! Die Schleusen schließen nacheinander! Oder durch den Schacht da!', v: 'm2_o' }]);
+        (async () => {
+          await c.wait(3.2);
+          await c.pa([{ s: 'unknown', name: 'UNBEKANNT', t: 'Der Schacht links von dir. Geduckt. Er führt an allen Schleusen vorbei.', v: 'c2_pa_contact' }]);
+          await c.lines([{ s: 'mine', t: 'Die Stimme … aus den Lautsprechern?! Wer ist das, Sami?' }]);
+          c.fact('Die Stimme vom Telefon kann auch über die Lautsprecher des Instituts sprechen. Sie hat Zugriff auf ARGUS.');
+        })();
         c.objective('Durch die Schleusen – bevor sie schließen! (Alternativ: Lüftungsschacht)');
         c.g.hud.toast(`Schacht: nur geduckt <kbd>${c.g.input.label('crouch')}</kbd>`);
         await c.wait(2.5 * t);
@@ -489,6 +503,8 @@ export default {
     },
   ],
 };
+
+const ARGUS_MSG = 'ARGUS › NACHVORNE\nSIE IST HINTER DEM GLAS.\nVERTRAU IHR. EIN BISSCHEN.';
 
 const FRAG2 = {
   title: 'Aufnahme 2/5 – „Zelle 017“',

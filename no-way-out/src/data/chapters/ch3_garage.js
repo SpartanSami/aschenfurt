@@ -241,7 +241,8 @@ export default {
       id: 'c3_ramp2', when: 'enter:ramp2', do: async (c) => {
         c.checkpoint('l1');
         await c.wait(2);
-        c.msg('unknown', 'UNBEKANNT', 'Im Kassenhäuschen auf minus eins sitzt ein Mann. Er kennt den Weg unter die Stadt.');
+        c.voiceMemo('vm_c3', 'Sprachnachricht · UNBEKANNT', [{ s: 'unknown', t: 'Minus eins. Im Kassenhäuschen sitzt ein Mann. Er kennt den Weg unter die Stadt. Hör ihm zu – aber gib ihm nichts.', v: 'c3_vm' }], { from: 'UNBEKANNT' });
+        c.msg('unknown', 'UNBEKANNT', '🎤 Sprachnachricht (0:07) – Telefon › Sprachmemos');
         c.objective('Ebene −1: Kassenhäuschen.');
       },
     },

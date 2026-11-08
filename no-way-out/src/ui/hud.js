@@ -77,10 +77,14 @@ export class HUD {
     return new Promise((resolve) => {
       this.choiceEl.innerHTML = `<h3>${title}</h3>`;
       const list = el('div', 'opts', this.choiceEl);
-      options.forEach((o, i) => {
-        const b = el('button', 'opt', list, `<span>${i + 1}</span>${o.text}${o.hint ? `<small>${o.hint}</small>` : ''}`);
+      const buttons = options.map((o, i) => {
+        const b = el('button', 'opt' + (i === 0 ? ' sel' : ''), list, `<span>${i + 1}</span>${o.text}${o.hint ? `<small>${o.hint}</small>` : ''}`);
         b.onclick = () => done(o.id);
+        b.onmouseenter = () => select(i);
+        return b;
       });
+      let sel = 0;
+      const select = (i) => { sel = (i + buttons.length) % buttons.length; buttons.forEach((b, k) => b.classList.toggle('sel', k === sel)); };
       this.choiceEl.classList.add('show');
       this.game.setModal('choice');
       const keyH = (e) => { const n = parseInt(e.key, 10); if (n >= 1 && n <= options.length) done(options[n - 1].id); };
@@ -93,7 +97,8 @@ export class HUD {
         this.game.audio.play('ui', { vol: 0.6 });
         resolve(id);
       };
-      this.choiceState = { done, options };
+      // Bedienung per Tastatur (W/S/↑/↓ + E/Enter) und Gamepad (Steuerkreuz/Stick + A)
+      this.choiceState = { done, options, move: (d) => select(sel + d), confirm: () => done(options[sel].id) };
     });
   }
 

@@ -128,7 +128,7 @@ export class Story {
     let dur = ln.d ?? Math.max(1.6, ln.t.length * 0.062 + 0.8);
     let h = null;
     if (ln.v) {
-      h = await game.audio.playVoice(ln.v, { filter: o.channel === 'phone' || ln.s === 'unknown' ? 'phone' : null, pos: ln.pos || (o.channel === 'pa' ? null : null), reverbSend: o.channel === 'pa' ? 0.9 : 0.2 });
+      h = await game.audio.playVoice(ln.v, { filter: o.channel === 'phone' || (ln.s === 'unknown' && o.channel !== 'pa') ? 'phone' : null, pos: ln.pos || (o.channel === 'pa' ? null : null), reverbSend: o.channel === 'pa' ? 0.9 : 0.2 });
       if (h && h.duration) dur = Math.max(h.duration + 0.25, 1.0);
     }
     if (ln.s === 'mine' || ln.s === 'ilyas') { const n = game.npc(ln.s); if (n) n.say(dur); }

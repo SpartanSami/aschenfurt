@@ -121,7 +121,8 @@ export class Input {
     for (const p of pads) { if (p && p.connected) { this.pad = p; break; } }
     if (this.pad) this.padButtons = this.pad.buttons.map((b) => b.pressed);
   }
-  static PAD = { interact: 0, vault: 1, crouch: 2, phone: 3, flashlight: 4, heal: 5, throw: 7, sprint: 10, pause: 9 };
+  static PAD = { interact: 0, vault: 1, crouch: 2, phone: 3, flashlight: 4, heal: 5, throw: 7, sprint: 10, pause: 9, forward: 12, back: 13, left: 14, right: 15 };
+  padPressed(action) { return this._padPressed(action); }
   _padDown(action) {
     const i = Input.PAD[action];
     if (i === undefined || !this.padButtons) return false;

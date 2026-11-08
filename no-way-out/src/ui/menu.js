@@ -26,6 +26,27 @@ export class Menu {
     this.screen = null;
   }
   loading(b) { this.loadingEl.classList.toggle('show', b); }
+
+  // Gamepad-Bedienung aller Menüs: Steuerkreuz/Stick wählt, A bestätigt, B = zurück
+  padNav(inp) {
+    if (!inp.pad || !this.screen) return;
+    const btns = [...this.root.querySelectorAll('button:not(:disabled)')].filter((b) => b.offsetParent !== null);
+    if (!btns.length) return;
+    const ay = inp.pad.axes[1] || 0;
+    const stickUp = ay < -0.6 && !(this._stickY < -0.6), stickDown = ay > 0.6 && !(this._stickY > 0.6);
+    this._stickY = ay;
+    let i = btns.indexOf(this._padFocus);
+    if (inp.padPressed('forward') || stickUp) i = i <= 0 ? btns.length - 1 : i - 1;
+    else if (inp.padPressed('back') || stickDown) i = i < 0 || i >= btns.length - 1 ? 0 : i + 1;
+    else if (i < 0) return;
+    if (btns[i] !== this._padFocus) {
+      if (this._padFocus) this._padFocus.classList.remove('padsel');
+      this._padFocus = btns[i]; this._padFocus.classList.add('padsel'); this._padFocus.focus?.();
+      this.game.audio.play('ui', { vol: 0.3 });
+    }
+    if (inp.padPressed('interact') && this._padFocus) this._padFocus.click();
+    if (inp.padPressed('vault')) { const back = this.root.querySelector('[data-a=back]'); if (back) back.click(); }
+  }
   hideAll() { this.root.innerHTML = ''; this.root.className = 'menu'; this.screen = null; }
   _set(el, cls = '') { this.root.innerHTML = ''; this.root.className = 'menu show ' + cls; this.root.appendChild(el); this.screen = el; }
 
@@ -239,8 +260,10 @@ export class Menu {
         g.audio.play('ui', { vol: 0.3, rate: 0.6 });
       };
       const next = () => { i++; show(); };
+      this._endingNext = () => { if (i < pages.length) next(); };
       const keyH = (ev) => { if (['KeyE', 'Enter', 'Space'].includes(ev.code)) next(); };
       const finish = () => {
+        this._endingNext = null;
         window.removeEventListener('keydown', keyH);
         const meta = g.save.meta();
         const c = h(`<div class="panel credits endc"><h2>${e.title}</h2><p>${e.summary}</p><p class="small">Erreichte Enden: ${meta.endings.length}/3</p>${meta.endings.length < 3 ? `<p class="small hint">${Object.values(ENDINGS).filter((x) => !meta.endings.includes(x.id)).map((x) => '• ' + x.hint).join('<br>')}</p>` : '<p class="small">Du hast alle Enden gesehen. Danke fürs Spielen.</p>'}<div class="row"><button data-a="menu" class="primary">Hauptmenü</button></div></div>`);

@@ -336,6 +336,37 @@ export class Game {
     this.menu.showMain();
   }
 
+  // Bildschirm mit änderbarem Text (z. B. ARGUS-Nachrichten der Kontaktperson)
+  makeScreen(o) {
+    const cv = document.createElement('canvas'); cv.width = 512; cv.height = Math.round(512 * o.h / o.w);
+    const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace;
+    const mat = new THREE.MeshBasicMaterial({ map: tex, toneMapped: false });
+    const grp = new THREE.Group();
+    const frame = new THREE.Mesh(new THREE.BoxGeometry(o.w + 0.08, o.h + 0.08, 0.06), new THREE.MeshStandardMaterial({ color: 0x15171a, roughness: 0.4 }));
+    const scr = new THREE.Mesh(new THREE.PlaneGeometry(o.w, o.h), mat); scr.position.z = 0.032;
+    grp.add(frame); grp.add(scr);
+    grp.position.set(o.x, o.y, o.z); grp.rotation.y = o.rotY || 0;
+    this.level.root.add(grp);
+    const s = { cv, tex, grp };
+    this.setScreen(s, o.text, o.color);
+    const glow = this.level.lights.add({ x: o.x + Math.sin(o.rotY || 0) * 0.6, y: o.y, z: o.z + Math.cos(o.rotY || 0) * 0.6, color: 0x80b0ff, intensity: 1.2, range: 3.5, mode: 'steady', group: 'screens' });
+    s.glow = glow;
+    return s;
+  }
+  setScreen(s, text, color = '#9fd3ff') {
+    if (!s) return;
+    const x = s.cv.getContext('2d'), W = s.cv.width, H = s.cv.height;
+    x.fillStyle = '#04080c'; x.fillRect(0, 0, W, H);
+    for (let y = 0; y < H; y += 4) { x.fillStyle = 'rgba(255,255,255,0.03)'; x.fillRect(0, y, W, 1); }
+    const lines = String(text).split('\n');
+    const longest = Math.max(...lines.map((l) => l.length), 1);
+    const fs = Math.floor(Math.min(H / (lines.length * 1.5 + 0.5), (W * 0.9) / (longest * 0.62)));
+    x.fillStyle = color; x.font = `bold ${fs}px monospace`; x.textBaseline = 'top';
+    lines.forEach((l, i) => x.fillText(l, W * 0.05, H * 0.12 + i * fs * 1.45));
+    s.tex.needsUpdate = true;
+    if (s.glow) s.glow.color.set(color);
+  }
+
   // Statische Figur als Dekoration (z. B. auf einer Überwachungskamera)
   decor(o) {
     const h = new Humanoid({ outfit: o.outfit || 'mine', skin: o.skin || 'human', hair: o.hair ?? 0x1a110c, hairStyle: o.hairStyle || 'long', scale: o.scale || 0.95, limp: 0 });
@@ -532,7 +563,9 @@ export class Game {
     const c = this.camView.list[this.camView.i];
     this.secCam.position.set(c.x, c.y ?? 2.7, c.z);
     this.secCam.lookAt(c.tx, c.ty ?? 0.8, c.tz);
-    this.hud.camOverlay(`<b>● REC</b> ${c.label}<br><small>[${this.input.label('left')}]/[${this.input.label('right')}] Kamera wechseln · [${this.input.label('interact')}] beenden</small>`);
+    const note = c.note ? `<div class="camnote">${c.note}</div>` : '';
+    this.hud.camOverlay(`<b>● REC</b> ${c.label}${note}<br><small>[${this.input.label('left')}]/[${this.input.label('right')}] Kamera wechseln · [${this.input.label('interact')}] beenden</small>`);
+    if (c.note) this.audio.play('glitch', { vol: 0.35 });
     if (c.onView) c.onView(this.story.ctx);
   }
   _updateCams() {
@@ -597,7 +630,16 @@ export class Game {
     if (this.mode === 'play') {
       this.time += dt;
       if (this.docs.isOpen()) { this.docs.update(inp); }
-      else if (this.modal === 'choice') { /* Welt pausiert */ }
+      else if (this.modal === 'choice') {
+        // Welt pausiert; Auswahl per Tastatur/Gamepad
+        const cs = this.hud.choiceState;
+        if (cs) {
+          if (inp.pressed('forward')) cs.move(-1);
+          if (inp.pressed('back')) cs.move(1);
+          if (inp.pressed('interact') || inp.rawPressed('Enter')) { this.hud.choiceState = null; cs.confirm(); }
+        }
+      }
+      else if (inp.pressed('pause') && !this.camView && !this.qte) { this._allowUnlock = true; this.input.exitLock(); this.pause(); }
       else if (this.camView) {
         this._updateCams();
         this._world(dt * 1.0, true);
@@ -619,7 +661,12 @@ export class Game {
       this.fx.update(dt);
     } else if (this.mode === 'ending' || this.mode === 'menu') {
       this.fx.update && this.level && this.fx.update(dt);
+      if (this.mode === 'ending' && this.menu._endingNext && inp.padPressed('interact')) this.menu._endingNext();
+    } else if (this.mode === 'paused') {
+      if (inp.padPressed('pause')) this.resume();
     }
+    // Gamepad-Navigation in Menüs (Hauptmenü, Pause, Tod, Einstellungen, Abspann)
+    if (this.mode !== 'play' && this.mode !== 'loading') this.menu.padNav(inp);
     // Audio-Hörer
     if (this.audio.ready) {
       const fwd = new THREE.Vector3(); (this.camView ? this.camera : this.camera).getWorldDirection(fwd);

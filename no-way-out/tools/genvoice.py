@@ -33,5 +33,6 @@ for l in lines:
     print('erzeugt', l['id'], len(text))
   fx = FX[l['s']]
   if l['id'] in ('c5_final_c', 'c5_final_d', 'c5_final_e'): fx = 'highpass=f=160,lowpass=f=6500,volume=1.2'
+  if l['id'] == 'c2_pa_contact': fx = FX['unknown'] + ',aecho=0.8:0.6:90|180:0.3|0.2'
   subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', raw, '-af', fx, '-ac', '1', '-b:a', '56k', os.path.join(OUT, l['id'] + '.mp3')], check=True)
 print('Zeichen verbraucht:', used)

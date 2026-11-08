@@ -23,8 +23,13 @@ Getestet wurde automatisiert in einem Headless-Chromium mit Software-Rendering (
 | Zombie-KI: Geräusch → Untersuchen → Verdacht → Alarm → Verfolgung → Angriff → Packen → Losreißen | ✅ |
 | Tür einschlagen, Suche, Rückkehr, Versteck prüfen | ✅ |
 | Heilen, Telefon-Apps, Dokumente, Sprachaufnahmen laden | ✅ |
+| Pause per P (zuvor nur Esc) | ✅ nach Fehlerbehebung |
+| Entscheidungen per Tastatur (W/S + E) | ✅ |
+| Kontaktperson über Kamera-Einblendung (Kap. 1), ARGUS-Monitor und Lautsprecher (Kap. 2), Sprachnachricht (Kap. 3) | ✅ |
 
 ## Behobene Fehler (Auswahl)
+- Die Pausetaste P und Gamepad-Start waren belegt, wurden aber nie ausgewertet.
+- Entscheidungen, Menüs, Todesbildschirm und Abspann ließen sich nicht per Gamepad bedienen.
 - Hindernisse auf Zellgrenzen wurden für die KI nicht markiert, Zombies blieben hängen. Die Markierung erfasst jetzt einen Rand.
 - Materialnamen mit Zeilenumbruch erzeugten Shader-Fehler.
 - Ein Objekt in den Story-Flags machte den Checkpoint-Snapshot zirkulär (Kapitel 3).
@@ -50,3 +55,4 @@ Das ist für aktuelle Desktop-GPUs unkritisch. Auf schwachen Laptops hilft die G
 - Der Autopilot fährt feste Routen ab. Er **schleicht und weicht nicht wie ein Mensch aus**, deshalb liefen die vollständigen Routen mit Unverwundbarkeit. Ob Verfolgungen fair sind, wurde zusätzlich ohne Unverwundbarkeit (Kapitel 1) und über die Zeitabstände der Skripte geprüft. Ein Feinschliff der Balance durch echte Spieltests wird empfohlen.
 - Die Bildrate wurde nicht auf echter Grafikhardware gemessen. Software-Rendering ist dafür nicht aussagekräftig.
 - Klang und Musik wurden technisch geprüft (Laden, Abspielen), aber nicht angehört.
+- Die Gamepad-Unterstützung ist nach dem Standard-Mapping der Gamepad-API implementiert, aber nicht mit echter Hardware getestet.

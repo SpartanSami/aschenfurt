@@ -14,7 +14,7 @@ Sami erwacht ohne Erinnerung in einem Krankenhaus. In seiner Akte steht kein Nam
 | **Projektordner** | `index.html` öffnen (lädt `dist/game.js`). Über einen lokalen Webserver (`npx http-server .`) werden die Sprachaufnahmen aus `assets/audio/` geladen. |
 | **Online** | Den Ordner zum Beispiel über GitHub Pages veröffentlichen und `…/no-way-out/` aufrufen. |
 
-**Voraussetzungen:** ein aktueller Desktop-Browser (Chrome, Edge oder Firefox) mit WebGL 2, Maus und Tastatur (Gamepad: Grundfunktionen). Kopfhörer werden dringend empfohlen.
+**Voraussetzungen:** ein aktueller Desktop-Browser (Chrome, Edge oder Firefox) mit WebGL 2, Maus und Tastatur oder Gamepad (Standard-Layout, z. B. Xbox/PlayStation). Kopfhörer werden dringend empfohlen.
 
 Der Fortschritt wird automatisch an Checkpoints im Browser gespeichert (localStorage).
 
@@ -33,6 +33,9 @@ Der Fortschritt wird automatisch an Checkpoints im Browser gespeichert (localSto
 | Werfen (Ablenkung) | G oder linke Maustaste |
 | Losreißen, wenn gepackt | A und D abwechselnd |
 | Pause | Esc oder P |
+| Entscheidungen | Maus, Zahlentasten 1–3 oder W/S + E |
+
+**Gamepad:** linker Stick bewegen, rechter Stick umsehen, A interagieren, B klettern/Atem anhalten, X ducken, Y Smartphone, LB Taschenlampe, RB heilen, RT werfen, LT/L3 rennen, Steuerkreuz für Smartphone-Menüs (X = zurück) und Losreißen, Start für Pause. Alle Menüs lassen sich mit Steuerkreuz bzw. Stick und A bedienen, B geht zurück.
 
 ## 🧟 Was das Spiel ausmacht
 
@@ -41,6 +44,7 @@ Der Fortschritt wird automatisch an Checkpoints im Browser gespeichert (localSto
 - **Verstecke ohne Garantie:** Spinde, unter Betten, hinter Fahrzeugen und Containern. Wer beim Verstecken gesehen wird oder zu laut atmet, wird herausgezogen.
 - **Verletzungssystem** mit den Zuständen Gesund, Verletzt und Schwer verletzt. Es bremst, kürzt die Ausdauer und trübt die Sicht. Heilmittel sind knapp, Wunden heilen nicht von selbst.
 - **Smartphone in der Hand** mit Taschenlampe, Nachrichten, Sprachmemos, Notizen (Ziel, Dokumente, Erkenntnisse), Fotos, Anrufliste und Zustand. Der Akku ist unbegrenzt.
+- **Die unbekannte Kontaktperson** meldet sich über Textnachrichten, Anrufe, Sprachnachrichten, Lautsprecherdurchsagen, Überwachungskameras und Monitore des ARGUS-Systems sowie über alte Aufnahmen.
 - **Fünf Kapitel:** Krankenhaus → Forschungseinrichtung PROJECT EVE → Parkhaus → U-Bahn → Stadt. Jedes Kapitel hat eigene Mechaniken, zum Beispiel Notstrom, Dekon-Schleuse, Sterilisation mit zeitgesteuerten Toren, Autoalarme, einen Zug voller „Fahrgäste“, Regen, der Schritte verschluckt, und einen Totmannschalter.
 - **Figuren:** Mine und İlyas müssen gefunden werden. Beide haben Geheimnisse.
 - **Entscheidungen und drei Enden:** **Hoffnung**, **Tragödie** und **Geheimnis**. Die Hinweise dazu sind über das ganze Spiel verteilt.
@@ -78,6 +82,6 @@ Debug-Modus: `index.html?debug` öffnet das Spiel mit F3 (Statistik), F4 (unverw
 - Die Spielzeit liegt je nach Spielweise bei etwa **60–90 Minuten** und damit unter den angestrebten 2–3 Stunden.
 - Die vertonten Stimmen stammen von englischsprachigen ElevenLabs-Stimmen, die über das mehrsprachige Modell Deutsch sprechen. Ein leichter Akzent ist möglich.
 - Begleiter werden von Zombies bewusst ignoriert, damit keine frustrierenden Eskortpassagen entstehen. Gefahr für sie entsteht nur durch die Inszenierung.
-- Touch-Steuerung für Smartphones ist nicht enthalten. Das Spiel ist für Desktop mit Maus und Tastatur oder Gamepad ausgelegt.
+- Touch-Steuerung für Smartphones ist nicht enthalten. Das Spiel ist für Desktop mit Maus und Tastatur oder Gamepad ausgelegt. Die Gamepad-Belegung ist fest, nur die Tastatur ist frei belegbar.
 
 Alle Personen, Firmen und Orte sind frei erfunden.

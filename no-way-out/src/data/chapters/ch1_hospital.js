@@ -458,7 +458,7 @@ export default {
         await g.viewCameras([
           { label: 'CAM 07 · LASTENAUFZUG EG/U3', x: 51.2, y: 2.7, z: 52.6, tx: 53.5, ty: 1.0, tz: 51.0 },
           { label: 'CAM 02 · WARTEBEREICH STATION 3', x: 57.3, y: 2.7, z: 20.4, tx: 50.5, ty: 1.2, tz: 16 },
-          { label: 'CAM 11 · U3 · BEOBACHTUNG (NEXARA)', x: 75.3, y: 2.6, z: 40.4, tx: 71.0, ty: 0.7, tz: 43.6, onView: (cx) => { if (!cx.get('saw_mine')) { cx.flag('saw_mine'); cx.fact('Kamera U3: Eine Frau im Laborkittel kauert im Beobachtungsraum. Sie lebt.'); } } },
+          { label: 'CAM 11 · U3 · BEOBACHTUNG (NEXARA)', note: 'ARGUS › NACHVORNE: SIE IST WICHTIG. FINDE SIE.', x: 75.3, y: 2.6, z: 40.4, tx: 71.0, ty: 0.7, tz: 43.6, onView: (cx) => { if (!cx.get('saw_mine')) { cx.flag('saw_mine'); cx.fact('Kamera U3: Eine Frau im Laborkittel kauert im Beobachtungsraum. Sie lebt.'); } } },
           { label: 'CAM 04 · TECHNIK / NEA-2', x: 31.6, y: 2.8, z: 54.4, tx: 35.5, ty: 0.8, tz: 57.5 },
         ]);
         if (c.get('saw_mine') && !c.get('saw_mine_said')) { c.flag('saw_mine_said'); c.say('sami', 'Wer ist sie? … Ich kenne sie. Ich weiß nicht, woher.', { d: 3.5 }); }
