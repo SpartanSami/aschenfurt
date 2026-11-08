@@ -36,7 +36,7 @@ export class LevelDef {
       floor: o.floor || this.defaults.floor, wall: o.wall || this.defaults.wall, ceil: o.ceil ?? this.defaults.ceil,
       height: o.height ?? this.defaults.height, floorY: o.floorY ?? 0,
       outdoor: !!o.outdoor, ambient: o.ambient ?? this.defaults.ambient, tint: o.tint || null,
-      rail: !!o.rail, label: o.label || null, reverb: o.reverb || null, noCeil: !!o.noCeil,
+      rail: !!o.rail, label: o.label || null, reverb: o.reverb || null, noCeil: !!o.noCeil, wet: !!o.wet, edge: o.edge || null, wallH: o.wallH ?? null,
     };
     this.rooms.push(r);
     this.carve(x, y, w, h, r);

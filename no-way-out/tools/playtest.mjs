@@ -69,6 +69,9 @@ await page.evaluate(() => {
       if (fd < 0.45) { gm.keyUp('KeyW'); gm.keyUp('ShiftLeft'); return 'stop'; }
       if (fd < best - 0.2) { best = fd; lastProg = t; }
       if (t - lastProg > 6) { A.log('FESTGESTECKT bei', p.pos.x.toFixed(2), p.pos.z.toFixed(2), 'Ziel', x, z); A.stuck = true; gm.keyUp('KeyW'); return 'stop'; }
+      // lokales Ausweichen bei Hängern
+      gm.input.keys.delete('KeyA'); gm.input.keys.delete('KeyD');
+      if (t - lastProg > 1.2) { const side = Math.floor((t - lastProg) / 0.8) % 2 ? 'KeyA' : 'KeyD'; gm.input.keys.add(side); }
       p.yaw = Math.atan2(-(wp.x - p.pos.x), -(wp.z - p.pos.z)); p.pitch = 0;
       // Türen öffnen
       for (const door of gm.level.doors) {
@@ -81,7 +84,7 @@ await page.evaluate(() => {
       gm.input.keys.add('KeyW');
       if (sprint) gm.input.keys.add('ShiftLeft');
     });
-    game.keyUp('KeyW'); game.keyUp('ShiftLeft');
+    game.keyUp('KeyW'); game.keyUp('ShiftLeft'); game.keyUp('KeyA'); game.keyUp('KeyD');
     const fd = Math.hypot(x - p.pos.x, z - p.pos.z);
     if (fd > 0.8) { A.log('Ziel nicht erreicht', x, z, 'Abstand', fd.toFixed(2)); return false; }
     return true;
@@ -110,7 +113,7 @@ async function runChapter(ch) {
   await page.evaluate((god) => { window.NWO.godMode = god; window.NWO.godInvisible = god; window.NWO.noAutoPause = true; }, args.includes('--god'));
   let ok = true;
   for (const [k, step] of route.entries()) {
-    const res = await page.evaluate(`(async () => { ${step.js} })()`);
+    const res = await page.evaluate(`(async () => { ${step.js.replace(/__CHOICE__/g, process.env.CHOICE || 'hope')} })()`);
     const st = await page.evaluate(() => window.AUTO.state());
     console.log(`${String(k).padStart(2)} ${step.label.padEnd(36)} -> ${JSON.stringify(res)} | ${st.mode}/${st.pmode} hp${st.hp} @${st.x},${st.z} | ${st.obj}`);
     if (shots) await page.screenshot({ path: `tools/out/pt_${ch}_${k}.png` });

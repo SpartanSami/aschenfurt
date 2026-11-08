@@ -116,6 +116,7 @@ export class Story {
     const run = async () => {
       for (const ln of lines) await this.playLine(ln, o);
     };
+    if (o.parallel) return run();
     const p = this.lineQueue.then(run, run);
     this.lineQueue = p.catch(() => {});
     return p;
@@ -166,7 +167,7 @@ export class StoryCtx {
   take(id) { this.game.inventory.remove(id); }
   fact(text) { this.game.phone.addFact(text); }
   photo(id, title) { this.game.phone.addPhoto(id, title); }
-  door(id) { const d = this.game.level.door(id); if (!d) console.warn('Tür fehlt', id); return d; }
+  door(id) { const d = this.game.level.door(id) || this.game.level.door(id + '_a'); if (!d) console.warn('Tür fehlt', id); return d; }
   unlock(id) { const d = this.door(id); if (d) { d.setLocked(false); this.game.state.doors[id] = { ...(this.game.state.doors[id] || {}), locked: false }; } }
   lock(id) { const d = this.door(id); if (d) { d.setLocked(true); this.game.state.doors[id] = { ...(this.game.state.doors[id] || {}), locked: true }; } }
   open(id, o = {}) { const d = this.door(id); if (d) { d.open(o.from || null, { force: true, ...o }); if (o.persist !== false) this.game.state.doors[id] = { ...(this.game.state.doors[id] || {}), open: true }; } }

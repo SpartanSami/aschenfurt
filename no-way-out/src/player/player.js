@@ -442,7 +442,12 @@ export class Player {
     else if (inv.count('bandage')) type = 'bandage';
     else if (inv.count('medkit')) type = 'medkit';
     else if (inv.count('pills')) type = 'pills';
-    if (!type) { this.game.hud.toast('Keine Heilmittel'); return; }
+    if (!type && inv.has('serum') && this.game.state.flags.serum_kept && this.hp <= 45) {
+      inv.remove('serum'); this.hp = 100; this.painkiller = 60;
+      this.game.hud.toast('Serum S-17 injiziert – vollständig geheilt'); this.game.audio.play('pills', { vol: 0.6 });
+      this.game.state.flags.serum_used = true; bus.emit('healed', this.hp); return;
+    }
+    if (!type) { this.game.hud.toast(inv.has('serum') && this.game.state.flags.serum_kept ? 'Das Serum nur im Notfall (schwer verletzt)' : 'Keine Heilmittel'); return; }
     const info = ITEM_INFO[type];
     this.heal = { type, t: 0, dur: info.useTime };
     if (this.mode === 'normal') this.mode = 'heal';

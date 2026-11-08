@@ -267,4 +267,69 @@ Der Verbindungsgang zur U-Bahn-Station „Klinikum“ (Ebene −2, Süd) ist **n
 
 Ihr Parkhausteam`,
   },
+  // ---------------- Kapitel 4 ----------------
+  c4_stoerung: {
+    title: 'Störungsmeldung Stadtwerke', where: 'Betriebsraum · Station Klinikum', kind: 'log',
+    body: `STADTWERKE VARNHEIM – U-BAHN
+Mo 04:58  Linie U3: Zug 3117 auf Anweisung Krisenstab in Station „Klinikum“ angehalten.
+Mo 05:10  Betrieb U3 vollständig eingestellt. Fahrgäste verbleiben im Zug (Quarantäne).
+Mo 05:40  Kontakt zu Zug 3117 abgebrochen.
+Di 09:12  Fahrstrom abgeschaltet. Tunnel Klinikum–Marktplatz: Zutritt verboten.
+Mi 22:30  Notruf aus Zug 3117. Keine Worte. Nur Geräusche.`,
+  },
+  c4_zettel: {
+    title: 'Notiz im Zug', where: 'Zug 3117', kind: 'note',
+    body: `Für wen auch immer:
+
+Herr Brandt aus Wagen 2 ist gebissen worden. Wir haben ihn hinten eingesperrt, aber die Tür hält nicht.
+
+Wenn ich mich verändere: Lasst mich hier sitzen. Ich will nicht mehr laufen.
+
+Sagt meiner Tochter, ich bin bis zum Schluss geblieben.
+– R.`,
+  },
+  c4_plan: {
+    title: 'Streckenplan U3', where: 'Stellwerk Marktplatz', kind: 'file',
+    body: `U3: Klinikum – **Marktplatz** – Alte Brücke (gesperrt) – Nordstadt
+
+Notausstieg Marktplatz: Treppe Stellwerk → Ausgang Lindenstraße.
+
+> Mit rotem Stift: „Kontrollpunkt Nord = Alte Brücke. 400 m. Bis 06:00!!“`,
+  },
+  // ---------------- Kapitel 5 ----------------
+  c5_zettel: {
+    title: 'Zettel am Kühlschrank', where: 'Wohnung Yıldız', kind: 'note',
+    body: `M.,
+
+ich habe etwas vorbereitet. Für den Fall, dass ich mich vergesse.
+
+Wenn ich mich in den nächsten Tagen komisch benehme: Vertrau mir trotzdem. Auch dem, der ich dann bin.
+
+Nach vorne.
+S.
+
+> Darunter, in Mines Schrift: „Du Idiot. Ich liebe dich.“`,
+  },
+  c5_flugblatt: {
+    title: 'Flugblatt des Krisenstabs', where: 'Marktplatz', kind: 'file',
+    body: `# KRISENSTAB VARNHEIM – BEKANNTMACHUNG
+
+Der Sektor Klinikum (Innenstadt Süd) wird am Donnerstag, 06:00 Uhr, im Rahmen der Gefahrenabwehr **vollständig geräumt und desinfiziert** („Protokoll ASCHE“).
+
+Personen im Sektor begeben sich unverzüglich zum **Kontrollpunkt Nord (Alte Brücke)**. Nach 06:00 Uhr ist eine Evakuierung nicht mehr möglich.
+
+Personen mit Bissverletzungen melden sich bei den Sanitätskräften.`,
+  },
+  c5_befehl: {
+    title: 'Einsatzbefehl (Durchschlag)', where: 'Sanitätszelt · Kontrollpunkt Nord', kind: 'file',
+    body: `VS – NUR FÜR DEN DIENSTGEBRAUCH
+
+Kontrollpunkt Nord wird um 05:30 Uhr aufgegeben. Truppe verlegt auf das Nordufer.
+
+Auf Weisung des Krisenstabs übernimmt das **Sicherheitsteam NEXARA** die Brücke zur „Rückführung eines Patienten mit besonderem Schutzbedarf“ (Kennung **017**).
+
+Dem Team ist Zugang zu gewähren. Keine Rückfragen.
+
+> Handschriftlich: „Seit wann sagt uns eine Pharmafirma, was wir tun?“`,
+  },
 };

@@ -128,7 +128,7 @@ export class Level {
       const v = g.f[k];
       if (!(v & F.FLOOR) || (v & F.SOLID)) continue;
       const room = rooms[g.room[k]] || rooms[0];
-      const fy = g.floorY[k], cy = g.ceilY[k];
+      const fy = g.floorY[k], cy = room.outdoor && room.wallH != null ? fy + room.wallH : g.ceilY[k];
       // Boden
       if (!stairCells.has(k)) {
         const [su, sv] = uvs(room.floor);

@@ -212,3 +212,51 @@ PROPS.stall_row = (c, o) => {
   const n = o.n || 6, w = o.w || 2.6, d = o.d || 5;
   for (let i = 0; i <= n; i++) c.box(0.12, 0.006, d, 'paint_white', -n * w / 2 + i * w, 0.004, 0);
 };
+
+PROPS.turnstile = (c, o) => {
+  if (o.open) { c.box(0.15, 1.0, 0.9, 'steel', -0.42, 0.5, 0); c.col(-0.5, -0.45, -0.34, 0.45, 0, 1.0, { noFlag: true }); return; }
+  c.box(0.25, 1.0, 0.9, 'steel', -0.35, 0.5, 0);
+  c.box(0.25, 1.0, 0.9, 'steel', 0.35, 0.5, 0);
+  c.box(0.6, 0.06, 0.06, 'chrome', 0, 0.85, 0.2, { ry: 0.5 });
+  c.box(0.08, 0.06, 0.04, o.broken ? 'black' : 'plastic_red', -0.35, 1.02, 0.2);
+  c.col(-0.48, -0.45, 0.48, 0.45, 0, 1.0, { vault: !o.open, cover: true });
+};
+PROPS.trainbody = (c, o) => {
+  const len = o.len || 4;
+  c.box(len, 0.95, 0.1, 'train_ext', 0, 0.475, 0);
+  c.box(len, 0.35, 0.1, 'train_ext', 0, 2.2, 0);
+  c.box(len, 0.06, 0.12, colorMat(0xb0261c, 0.5), 0, 0.98, 0);
+};
+PROPS.kiosk = (c, o) => {
+  c.box(2.6, 1.1, 1.2, 'wood', 0, 0.55, 0);
+  c.box(2.7, 0.06, 1.3, 'plastic_dark', 0, 1.12, 0);
+  c.box(2.6, 0.5, 0.05, signMat(o.text || 'KIOSK', { bg: '#1a3a6a', fg: '#ffd040', w: 512, h: 96, fontPx: 60 }), 0, 2.3, 0.62);
+  c.col(-1.3, -0.6, 1.3, 0.6, 0, 1.15, { cover: true });
+};
+
+PROPS.fountain = (c) => {
+  c.cyl(2.2, 2.3, 0.6, 'concrete', 0, 0.3, 0, { seg: 20 });
+  c.cyl(1.9, 1.9, 0.05, colorMat(0x1a2a30, 0.05, 0.3), 0, 0.5, 0, { seg: 20 });
+  c.cyl(0.35, 0.45, 1.6, 'concrete', 0, 1.1, 0, { seg: 10 });
+  c.cyl(0.9, 0.6, 0.2, 'concrete', 0, 1.9, 0, { seg: 14 });
+  c.col(-2.2, -2.2, 2.2, 2.2, 0, 0.6, { vault: true, cover: false });
+};
+PROPS.bus = (c, o) => {
+  const L = 11.5;
+  const paint = colorMat(o.color || 0xd8c020, 0.5, 0.2);
+  c.box(2.5, 2.6, L, paint, 0, 1.6, 0);
+  c.box(2.52, 0.9, L - 1, colorMat(0x0d1418, 0.05, 0.6, { transparent: true, opacity: 0.8 }), 0, 2.2, 0);
+  for (const z of [L * 0.35, -L * 0.35]) for (const s of [-1, 1]) c.cyl(0.5, 0.5, 0.3, 'tire', s * 1.15, 0.5, z, { rz: Math.PI / 2, seg: 14 });
+  c.box(2.0, 0.3, 0.05, signMat(o.text || '3  MARKTPLATZ', { bg: '#111', fg: '#ff9a20', glow: true, w: 512, h: 64, fontPx: 44 }), 0, 2.75, L / 2 + 0.02);
+  c.col(-1.25, -L / 2, 1.25, L / 2, 0, 3.0, { tall: true });
+};
+PROPS.floodlight = (c, o) => {
+  c.cyl(0.05, 0.08, 3.2, 'metal_dark', 0, 1.6, 0);
+  c.box(0.6, 0.4, 0.3, 'metal_dark', 0, 3.3, 0, { rx: 0.4 });
+  c.lights.push({ x: 0, z: 0.6, y: 3.1, color: 0xf0f4ff, intensity: 22, range: 15, noMesh: true, group: o.group || 'flood' });
+  c.col(-0.15, -0.15, 0.15, 0.15, 0, 3.2, { noFlag: true });
+};
+PROPS.speaker_truck = (c) => {
+  PROPS.military_truck(c, {});
+  c.box(0.5, 0.5, 0.5, 'metal_dark', 0.6, 3.5, 2.0); c.box(0.5, 0.5, 0.5, 'metal_dark', -0.6, 3.5, 2.0);
+};

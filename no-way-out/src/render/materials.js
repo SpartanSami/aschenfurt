@@ -115,6 +115,8 @@ export const MATERIAL_DEFS = {
   // U-Bahn
   s_wall_tile: () => texMat('tiles', { count: 16, aspect: 2, offsetRows: true, color: '#c9b37a', grout: '#5a5040', rough: 0.15, dirt: true }),
   s_wall_tile2: () => texMat('tiles', { count: 16, aspect: 2, offsetRows: true, color: '#7f9fa8', grout: '#3e4a4c', rough: 0.15, dirt: true }),
+  train_ext: () => texMat('panel', { color: '#d4d6d2', base: '#b0261c' }),
+  train_int: () => texMat('panel', { color: '#c8ccc6', base: '#3a4a5a' }),
   s_floor: () => texMat('tiles', { count: 6, color: '#6f6c66', grout: '#3a3834', rough: 0.5, dirt: true }),
   gravel: () => texMat('gravel', {}),
   tunnel: () => texMat('concrete', { color: '#55534e', stains: 16, stainColor: 'rgba(15,14,10,0.5)', cracks: 6 }),
@@ -147,6 +149,7 @@ export const MATERIAL_DEFS = {
   fabric_dark: () => texMat('cloth', { color: '#3a3f46' }),
   scrubs: () => texMat('cloth', { color: '#3f7a72', dirt: 8, blood: 3 }),
   labcoat: () => texMat('cloth', { color: '#e2e4e2', dirt: 8, blood: 4 }),
+  soldier: () => texMat('cloth', { color: '#4a5236', dirt: 8, blood: 3 }),
   gown: () => texMat('cloth', { color: '#8fb0c4', pattern: true, dirt: 8, blood: 2 }),
   fabric_seat: () => texMat('cloth', { color: '#3b4d7a', pattern: true, dirt: 8 }),
   wood: () => texMat('wood', {}),
@@ -184,7 +187,7 @@ export const UV_SCALE = {
   asphalt: [5, 5], pavement: [3, 3], brick: [3, 3], plaster: [4, 4],
 };
 // Wände, deren Textur die volle Wandhöhe von 3 m abbildet (Sockelleiste unten)
-export const V_FULL = { h_wall: 3, h_wall_green: 3, h_wall_dirty: 3, l_wall: 3, l_wall_dark: 3, facade1: 12, facade2: 12, facade3: 12 };
+export const V_FULL = { h_wall: 3, h_wall_green: 3, h_wall_dirty: 3, l_wall: 3, l_wall_dark: 3, train_ext: 2.6, train_int: 2.3, facade1: 12, facade2: 12, facade3: 12 };
 
 const safeName = (n) => String(n).replace(/[^A-Za-z0-9_:.#-]/g, '_').slice(0, 48);
 
