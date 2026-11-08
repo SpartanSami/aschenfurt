@@ -99,4 +99,172 @@ Bergmann sagt nichts mehr.`,
     title: 'Laufband: Regionalnachrichten', where: 'Fernseher · Wartebereich', kind: 'screen',
     body: `+++ EILMELDUNG +++ Klinikum St. Elisabeth weiträumig abgeriegelt +++ Krisenstab: „Lage unter Kontrolle“ +++ Anwohner im Umkreis von 2 km zum Verbleib in den Wohnungen aufgefordert +++ NEXARA Pharma AG weist Berichte über einen Zwischenfall in Forschungseinrichtung zurück +++ Bundeswehr unterstützt mit ABC-Abwehrkräften +++ Evakuierung über Kontrollpunkt Nord (Alte Brücke) +++`,
   },
+  // ---------------- Kapitel 2 ----------------
+  c2_eve: {
+    title: 'PROJECT EVE – Projektübersicht (intern)', where: 'Labor B', kind: 'file',
+    body: `NEXARA Pharma AG · Halden-Institut · VERTRAULICH
+
+# Ziel
+Kausale Therapie des **Kessler-Syndroms** (erbliche, progrediente Neurodegeneration, Letalität 100 %, Erkrankungsbeginn 25–45 J.).
+
+# Ansatz
+**E.V.E. – Endogene Vektor-Expression.** Ein modifizierter viraler Vektor schleust regenerative Gensequenzen in geschädigte Nervenzellen ein und regt deren Neubildung an.
+
+# Status
+Phase I (Probanden 001–012): signifikante Regeneration bis Monat 3.
+Phase II (Probanden 013–020): Variante EVE-2b, laufend.
+
+> Marktpotenzial bei Zulassung: geschätzt 4,2 Mrd. € p. a.`,
+  },
+  c2_phase1: {
+    title: 'Laborbericht – Phase I, Monat 4', where: 'Labor B', kind: 'file',
+    body: `Verfasser: Dr. H. Arendt / Dr. K. Brenner (Sicherheit)
+
+Bei 11 von 12 Probanden setzt ab Woche 14 eine unkontrollierte Fortsetzung der Vektor-Expression ein. Interne Bezeichnung: **„Überschreibung“**.
+
+Symptome: Verlust von Sprache und Gedächtnis, Persönlichkeitszerfall, gesteigerte Aggression, Hyperphagie. Vitalfunktionen bleiben auffallend stabil.
+
+Mutation **EVE-2**: Übertragung durch Speichel und Blut nachgewiesen (Pflegekraft, Biss, Woche 16).
+
+# Maßnahmen
+Verlegung aller Überschriebenen nach **Sektion C**. Angehörige: Todesfall melden, Urnenbeisetzung über Partnerinstitut.
+Keine Meldung an das Paul-Ehrlich-Institut. Fortsetzung mit Phase II.`,
+  },
+  c2_memo: {
+    title: 'Aktennotiz Dr. Arendt', where: 'Büro Dr. Arendt', kind: 'email',
+    body: `Von: Dr. Helena Arendt
+An: Dr. Konrad Brenner
+Betreff: Kosten Sektion C / Proband 017
+
+Konrad,
+
+die separate Notstromversorgung der Schleusen in Sektion C ist zu teuer. Wir koppeln die Verriegelung an ARGUS. Ausfallverhalten bitte auf **„offen“** – Brandschutzauflage, sonst bekommen wir keine Abnahme.
+
+Zu 017: Die Blutwerte sind eindeutig. Er bildet Antikörper gegen die Überschreibung, ohne die Regeneration zu verlieren. Das ist das Produkt. **017 ist ab sofort als Wertanlage einzustufen** und verlässt das Institut nicht.
+
+Die Amnesie (erwartet ab T+72 h) arbeitet für uns. Dr. Aksoy steht ihm zu nahe – behalten Sie sie im Auge.
+
+H. A.`,
+  },
+  c2_elif: {
+    title: 'Probandenblatt 009', where: 'Zelle 009', kind: 'file',
+    body: `Probandin: **009** – Elif [[Yıldız]], 27 J.
+Diagnose: Kessler-Syndrom, früher Beginn.
+Phase I, Aufnahme vor 14 Monaten.
+
+Verlauf: Regeneration bis Monat 3. Ab Woche 15 Überschreibung. Nicht mehr ansprechbar.
+
+Angehörige: Bruder (Mitarbeiter NEXARA, IT). **Sterbeurkunde ausgestellt.** Bruder hat Akteneinsicht verlangt – abgelehnt.
+
+> Handschriftlich: „Sie summt manchmal. Immer dieselbe Melodie.“`,
+  },
+  c2_017: {
+    title: 'Probandenblatt 017', where: 'Zelle 017', kind: 'file',
+    body: `Proband: **017** – Sami [[Yıldız]], 34 J.
+Arbeitgeber: NEXARA Pharma AG, Systemarchitektur (ARGUS)
+Teilnahme: **freiwillig** (Trägerstatus Kessler-Gen positiv)
+Wirkstoff: EVE-2b, Applikation durch Dr. M. Aksoy
+
+Befund: Einzigartige Immunantwort („017-Antwort“). Keine Überschreibung. Regeneration vollständig erhalten.
+Nebenwirkung: Umbau Hippocampus. **Retrograde Amnesie erwartet ab T+72 h.**
+
+Einstufung: ~~Proband~~ **WERTANLAGE** (Anweisung Dr. Arendt)
+
+Bezugsperson: Dr. M. Aksoy – Zugang beschränken.`,
+  },
+  c2_argus: {
+    title: 'ARGUS – Systemprotokoll', where: 'Serverraum · Terminal', kind: 'screen',
+    body: `ARGUS 4.2 · Halden-Institut · Ereignisprotokoll
+
+Mo 01:52  Skript **NACHVORNE** aktualisiert (Benutzer: s.yildiz)
+Mo 03:17  ARGUS-Kern: **manuelle Abschaltung** – Wartungszugang Techniker 4471
+Mo 03:17  Sektion C, Schleusen 1–6: Stromausfall → Ausfallverhalten OFFEN
+Mo 03:21  ARGUS-Kern: Neustart
+Mo 03:21  Sektion C: 11 Bewegungen außerhalb der Zellen
+Mo 03:26  Lastenaufzug U3 → EG
+…
+Do 04:12  Gerät „Sami-Telefon“ im Netz ARGUS-GAST erkannt
+Do 04:12  Skript NACHVORNE: Ausführung gestartet
+
+> Prozess NACHVORNE · Status: aktiv · Besitzer: s.yildiz`,
+  },
+  c2_laptop: {
+    title: 'Notiz auf einem Laptop', where: 'Serverraum', kind: 'screen',
+    body: `Benutzer: idemir (Techniker 4471)
+
+kopiert: /eve/phase1  /eve/phase2  /eve/017  (412 GB)
+Ziel: externe Platte „DEFNE“
+
+Notiz:
+4 Minuten. Er hat gesagt, 4 Minuten reichen.
+Daten gesichert. Was ist mit den Schleusen los??
+Papa kommt nach Hause, Defne. Versprochen.`,
+  },
+  c2_badge: {
+    title: 'Dienstausweis', where: 'Serverraum · am Boden', kind: 'file',
+    body: `NEXARA PHARMA AG
+**Dr. Helena Arendt**
+Projektleitung EVE · Halden-Institut
+Zugangsstufe: ROOT
+
+> Der Ausweis klebt. Die Frau, die ihn getragen hat, steht drei Meter weiter zwischen den Servern.`,
+  },
+  c2_s17: {
+    title: 'Etikett: S-17', where: 'Kühlraum B', kind: 'note',
+    body: `S-17 – Hemmserum (aus Probe 017)
+1 Dosis · i.v.
+
+Wirkt nur bei **frischer** Infektion (< 6 h nach Biss).
+Nicht an NEXARA übergeben.
+
+– M.A.`,
+  },
+  c2_decon: {
+    title: 'Dekontaminationsschleuse – Hinweis', where: 'Empfang', kind: 'file',
+    body: `Zutritt zu den Laborbereichen nur nach vollständigem Dekontaminationszyklus.
+1. Schleuse betreten. 2. Zyklus am Bedienfeld starten. 3. Nicht bewegen (ca. 5 Sekunden). 4. Innere Tür öffnet automatisch.
+
+Bei Alarm: Schleusen verriegeln **automatisch** (Sterilisationsprotokoll).`,
+  },
+  // ---------------- Kapitel 3 ----------------
+  c3_zettel: {
+    title: 'Zettel unter dem Scheibenwischer', where: 'Parkhaus · Ebene −3', kind: 'note',
+    body: `Wir sind runter zur U-Bahn. Oben auf der Straße schießen sie. Die Soldaten sagen nichts, die schießen einfach.
+
+Wenn du das liest, Thomas: Der Verbindungsgang auf −2 hat ein Rolltor. Ohne Strom geht es nicht auf.
+
+Wir warten am Bahnsteig. Bis sechs.
+– Anja & Leo`,
+  },
+  c3_ticket: {
+    title: 'Dauerparkausweis', where: 'Kombi · Stellplatz 17', kind: 'file',
+    body: `Parkhaus Am Klinikum · Dauerparker
+
+Stellplatz: **−2 / 17**
+Inhaber: S. Yıldız
+Arbeitgeber: NEXARA Pharma AG (Halden-Institut)
+Gültig bis: 31.12.
+
+> Auf der Rückseite, Samis Handschrift: „M. – Samstag Ringe abholen. Nicht vergessen!!“`,
+  },
+  c3_funk: {
+    title: 'Funkprotokoll (mitgeschrieben)', where: 'Kassenhäuschen', kind: 'note',
+    body: `– Krisenstab an alle: Sektor Klinikum bleibt abgeriegelt.
+– Evakuierung NUR über Kontrollpunkt Nord, Alte Brücke.
+– 06:00 Uhr: **Protokoll ASCHE**. Danach keine Evakuierung mehr.
+– „NEXARA-Team“ am Kontrollpunkt Nord?? Wer sind die??
+– Jemand fragt nach „Wertanlage 017“. Hä?
+
+(İlyas' Handschrift, darunter:) Defne – Kinderklinik Süd – Station 2 – NICHT im Sektor. Gott sei Dank.`,
+  },
+  c3_aushang: {
+    title: 'Aushang Parkhausbetreiber', where: 'Parkhaus · Ebene −1', kind: 'file',
+    body: `Sehr geehrte Kunden,
+
+aufgrund der behördlichen Absperrung ist die Ausfahrt Ost bis auf Weiteres geschlossen. Die Schranken sind außer Betrieb.
+
+Der Verbindungsgang zur U-Bahn-Station „Klinikum“ (Ebene −2, Süd) ist **nur bei Stromversorgung** über das Rolltor passierbar. Die Steuerung befindet sich im Kassenhäuschen.
+
+Ihr Parkhausteam`,
+  },
 };

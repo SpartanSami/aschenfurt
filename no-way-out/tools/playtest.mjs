@@ -107,7 +107,7 @@ async function runChapter(ch) {
   console.log(`\n=== ${ch} ===`);
   await page.evaluate((c) => { window.NWO.startChapter(c); }, ch);
   await page.waitForFunction(() => window.NWO.mode === 'play', null, { timeout: 60000 });
-  await page.evaluate((god) => { window.NWO.godMode = god; window.NWO.godInvisible = god; }, args.includes('--god'));
+  await page.evaluate((god) => { window.NWO.godMode = god; window.NWO.godInvisible = god; window.NWO.noAutoPause = true; }, args.includes('--god'));
   let ok = true;
   for (const [k, step] of route.entries()) {
     const res = await page.evaluate(`(async () => { ${step.js} })()`);

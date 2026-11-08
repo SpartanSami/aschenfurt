@@ -66,6 +66,19 @@ export class FX {
     this.game.audio.play('glass_break', { pos: new THREE.Vector3(x, y, z), vol: 1 });
   }
 
+  // Nebelstoß (Dekontamination, Dampf)
+  puff(x, y, z, o = {}) {
+    const n = o.n || 120;
+    const pos = new Float32Array(n * 3), vel = [];
+    for (let i = 0; i < n; i++) { pos.set([x + (Math.random() - 0.5) * (o.w || 2), y + Math.random() * 0.5, z + (Math.random() - 0.5) * (o.d || 2)], i * 3); vel.push([(Math.random() - 0.5) * 0.6, -0.2 - Math.random() * 0.5, (Math.random() - 0.5) * 0.6]); }
+    const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    const m = new THREE.PointsMaterial({ size: o.size || 0.35, map: this.dustTex, transparent: true, opacity: 0.35, depthWrite: false, color: o.color || 0xdfe8f0 });
+    const pts = new THREE.Points(g, m);
+    this.root.add(pts);
+    this.puffs = this.puffs || [];
+    this.puffs.push({ pts, vel, life: o.life || 4, max: o.life || 4 });
+  }
+
   damageFlash(a) { this.damage = Math.min(1, this.damage + a); }
   fadeTo(target, seconds = 1) { this.fadeTarget = target; this.fadeSpeed = seconds > 0 ? 1 / seconds : 100; }
 
@@ -115,6 +128,14 @@ export class FX {
       if (s.m.position.y < gy) { s.m.position.y = gy; s.v.set(0, 0, 0); s.m.rotation.x = -Math.PI / 2; }
       if (s.life < -20) { this.root.remove(s.m); this.shards.splice(i, 1); }
     }
+    if (this.puffs) for (let i = this.puffs.length - 1; i >= 0; i--) {
+      const pf = this.puffs[i]; pf.life -= dt;
+      const a = pf.pts.geometry.attributes.position;
+      for (let k = 0; k < a.count; k++) { a.setXYZ(k, a.getX(k) + pf.vel[k][0] * dt, Math.max(0.05, a.getY(k) + pf.vel[k][1] * dt), a.getZ(k) + pf.vel[k][2] * dt); }
+      a.needsUpdate = true;
+      pf.pts.material.opacity = 0.35 * Math.min(1, pf.life / pf.max * 2);
+      if (pf.life <= 0) { this.root.remove(pf.pts); pf.pts.geometry.dispose(); this.puffs.splice(i, 1); }
+    }
     // Staub um die Kamera
     if (this.dust) {
       const cam = game.camera;
@@ -162,6 +183,7 @@ export class FX {
   clear() {
     for (const p of this.projectiles) this.root.remove(p.mesh);
     for (const s of this.shards) this.root.remove(s.m);
-    this.projectiles = []; this.shards = [];
+    if (this.puffs) for (const pf of this.puffs) this.root.remove(pf.pts);
+    this.projectiles = []; this.shards = []; this.puffs = [];
   }
 }

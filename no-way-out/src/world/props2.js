@@ -42,8 +42,12 @@ PROPS.car = (c, o) => {
     c.lights.push({ x: 0, z: 0.7, y: 0.3 + bh + ch + 0.3, kind: 'blue', noMesh: true });
   }
   if (o.burnt) c.lights.push({ x: 0, z: 0.3, y: 1.2, kind: 'fire', noMesh: true, range: o.fireRange || 9 });
-  if (o.alarm) c.sounds.push({ kind: 'caralarm_idle', x: 0, z: 0 });
-  c.col(-W / 2, -L / 2, W / 2, L / 2, 0, o.van ? 2.1 : 1.45, { cover: true, tall: !!o.van, vault: !!o.vault });
+  if (o.alarm) {
+    c.sounds.push({ kind: 'caralarm_idle', x: 0, z: 0 });
+    c.lights.push({ x: 0, z: L / 2 + 0.5, y: 0.75, color: 0xffc070, intensity: 5, range: 7, noMesh: true, mode: 'off', group: 'caralarm' });
+    c.lights.push({ x: 0, z: -L / 2 - 0.5, y: 0.8, color: 0xff3020, intensity: 3, range: 5, noMesh: true, mode: 'off', group: 'caralarm' });
+  }
+  c.col(-W / 2, -L / 2, W / 2, L / 2, 0, o.van ? 2.1 : 1.45, { cover: true, tall: !!o.van, vault: !!o.vault, alarm: !!o.alarm });
   if (o.hideBehind) c.hides.push({ type: 'vehicle', ex: (o.hideSide || 1) * (W / 2 + 0.5), ez: 0, ey: 0.95, exitX: (o.hideSide || 1) * (W / 2 + 0.8), exitZ: 0.6, yaw: (o.hideSide || 1) > 0 ? -Math.PI / 2 : Math.PI / 2, prompt: 'Hinter dem Fahrzeug kauern' });
   if (o.id) c.interacts.push({ id: o.id, x: W / 2 + 0.4, z: 0.3, y: 1.0, prompt: o.prompt || 'Fahrzeug untersuchen', radius: 1.4 });
 };
@@ -200,4 +204,11 @@ PROPS.deadman = (c, o) => {
   c.box(0.3, 0.2, 0.05, emissiveMat(0xffb000, 1.5), 0, 1.0, 0.21);
   c.col(-0.25, -0.2, 0.25, 0.2, 0, 1.2, {});
   if (o.id) c.interacts.push({ id: o.id, x: 0, z: 0.6, y: 1.0, prompt: o.prompt || 'Torsteuerung', radius: 1.2 });
+};
+
+PROPS.stripe = (c, o) => { c.box(0.12, 0.006, o.len || 5, 'paint_white', 0, 0.004, 0); };
+PROPS.stall_row = (c, o) => {
+  // Markierungen für eine Reihe Stellplätze (entlang x, Tiefe in z)
+  const n = o.n || 6, w = o.w || 2.6, d = o.d || 5;
+  for (let i = 0; i <= n; i++) c.box(0.12, 0.006, d, 'paint_white', -n * w / 2 + i * w, 0.004, 0);
 };

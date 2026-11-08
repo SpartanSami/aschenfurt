@@ -87,7 +87,7 @@ export class Zombie {
   _perceive(dt) {
     const game = this.game, p = game.player, g = game.level.grid;
     this.seen = false;
-    if (p.mode === 'dead' || game.godInvisible) return 0;
+    if (p.mode === 'dead' || game.godInvisible || this.def.blind) return 0;
     const dx = p.pos.x - this.pos.x, dz = p.pos.z - this.pos.z;
     const d = Math.hypot(dx, dz);
     if (Math.abs(p.pos.y - this.pos.y) > 2.2 && d > 2) return 0;

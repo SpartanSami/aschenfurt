@@ -81,11 +81,11 @@ export class Game {
     this.renderer.onResize = (w, h) => { this.camera.aspect = w / h; this.camera.updateProjectionMatrix(); this.hands.resize(w, h); this.secCam.aspect = w / h; this.secCam.updateProjectionMatrix(); };
     this.renderer.resize();
     this.input.onLockChange = (locked) => {
-      if (!locked && this.mode === 'play' && !this.modal && !this._allowUnlock) this.pause();
+      if (!locked && this.mode === 'play' && !this.modal && !this._allowUnlock && !this.noAutoPause) this.pause();
       this._allowUnlock = false;
     };
     this.audio.occlusionFn = (pos) => this.level ? !this.level.grid.losLight(this.camera.position.x, this.camera.position.z, pos.x, pos.z) : false;
-    document.addEventListener('visibilitychange', () => { if (document.hidden && this.mode === 'play') this.pause(); });
+    document.addEventListener('visibilitychange', () => { if (document.hidden && this.mode === 'play' && !this.noAutoPause) this.pause(); });
     window.NWO = this;
     this.last = performance.now();
     this._loop = this._loop.bind(this);
@@ -547,6 +547,33 @@ export class Game {
     }
   }
 
+  // Autoalarm: Spieler (rennend) oder verfolgende Zombies, die ein scharfes Auto berühren
+  _carAlarms(dt) {
+    const lv = this.level, p = this.player;
+    if (!lv.alarmCars) lv.alarmCars = lv.colliders.filter((c) => c.alarm).map((c) => ({ c, t: 0, done: false }));
+    for (const a of lv.alarmCars) {
+      if (a.t > 0) {
+        a.t -= dt; a.n = (a.n || 0) - dt;
+        if (a.n <= 0) { a.n = 1.4; this.noise.emit(a.c.cx, a.c.cz, 22, 'alarm'); }
+        if (a.t <= 0) { this.audio.stopLoop('car_' + a.c.cx.toFixed(1), 1); for (const f of a.fx) f.mode = 'off'; lv.powerChanged(); }
+        continue;
+      }
+      if (a.done) continue;
+      const near = (x, z, r) => { const dx = x - a.c.cx, dz = z - a.c.cz; const lx = dx * a.c.cos - dz * a.c.sin, lz = dx * a.c.sin + dz * a.c.cos; return Math.abs(lx) < a.c.hx + r && Math.abs(lz) < a.c.hz + r; };
+      let hit = p.speedNow > 3.1 && near(p.pos.x, p.pos.z, p.radius + 0.12);
+      if (!hit) for (const z of this.zombies) if (z.alive && z.state === 'chase' && near(z.pos.x, z.pos.z, 0.36)) { hit = true; break; }
+      if (hit) this.triggerCarAlarm(a);
+    }
+  }
+  triggerCarAlarm(a) {
+    a.done = true; a.t = 16; a.n = 0;
+    a.fx = this.level.lights.fixtures.filter((f) => f.group === 'caralarm' && Math.hypot(f.x - a.c.cx, f.z - a.c.cz) < 3.2);
+    for (const f of a.fx) { f.mode = 'strobe'; f.on = true; }
+    this.audio.loop('car_' + a.c.cx.toFixed(1), 'caralarm', { pos: new THREE.Vector3(a.c.cx, 1, a.c.cz), vol: 0.7, bus: 'sfx', ref: 3, rolloff: 0.8, fadeIn: 0.05 });
+    this.story.fire('caralarm', a);
+    this.hud.toast('Autoalarm!');
+  }
+
   teleportPlayer(x, z, yaw) { this.player.spawn(x, z, yaw ?? this.player.yaw); }
 
   // ---------------- Hauptschleife ----------------
@@ -613,6 +640,8 @@ export class Game {
       if (inside && !t.inside) { t.inside = true; this.story.onEnterZone(t.id); }
       else if (!inside && t.inside) { t.inside = false; this.story.onExitZone(t.id); }
     }
+    this._carAlarms(dt);
+    if (this.chapter.update) this.chapter.update(this.story.ctx, dt);
     this.story.update(dt);
     this.noise.update(dt);
     this.fx.update(dt);

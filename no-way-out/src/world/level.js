@@ -269,7 +269,7 @@ export class Level {
     for (const cl of c.colliders) {
       const cx = (cl.x0 + cl.x1) / 2, cz = (cl.z0 + cl.z1) / 2;
       const w = toWorld(cx, cz);
-      const col = { cx: w.x, cz: w.z, hx: (cl.x1 - cl.x0) / 2, hz: (cl.z1 - cl.z0) / 2, ang: p.rot, cos, sin, y0: fy + cl.y0, y1: fy + cl.y1, vault: !!cl.vault, id: p.o.id || null, enabled: true };
+      const col = { cx: w.x, cz: w.z, hx: (cl.x1 - cl.x0) / 2, hz: (cl.z1 - cl.z0) / 2, ang: p.rot, cos, sin, y0: fy + cl.y0, y1: fy + cl.y1, vault: !!cl.vault, id: p.o.id || null, enabled: true, alarm: !!cl.alarm };
       this.addCollider(col);
       if (!cl.noFlag) {
         const fl = F.PROP | (cl.tall || cl.y1 > 1.75 ? F.TALL : 0) | ((cl.cover !== false && cl.y1 >= 0.85) || cl.cover ? F.COVER : 0) | (cl.vault ? F.VAULT : 0);
