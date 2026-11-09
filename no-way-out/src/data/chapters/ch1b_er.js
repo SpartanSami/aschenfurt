@@ -219,7 +219,7 @@ export default {
     L.zombie(17.4, 25.4, { id: 'z_feed', type: 'sleeper', pose: 'kneel', yaw: 0.2, outfit: 'scrubs', wake: 2.6 });
     L.zombie(24.0, 28.6, { id: 'z_bay1', type: 'sleeper', pose: 'lying', yaw: PI / 2, outfit: 'gown', wake: 3 });
     L.zombie(32.2, 28.4, { id: 'z_bay3', type: 'sleeper', pose: 'sitting', yaw: 0, outfit: 'gown', wake: 3 });
-    L.zombie(28.0, 22.2, { id: 'z_er_w', type: 'wanderer', outfit: 'scrubs', patrol: [[24, 22.5], [39, 22.5], [39, 26.2], [24, 26.2]] });
+    L.zombie(28.0, 26.3, { id: 'z_er_w', type: 'wanderer', outfit: 'scrubs', patrol: [[24, 26.3], [39, 26.3]] });
     L.zombie(40.6, 26.4, { id: 'z_er_st', type: 'stalker', stalker: true, yaw: PI / 2 + 0.3, outfit: 'labcoat' });
     const crowd = [[32.6, 15.2, 'civilian'], [34.3, 14.6, 'suit'], [35.6, 15.3, 'gown'], [36.9, 14.2, 'civilian2'], [38.1, 15.1, 'civilian'], [39.6, 14.7, 'scrubs'], [35.0, 13.4, 'civilian2']];
     crowd.forEach(([x, z, outfit], i) => L.zombie(x, z, { id: 'w' + (i + 1), type: 'shambler', state: 'dormant', wake: 99, yaw: PI + (i % 3 - 1) * 0.35, outfit, spawnIf: (f) => !f['glass:wait'] }));

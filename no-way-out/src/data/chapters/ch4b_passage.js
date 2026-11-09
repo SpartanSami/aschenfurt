@@ -216,7 +216,7 @@ export default {
     if (!c.npc('ilyas')) c.addNpc('ilyas', 4.0, 19.6, { mode: 'follow' });
     const il = c.npc('ilyas'); if (il && c.get('ilyas_bitten')) il.injured = !c.get('ilyas_saved');
     // Schaufensterpuppen (statische Figuren auf ihren Sockeln)
-    for (const [x, z, yaw, outfit] of DUMMIES) g.decor({ x, z, yaw, pose: 'stand', outfit, skin: 'plastic', hairStyle: 'none', scale: 1.0 });
+    for (const [x, z, yaw, outfit] of DUMMIES) g.decor({ x, z, yaw, pose: 'stand', outfit, skin: 'plastic', hairStyle: 'none', scale: 1.0, merge: true });
     if (c.get('gate_open')) { c.unlock('gate'); c.open('gate'); }
     // Regen über der Rampe
     g.audio.loop('rain_ramp', 'rain_loop', { pos: { x: 73, y: 3, z: 2 }, vol: 0.35, bus: 'sfx' });

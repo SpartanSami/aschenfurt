@@ -1,6 +1,7 @@
 // Zentrale Spielklasse: verbindet alle Systeme, steuert Spielzustände, Kapitel, Checkpoints,
 // Tod/Neustart, Angriffe, Verstecke, Gegenstände und die Hauptschleife.
 import * as THREE from 'three';
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { loadSettings, saveSettings, DIFFICULTY, QUALITY } from './core/config.js';
 import { Input } from './core/input.js';
 import { SaveManager } from './core/save.js';
@@ -317,6 +318,8 @@ export class Game {
   pause() {
     if (this.mode !== 'play') return;
     this.mode = 'paused';
+    // Mauszeiger immer freigeben, egal auf welchem Weg pausiert wurde (Taste, Gamepad, Fensterwechsel)
+    this._allowUnlock = true; this.input.exitLock();
     this.audio.suspend();
     this.menu.showPause();
   }
@@ -374,10 +377,33 @@ export class Game {
     const h = new Humanoid({ outfit: o.outfit || 'mine', skin: o.skin || 'human', hair: o.hair ?? 0x1a110c, hairStyle: o.hairStyle || 'long', scale: o.scale || 0.95, limp: 0 });
     h.setPose(o.pose || 'sitting', true);
     for (let i = 0; i < 30; i++) h.update(0.05);
+    if (o.merge) return this._mergeDecor(h, o);
     h.root.position.set(o.x, this.level.grid.heightAt(o.x, o.z), o.z);
     h.root.rotation.y = o.yaw || 0;
     this.level.root.add(h.root);
     return h;
+  }
+  // Unbewegliche Figur (z. B. Schaufensterpuppe): Teile je Material zu wenigen Meshes zusammenfassen
+  _mergeDecor(h, o) {
+    h.root.updateMatrixWorld(true);
+    const byMat = new Map();
+    h.root.traverse((m) => {
+      if (!m.isMesh || !m.visible) return;
+      let g = m.geometry.clone(); g.applyMatrix4(m.matrixWorld);
+      if (g.index) g = g.toNonIndexed();
+      for (const k of Object.keys(g.attributes)) if (!['position', 'normal', 'uv'].includes(k)) g.deleteAttribute(k);
+      if (!byMat.has(m.material)) byMat.set(m.material, []);
+      byMat.get(m.material).push(g);
+    });
+    const grp = new THREE.Group();
+    for (const [mat, geos] of byMat) {
+      const merged = geos.length > 1 ? mergeGeometries(geos, false) : geos[0];
+      for (const g of merged ? [merged] : geos) { const mesh = new THREE.Mesh(g, mat); mesh.castShadow = true; mesh.receiveShadow = true; grp.add(mesh); }
+    }
+    grp.position.set(o.x, this.level.grid.heightAt(o.x, o.z), o.z);
+    grp.rotation.y = o.yaw || 0;
+    this.level.root.add(grp);
+    return { root: grp, merged: true };
   }
 
   // ---------------- Begleiter ----------------

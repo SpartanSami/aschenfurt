@@ -12,10 +12,10 @@ const errs = []; page.on('pageerror', (e) => errs.push(e.message)); page.on('con
 await page.goto(`http://localhost:${srv.address().port}/index.html?debug`);
 await page.waitForTimeout(500);
 const R = async (label, fn, arg) => { const r = await page.evaluate(fn, arg); console.log(label.padEnd(44), JSON.stringify(r)); return r; };
-// Schwierigkeitsgrade: Anzahl Heilmittel in Kapitel 1–5
+// Schwierigkeitsgrade: Anzahl Heilmittel in allen acht Abschnitten
 for (const d of ['easy', 'normal', 'hard']) {
   const counts = [];
-  for (const ch of ['ch1', 'ch2', 'ch3', 'ch4', 'ch5']) {
+  for (const ch of ['ch1', 'ch1b', 'ch2', 'ch2b', 'ch3', 'ch4', 'ch4b', 'ch5']) {
     await page.evaluate(async ([d, ch]) => { const g = window.NWO; g.difficulty = (await import('/dist/game.js').catch(() => null), g.difficulty); }, [d, ch]).catch(() => {});
     const n = await page.evaluate(async ([d, ch]) => { const g = window.NWO; g.noAutoPause = true; g.settings.difficulty = d; await g.newGame(d); await g.loadChapter(ch, 'start', null); return g.level.items.filter((i) => i.info.kind === 'heal').length; }, [d, ch]);
     counts.push(n);

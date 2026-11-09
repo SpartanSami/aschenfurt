@@ -18,22 +18,25 @@ Getestet wurde automatisiert in einem Headless-Chromium mit Software-Rendering (
 | Kapitel 5 + **Ende „Tragödie“ (İlyas bleibt)** | ✅ |
 | Kapitel 5 + **Ende „Tragödie“ (Sami bleibt)** | ✅ |
 | Kapitel 5 + **Ende „Geheimnis“** | ✅ |
-| **Gesamte Kampagne am Stück** (Kapitel 1→5, Zustand wird übernommen) | ✅ Aufnahmen 1–5 gesammelt, Serum in Kapitel 2 gefunden und in Kapitel 4 an İlyas gegeben, Geheimnis-Ende erreicht. Keine Skript- oder Laufzeitfehler. |
+| **Gesamte Kampagne am Stück** (alle acht Abschnitte, Zustand wird übernommen) | ✅ 1 → 1·2 → 2 → 2·2 → 3 → 4 → 4·2 → 5: Aufnahmen 1–5 gesammelt, Serum gefunden und weitergegeben, Begleiter übernommen, Geheimnis-Ende erreicht. Keine Skript- oder Laufzeitfehler (Produktions-Build). |
+| Kapitel 1, Teil 2 **ohne** Unverwundbarkeit | ✅ bis in den Keller: Notaufnahme geduckt hinter der Theke, Flucht vor dem Wartezimmer und Brandschutztür mit voller Gesundheit. Danach läuft der Bot aufrecht in die Patrouille im Kellerflur und stirbt, weil er nicht ausweicht. |
+| Einzeldatei `NoWayOut.html` per file:// | ✅ neue Abschnitte laden, alle 46 Sprachaufnahmen eingebettet |
 | Tod → Todesbildschirm → „Weiter vom Checkpoint“ | ✅ |
 | Fortsetzen nach Neuladen der Seite (localStorage) | ✅ |
 | Kapitelauswahl / Freischaltung / gesehene Enden | ✅ |
-| Schwierigkeitsgrade: Heilmittel im gesamten Spiel | ✅ Leicht 27 · Mittel 21 · Schwer 9 |
+| Schwierigkeitsgrade: Heilmittel im gesamten Spiel (acht Abschnitte) | ✅ Leicht 39 · Mittel 30 · Schwer 14 |
 | Zombie-KI: Geräusch → Untersuchen → Verdacht → Alarm → Verfolgung → Angriff → Packen → Losreißen | ✅ |
 | Tür einschlagen, Suche, Rückkehr, Versteck prüfen | ✅ |
 | Heilen, Telefon-Apps, Dokumente, Sprachaufnahmen laden | ✅ |
 | Pause per P (zuvor nur Esc) | ✅ nach Fehlerbehebung |
-| Schwierigkeitsgrad im Haupt- und Pausemenü ändern (wirkt sofort und auf den Spielstand) | ✅ |
+| Schwierigkeitsgrad im Haupt- und Pausemenü ändern (wirkt sofort, auf den Spielstand und alle Kapitelstarts) | ✅ per Mausklick im Browser geprüft |
 | Entscheidungen per Tastatur (W/S + E) | ✅ |
 | Kontaktperson über Kamera-Einblendung (Kap. 1), ARGUS-Monitor und Lautsprecher (Kap. 2), Sprachnachricht (Kap. 3) | ✅ |
 
 ## Behobene Fehler (Auswahl)
 - Requisiten, die ihre Höhe selbst setzen (Rohre, Schilder, Fernseher, OP-Lampen), wurden doppelt angehoben und hingen teils in der Decke oder im Boden. Ihre Höhe gilt jetzt relativ zum örtlichen Boden.
 - Schild- und Bildschirmtexte wurden über breite Flächen gekachelt („ELEKTRO MAX ELEKTRO MAX …“) bzw. abgeschnitten. Beschriftete Flächen werden jetzt eingepasst.
+- Wurde die Pause nicht über Esc ausgelöst, konnte der Mauszeiger gefangen bleiben, und Klicks landeten im 3D-Bild statt auf den Menüknöpfen. Die Pause gibt den Zeiger jetzt immer frei.
 - Checkpoints in Verfolgungen: Nach der Brandschutztür und dem Schott wird nur gespeichert, wenn kein Verfolger mehr im Raum ist.
 - Die Pausetaste P und Gamepad-Start waren belegt, wurden aber nie ausgewertet.
 - Entscheidungen, Menüs, Todesbildschirm und Abspann ließen sich nicht per Gamepad bedienen.
@@ -55,8 +58,14 @@ Getestet wurde automatisiert in einem Headless-Chromium mit Software-Rendering (
 | 3 Parkhaus | ~600 | ~67 000 |
 | 4 U-Bahn | ~440 | ~26 000 |
 | 5 Stadt | 450–740 | 38 000–60 000 |
+| 1·2 Notaufnahme | 535–770 | 40 000–55 000 |
+| 2·2 Pumpwerk | ~400 | ~29 000 |
+| 4·2 Linden-Passage | 300–970 | 30 000–89 000 |
 
-Das ist für aktuelle Desktop-GPUs unkritisch. Auf schwachen Laptops hilft die Grafikstufe „Niedrig“.
+Die Schaufensterpuppen der Linden-Passage werden zu wenigen Meshes zusammengefasst (vorher bis zu ~1180 Draw-Calls). Das ist für aktuelle Desktop-GPUs unkritisch. Auf schwachen Laptops hilft die Grafikstufe „Niedrig“.
+
+## Spielzeit
+Der Autopilot braucht für die gesamte Kampagne **27 Minuten reine Spielzeit** (1: 4,0 · 1·2: 2,8 · 2: 4,3 · 2·2: 1,9 · 3: 3,0 · 4: 3,6 · 4·2: 3,5 · 5: 3,9 Minuten). Er rennt unsichtbar die kürzesten Wege ab, schleicht nicht, wartet keine Patrouillen ab, stirbt nie und liest Dokumente nicht. Das ist eine Untergrenze. Für menschliche Spieler ergibt sich daraus die Schätzung von etwa 1,5 bis 2 Stunden. Gemessen wurde das nicht.
 
 ## Grenzen der Tests
 - Der Autopilot fährt feste Routen ab. Er **schleicht und weicht nicht wie ein Mensch aus**, deshalb liefen die vollständigen Routen mit Unverwundbarkeit. Ob Verfolgungen fair sind, wurde zusätzlich ohne Unverwundbarkeit (Kapitel 1) und über die Zeitabstände der Skripte geprüft. Ein Feinschliff der Balance durch echte Spieltests wird empfohlen.
