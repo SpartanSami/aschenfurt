@@ -118,16 +118,16 @@ export class Humanoid {
     this.time += dt;
     const sp = this.speed;
     const chase = this.mode === 'chase';
-    const stride = chase ? 1.1 : this.human ? (sp > 2.5 ? 1.25 : 0.85) : 0.62;
+    const stride = chase ? 0.72 : this.human ? (sp > 2.5 ? 1.25 : 0.85) : 0.62;
     this.phase += (sp / stride) * Math.PI * dt;
     const ph = this.phase;
-    const walkAmt = clamp(sp / (this.human ? 1.2 : 0.7), 0, 1);
+    const walkAmt = clamp(sp / (this.human ? 1.2 : 0.6), 0, 1);
     const T = {};
     const set = (k, x = 0, y = 0, z = 0) => { T[k] = [x, y, z]; };
     // Grundhaltung
-    const lean = this.human ? (sp > 2.5 ? 0.25 : 0.05) + this.crouch * 0.5 : chase ? 0.38 : 0.18;
+    const lean = this.human ? (sp > 2.5 ? 0.25 : 0.05) + this.crouch * 0.5 : chase ? 0.3 : 0.18;
     const limpL = this.limp < 0 ? 1 - Math.abs(this.limp) : 1, limpR = this.limp > 0 ? 1 - Math.abs(this.limp) : 1;
-    const legA = (chase ? 0.75 : this.human ? (sp > 2.5 ? 0.8 : 0.45) : 0.38) * walkAmt;
+    const legA = (chase ? 0.5 : this.human ? (sp > 2.5 ? 0.8 : 0.45) : 0.38) * walkAmt;
     set('hipL', Math.sin(ph) * legA * limpL - this.crouch * 0.9, 0, 0);
     set('hipR', -Math.sin(ph) * legA * limpR - this.crouch * 0.9, 0, 0);
     set('knL', Math.max(0, -Math.sin(ph + 1.2)) * legA * 1.4 * limpL + this.crouch * 1.4, 0, 0);
@@ -140,7 +140,7 @@ export class Humanoid {
       set('shL', -Math.sin(ph) * aa, 0, -0.08); set('shR', Math.sin(ph) * aa, 0, 0.08);
       set('elL', -0.25 - (sp > 2.5 ? 0.9 : 0), 0, 0); set('elR', -0.25 - (sp > 2.5 ? 0.9 : 0), 0, 0);
     } else if (chase) {
-      const fl = Math.sin(this.time * 9) * 0.15;
+      const fl = Math.sin(this.time * 3.5) * 0.12;
       set('shL', -1.35 + fl, 0.15, -0.15); set('shR', -1.25 - fl, -0.15, 0.15);
       set('elL', -0.35, 0, 0); set('elR', -0.25, 0, 0);
     } else {
