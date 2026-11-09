@@ -205,14 +205,17 @@ export class AudioEngine {
   setReverb(seconds, decay) {
     if (!this.ctx) return;
     const c = this.ctx;
-    const n = Math.floor(seconds * SR);
-    const b = c.createBuffer(2, n, SR);
+    // Der Hall muss mit der Abtastrate des Geräts erzeugt werden (Handys/Tablets oft 48 kHz statt 44,1 kHz),
+    // sonst lehnen manche Browser den Puffer ab.
+    const rate = c.sampleRate || SR;
+    const n = Math.floor(seconds * rate);
+    const b = c.createBuffer(2, n, rate);
     for (let ch = 0; ch < 2; ch++) {
       const d = b.getChannelData(ch);
-      const lp = new OnePole(3500);
-      for (let i = 0; i < n; i++) { const t = i / SR; d[i] = lp.lp(rnd()) * Math.pow(1 - t / seconds, decay) * (i < 300 ? i / 300 : 1); }
+      const lp = new OnePole(3500 * SR / rate);
+      for (let i = 0; i < n; i++) { const t = i / rate; d[i] = lp.lp(rnd()) * Math.pow(1 - t / seconds, decay) * (i < 300 ? i / 300 : 1); }
     }
-    this.reverb.buffer = b;
+    try { this.reverb.buffer = b; } catch (e) { console.warn('Hall nicht verfügbar', e); }
   }
   setReverbMix(v) { if (this.reverbGain) this.reverbGain.gain.setTargetAtTime(v, this.ctx.currentTime, 0.5); }
 

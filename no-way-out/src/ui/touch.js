@@ -24,7 +24,8 @@ export class TouchControls {
         <button class="t-btn" data-t="flashlight">Lampe</button>
         <button class="t-btn" data-t="phone">Handy</button>
       </div>
-      <button class="t-btn t-pause" data-t="pause" aria-label="Pause">II</button>`;
+      <button class="t-btn t-pause" data-t="pause" aria-label="Pause">II</button>
+      <div class="t-rotate">Tipp: Handy quer halten – mehr Sicht, mehr Platz zum Steuern</div>`;
     ui.insertBefore(this.base, ui.firstChild);
     // Kontextebene liegt über allem (Smartphone-Menü, Überwachungskameras, Losreißen)
     this.ctx = document.createElement('div');

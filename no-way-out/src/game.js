@@ -231,8 +231,11 @@ export class Game {
     for (const n of this.npcs) if (n.mode === 'follow') { const sp = n._spotBehindPlayer() || { x: cpd.x, z: cpd.z }; n.teleport(sp.x, sp.z, cpd.yaw); }
     this.audio.init();
     this.audio.stopAllLoops();
-    if (env.reverb) this.audio.setReverb(env.reverb[0], env.reverb[1]);
-    if (env.reverbMix != null) this.audio.setReverbMix(env.reverbMix);
+    // Ton darf den Levelaufbau nie verhindern
+    try {
+      if (env.reverb) this.audio.setReverb(env.reverb[0], env.reverb[1]);
+      if (env.reverbMix != null) this.audio.setReverbMix(env.reverbMix);
+    } catch (e) { console.warn('Hall konnte nicht gesetzt werden', e); }
     if (chapter.ambience) chapter.ambience(this);
     for (const e of level.emitters) this._startEmitter(e);
     this.audio.music && this.audio.music.setForced(null);
