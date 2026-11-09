@@ -374,8 +374,9 @@ export default {
         c.sound('door_bash', [52.5, 1.2, 19.5], { vol: 1 });
         c.objective('Die Treppe hinunter in den Keller. Zur Pathologie.');
         // Checkpoint erst, wenn kein Verfolger im Treppenhaus steht
-        await c.until(() => !g.zombies.some((z) => z.alive && z.pos.x > 52.6 && ['chase', 'attack', 'grab'].includes(z.state)), 30);
-        c.checkpoint('stairs');
+        const safe = () => !g.zombies.some((z) => z.alive && z.pos.x > 52.6 && ['chase', 'attack', 'grab'].includes(z.state));
+        await c.until(safe, 30);
+        if (safe() && g.player.mode !== 'dead') c.checkpoint('stairs');
       },
     },
     {

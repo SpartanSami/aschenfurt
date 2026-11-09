@@ -158,6 +158,9 @@ export class Player {
     if (phoneOpen) speed *= 0.55;
     if (this.carry) speed *= 0.97;
     if (this.exhausted && !this.crouched) speed *= 0.85;
+    // Waten im Wasser: langsamer
+    this.wading = this.game.level.waterDepth(this.pos.x, this.pos.z, this.pos.y) > 0.25;
+    if (this.wading) speed *= this.sprinting ? 0.62 : 0.72;
     speed *= speedScale;
     // Hinken bei schwerer Verletzung
     if (this.healthState === 'severe' && this.painkiller <= 0) speed *= 0.85 + 0.15 * Math.abs(Math.sin(this.bobT * 0.5));
@@ -208,7 +211,7 @@ export class Player {
   }
 
   _footstep() {
-    const r = this.crouched ? NOISE.crouchStep : this.sprinting ? NOISE.sprintStep : NOISE.walkStep;
+    const r = (this.crouched ? NOISE.crouchStep : this.sprinting ? NOISE.sprintStep : NOISE.walkStep) * (this.wading ? (this.crouched ? 2.5 : 1.7) : 1);
     const mul = this.game.chapterNoiseMul || 1;
     this.game.noise.emit(this.pos.x, this.pos.z, r * mul, 'step');
     this.game.audio.footstep(this.surface(), this.crouched ? 0.25 : this.sprinting ? 1 : 0.55);
@@ -220,7 +223,7 @@ export class Player {
     const f = room.floor || '';
     if (f.includes('metal')) return 'metal';
     if (f.includes('gravel')) return 'gravel';
-    if (room.wet) return 'wet';
+    if (room.wet || this.wading) return 'wet';
     if (f.includes('asphalt') || f.includes('concrete') || f.includes('pavement') || f.includes('tunnel')) return 'concrete';
     return 'hard';
   }

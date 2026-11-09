@@ -5,7 +5,7 @@ import { F } from './grid.js';
 import { Batcher } from './batcher.js';
 import { PROPS, PropCtx } from './props.js';
 import './props2.js';
-import { getMat, emissiveMat, decalMat, signMat, UV_SCALE, V_FULL, GRID_UNIFORMS } from '../render/materials.js';
+import { getMat, colorMat, emissiveMat, decalMat, signMat, UV_SCALE, V_FULL, GRID_UNIFORMS } from '../render/materials.js';
 import { LightSystem } from '../render/lighting.js';
 import { Door } from './door.js';
 import { makeItemMesh, ITEM_INFO } from './items.js';
@@ -62,6 +62,16 @@ export class Level {
     for (const d of def.doors) { const door = new Door(this, d); this.doors.push(door); this.doorById.set(d.id, door); door.buildFrame(batch); }
     for (const dd of this.doors) if (dd.def.double) dd.partner = this.doors.find((o) => o !== dd && o.def.double === dd.def.double) || null;
     for (const gp of def.glassPanes) this._buildGlass(gp);
+    // Wasserflächen
+    for (const w of def.waters || []) {
+      const mat = colorMat(w.color, 0.14, 0.35, { transparent: true, opacity: 0.9 }).clone();
+      mat.depthWrite = false; mat.name = 'water';
+      // schwacher Eigenschimmer, damit die Oberfläche auch im Dunkeln als Wasser lesbar bleibt
+      mat.emissive = new THREE.Color(w.color); mat.emissiveIntensity = 0.45;
+      const m = new THREE.Mesh(new THREE.PlaneGeometry(w.w, w.h), mat);
+      m.rotation.x = -Math.PI / 2; m.position.set(w.x + w.w / 2, w.level, w.y + w.h / 2); m.renderOrder = 2;
+      this.root.add(m);
+    }
     for (const l of def.lights) this._addLight(l);
     for (const d of def.decals) this._addDecal(d);
     for (const s of def.signs) this._addSign(batch, s);
@@ -234,6 +244,12 @@ export class Level {
     post.position.set(gp.x + (alongX ? 0 : 0.5), fy + h / 2, gp.y + (alongX ? 0.5 : 0)); grp.add(post);
     this.root.add(grp);
     this.glass.push({ ...gp, grp, pane, broken: false });
+  }
+
+  // Wassertiefe an einer Position (0 = trocken)
+  waterDepth(x, z, y) {
+    for (const w of this.def.waters || []) if (x >= w.x && x < w.x + w.w && z >= w.y && z < w.y + w.h && y < w.level) return w.level - y;
+    return 0;
   }
 
   breakGlass(id) {

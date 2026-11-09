@@ -23,6 +23,7 @@ export class LevelDef {
     this.stairs = [];
     this.sounds = [];
     this.cameras = [];
+    this.waters = [];
     this.defaults = {
       floor: opts.floor || 'h_floor', wall: opts.wall || 'h_wall', ceil: opts.ceil || 'h_ceil',
       height: opts.height ?? 3, ambient: opts.ambient ?? 0.0,
@@ -105,6 +106,8 @@ export class LevelDef {
       this.glassPanes.push({ x: i, y: j, id: o.id || null, breakable: !!o.breakable, frost: !!o.frost });
     }
   }
+  // Wasserfläche (geflutetes Becken): Spiegel auf Höhe level. Wer darin watet, ist langsamer und lauter.
+  water(x, y, w, h, o = {}) { this.waters.push({ x, y, w, h, level: o.level ?? 0, color: o.color ?? 0x1c3236 }); }
   // Tür in einer Wandzelle
   door(x, y, o = {}) {
     const g = this.grid;

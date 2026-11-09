@@ -219,7 +219,8 @@ export class Zombie {
     // Beim Hineinstolpern in ein Hindernis kann ein verfolgender Zombie stürzen
     if (inVault && !this.climbing && this.state === ZS.CHASE && this.rng.chance(0.22)) { this.climbing = true; this.setState(ZS.FALL); return; }
     this.climbing = inVault;
-    const sp = speed * align * (inVault ? 0.35 : 1);
+    const wade = this.game.level.waterDepth(this.pos.x, this.pos.z, this.pos.y) > 0.25 ? 0.75 : 1;
+    const sp = speed * align * (inVault ? 0.35 : 1) * wade;
     this.speed = sp;
     const fx = -Math.sin(this.yaw), fz = -Math.cos(this.yaw);
     const step = Math.min(sp * dt, d);

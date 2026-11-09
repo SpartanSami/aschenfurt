@@ -327,3 +327,17 @@ PROPS.mannequin_base = (c) => {
   c.cyl(0.02, 0.02, 0.9, 'chrome', 0, 0.45, -0.05);
   c.col(-0.2, -0.2, 0.2, 0.2, 0, 0.9, { noFlag: true });
 };
+// Absperrventil an der Wand (Dampfleitung): Rohrstutzen mit Handrad
+PROPS.valve = (c) => {
+  c.cyl(0.09, 0.09, 0.35, 'metal_rust', 0, 1.3, 0.17, { rx: Math.PI / 2 });
+  c.cyl(0.2, 0.2, 0.03, 'paint_red', 0, 1.3, 0.36, { rx: Math.PI / 2, seg: 14 });
+  c.cyl(0.05, 0.05, 2.6, 'metal_rust', 0, 1.3, 0.05);
+};
+// Pumpe (Motorblock mit Spirale)
+PROPS.pump = (c, o) => {
+  c.box(1.4, 0.9, 0.9, colorMat(0x2a5a7a, 0.6, 0.4), 0, 0.45, 0);
+  c.cyl(0.5, 0.5, 0.7, colorMat(0x2a5a7a, 0.6, 0.4), 0.9, 0.55, 0, { rz: Math.PI / 2, seg: 16 });
+  c.cyl(0.14, 0.14, 2.4, 'metal_rust', 0.9, 1.9, 0, { seg: 10 });
+  c.box(0.5, 0.3, 0.02, signMat(o.text || 'P1', { bg: '#e8e8e8', fg: '#111', w: 128, h: 64, fontPx: 40 }), -0.2, 0.7, 0.46);
+  c.col(-0.7, -0.45, 1.4, 0.45, 0, 1.0, { cover: true });
+};

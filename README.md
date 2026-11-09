@@ -1,5 +1,5 @@
 > ## 🆕 Ebenfalls in diesem Repository: **NO WAY OUT**
-> Ein First-Person-Survival-Horror-Spiel in 3D (Browser, three.js): fünf Kapitel, Zombie-KI, Verstecken statt Kämpfen, Smartphone, drei Enden.
+> Ein First-Person-Survival-Horror-Spiel in 3D (Browser, three.js): fünf Kapitel in acht Abschnitten, Zombie-KI, Verstecken statt Kämpfen, Smartphone, drei Enden.
 > → Ordner [`no-way-out/`](no-way-out/README.md) · Direkt spielen: `no-way-out/NoWayOut.html` öffnen.
 
 ---

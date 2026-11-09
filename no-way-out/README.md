@@ -46,7 +46,7 @@ Der Fortschritt wird automatisch an Checkpoints im Browser gespeichert (localSto
 - **Smartphone in der Hand** mit Taschenlampe, Nachrichten, Sprachmemos, Notizen (Ziel, Dokumente, Erkenntnisse), Fotos, Anrufliste und Zustand. Der Akku ist unbegrenzt.
 - **Die unbekannte Kontaktperson** meldet sich über Textnachrichten, Anrufe, Sprachnachrichten, Lautsprecherdurchsagen, Überwachungskameras und Monitore des ARGUS-Systems sowie über alte Aufnahmen.
 - **Zombies sind keine Statisten:** Sie stolpern bei Verfolgungen über Hindernisse und stürzen, schlagen Türen ein, prüfen Verstecke und rufen sich gegenseitig herbei.
-- **Fünf Kapitel in sieben Abschnitten:** Krankenhaus (Station 3, dann Notaufnahme und Pathologie) → Forschungseinrichtung PROJECT EVE → Parkhaus → U-Bahn (Tunnel, dann Linden-Passage) → Stadt. Jeder Abschnitt hat eigene Mechaniken, zum Beispiel Notstrom, ein Wartezimmer hinter Glas, Kühlfächer, Dekon-Schleuse, Sterilisation mit zeitgesteuerten Toren, Autoalarme, einen Zug voller „Fahrgäste“, Schaufensterpuppen, zwischen denen nicht nur Puppen stehen, einen Supermarkt voller Infizierter, Regen, der Schritte verschluckt, und einen Totmannschalter.
+- **Fünf Kapitel in acht Abschnitten:** Krankenhaus (Station 3, dann Notaufnahme und Pathologie) → Forschungseinrichtung PROJECT EVE (Institut, dann Versorgungsebene mit Pumpwerk) → Parkhaus → U-Bahn (Tunnel, dann Linden-Passage) → Stadt. Jeder Abschnitt hat eigene Mechaniken, zum Beispiel Notstrom, ein Wartezimmer hinter Glas, Kühlfächer, Dekon-Schleuse, Sterilisation mit zeitgesteuerten Toren, Autoalarme, einen Zug voller „Fahrgäste“, Dampfventile, die Infizierte anlocken, ein geflutetes Becken, in dem jeder Schritt laut ist, Schaufensterpuppen, zwischen denen nicht nur Puppen stehen, einen Supermarkt voller Infizierter, Regen, der Schritte verschluckt, und einen Totmannschalter.
 - **Figuren:** Mine und İlyas müssen gefunden werden. Beide haben Geheimnisse.
 - **Entscheidungen und drei Enden:** **Hoffnung**, **Tragödie** und **Geheimnis**. Die Hinweise dazu sind über das ganze Spiel verteilt.
 - **Drei Schwierigkeitsgrade:** Leicht, Mittel (Standard) und Schwer. Sie ändern Heilmittel, Reaktionsfenster, Gegnertempo, Wahrnehmung und Schaden. Die Geschichte bleibt gleich. Der Grad lässt sich jederzeit im Haupt- und Pausemenü ändern.
@@ -58,7 +58,7 @@ Der Fortschritt wird automatisch an Checkpoints im Browser gespeichert (localSto
 - **Engine:** three.js (WebGL 2) mit eigener Spiel-Architektur in modularem JavaScript. Mit esbuild wird daraus eine Datei gebündelt. Unreal Engine 5 ließ sich in der Cloud-Entwicklungsumgebung nicht betreiben. Die Browser-Lösung ist außerdem ohne Installation sofort spielbar.
 - **Alles prozedural:** Texturen (PBR mit Normal- und Rauheitsmaps), Möbel, Fahrzeuge, Figuren, Animationen, Soundeffekte und die dynamische Musik entstehen zur Laufzeit. Es gibt keine externen Grafik- oder Sounddateien.
 - **Licht:** Ein Pool echter Punktlichter wird den relevantesten Leuchten zugewiesen. Ein Shader-Patch prüft jede Lampe über das Weltraster gegen Wände, sodass kein Licht durch Mauern dringt. Dazu kommt weiches Umgebungslicht pro Raum, und die Taschenlampe wirft Schatten.
-- **Sprachaufnahmen:** Alles, was Sami über Geräte hört (Anrufe, Diktiergerät, Lautsprecher, Fernsehnachrichten), ist vertont: 45 Aufnahmen, erzeugt mit ElevenLabs und nachbearbeitet mit ffmpeg. Gespräche mit Mine und İlyas laufen über Untertitel.
+- **Sprachaufnahmen:** Alles, was Sami über Geräte hört (Anrufe, Diktiergerät, Lautsprecher, Fernsehnachrichten), ist vertont: 46 Aufnahmen, erzeugt mit ElevenLabs und nachbearbeitet mit ffmpeg. Gespräche mit Mine und İlyas laufen über Untertitel.
 
 Mehr dazu in [`docs/ARCHITEKTUR.md`](docs/ARCHITEKTUR.md), Testergebnisse in [`docs/QA.md`](docs/QA.md). Die Story-Bibel mit allen Auflösungen steht in [`docs/STORY.md`](docs/STORY.md) und enthält **Spoiler**.
 
@@ -80,7 +80,7 @@ Debug-Modus: `index.html?debug` öffnet das Spiel mit F3 (Statistik), F4 (unverw
 ## ⚠️ Ehrliche Einordnung
 
 - Die Grafik ist **atmosphärisch, aber nicht fotorealistisch**. Alle Modelle bestehen aus prozeduralen Grundkörpern, die Animationen sind prozedural statt per Motion-Capture. Die Systeme sind so gebaut, dass sich echte 3D-Modelle (glTF) und Sounddateien später einsetzen lassen.
-- Die Spielzeit liegt je nach Spielweise bei etwa **60–90 Minuten** und damit unter den angestrebten 2–3 Stunden.
+- Die Spielzeit liegt je nach Spielweise bei etwa **1,5 bis 2 Stunden**, wer alle Dokumente liest und vorsichtig schleicht, braucht länger. Das ist die untere Grenze der angestrebten 2–3 Stunden. Die Schätzung beruht auf den Weglängen und Skriptzeiten, nicht auf gemessenen Spielsitzungen.
 - Die vertonten Stimmen stammen von englischsprachigen ElevenLabs-Stimmen, die über das mehrsprachige Modell Deutsch sprechen. Ein leichter Akzent ist möglich.
 - Begleiter werden von Zombies bewusst ignoriert, damit keine frustrierenden Eskortpassagen entstehen. Gefahr für sie entsteht nur durch die Inszenierung.
 - Touch-Steuerung für Smartphones ist nicht enthalten. Das Spiel ist für Desktop mit Maus und Tastatur oder Gamepad ausgelegt. Die Gamepad-Belegung ist fest, nur die Tastatur ist frei belegbar.

@@ -48,6 +48,12 @@
 
 Falsche Fährten: Dr. Arendt (bis Kap. 2), Mine (Nachrichten kommen, auch wenn sie dabei ist), İlyas (Zugriff auf ARGUS), ARGUS selbst als „KI“.
 
+## Spuren der Vertuschung (Teilabschnitte)
+- **Notaufnahme (Kap. 1, Teil 2):** Das Triage-Protokoll zeigt, dass Dr. Brenner (NEXARA-Sicherheit) Meldungen an das Gesundheitsamt untersagt und Gebissene im Wartezimmer einsperren ließ.
+- **Pathologie (Kap. 1, Teil 2):** Totenscheine für Probanden der Phase I (darunter 009 – Elif) wurden vorab ausgestellt, Leichname sind nie eingegangen. Der tote Kurier R. Lenz sollte „Material 017“ sichern und den Probanden lebend am Kontrollpunkt Nord übergeben lassen. Das ist der erste Hinweis auf Brenners Extraktionsplan.
+- **Pumpwerk (Kap. 2, Teil 2):** Brenner ließ die Pumpen von Ebene U4 absichtlich ausgeschaltet, das Wasser soll Spuren aus Sektion C bedecken. Eine Bleistiftnotiz stammt von İlyas.
+- **Linden-Passage (Kap. 4, Teil 2):** NEXARA beschuldigt İlyas öffentlich im Fernsehen. Ein NEXARA-Handzettel sucht Sami mit Foto („nicht ansprechen“, Übergabe am Kontrollpunkt Nord). Mines Telefon klingelt, sie lehnt ab („die Klinik“). In Wahrheit ist es Brenner.
+
 ## Entscheidungen
 | Kapitel | Entscheidung | Wirkung |
 |---|---|---|

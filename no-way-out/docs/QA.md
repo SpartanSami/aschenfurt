@@ -11,6 +11,9 @@ Getestet wurde automatisiert in einem Headless-Chromium mit Software-Rendering (
 | Kapitel 2 vollständig | ✅ Dekon-Schleuse → Labore → Mine → Zellentrakt (Elif, Zelle 017, Aufnahme 2) → Entscheidung Kryo-Box → Kühlraum B (Serum) → ARGUS-Terminal → Sterilisation durch die Schleusen → Tunnel → Kapitel 3 |
 | Kapitel 3 vollständig | ✅ Ebenen −3/−2/−1 über Rampen → Samis Kombi (Aufnahme 3) → İlyas → Strom fürs Rolltor → Flucht zwischen den Autos → Kapitel 4 |
 | Kapitel 4 vollständig | ✅ Drehkreuz → Bahnsteig → durch Zug 3117 (geduckt) → Geständnis + Entscheidung → Aufnahme 4 → Tunnel → Horde → Bahnsteigkante klettern → Biss → Serum-Entscheidung → Kapitel 5 |
+| Kapitel 1, Teil 2 (Notaufnahme & Pathologie) | ✅ Aufzug hält im EG → Anruf → Fressender im Versorgungsgang → Notaufnahme (Triage-Protokoll) → Wartezimmer erwacht, Scheibe bricht → Brandschutztür schließen → Keller → Büro (Eingangsbuch) → Kühlfächer-Szene → Kurier: NEXARA-Karte → Verfolgung zum Lastenaufzug → Kapitel 2 |
+| Kapitel 2, Teil 2 (Versorgungsebene & Pumpwerk) | ✅ Leitungsgang mit Dampfventilen → Werkstatt (Wartungsbuch) → Pumpwerk → Flasche werfen → durchs Becken watend (langsamer, lauter) → Schaltwarte → Notstrom → Flucht über den Südsteg → Schott → Notausgang → Kapitel 3 |
+| Kapitel 4, Teil 2 (Linden-Passage) | ✅ Betriebsgang → verschütteter Hauptgang → durch „Mode Krüger“ (Puppe erwacht) → Fernsehwand (Nachrichten, Dialog) → Drogerie (Heilmittel, Suchplakat) → Mines Telefon → Frischmarkt: Flasche werfen, durch die Gänge → Rolltor-Motor → Tür schließen → Tor öffnet → Lindenstraße → Kapitel 5 |
 | Kapitel 5 + **Ende „Hoffnung“** | ✅ |
 | Kapitel 5 + **Ende „Tragödie“ (İlyas bleibt)** | ✅ |
 | Kapitel 5 + **Ende „Tragödie“ (Sami bleibt)** | ✅ |
@@ -24,10 +27,14 @@ Getestet wurde automatisiert in einem Headless-Chromium mit Software-Rendering (
 | Tür einschlagen, Suche, Rückkehr, Versteck prüfen | ✅ |
 | Heilen, Telefon-Apps, Dokumente, Sprachaufnahmen laden | ✅ |
 | Pause per P (zuvor nur Esc) | ✅ nach Fehlerbehebung |
+| Schwierigkeitsgrad im Haupt- und Pausemenü ändern (wirkt sofort und auf den Spielstand) | ✅ |
 | Entscheidungen per Tastatur (W/S + E) | ✅ |
 | Kontaktperson über Kamera-Einblendung (Kap. 1), ARGUS-Monitor und Lautsprecher (Kap. 2), Sprachnachricht (Kap. 3) | ✅ |
 
 ## Behobene Fehler (Auswahl)
+- Requisiten, die ihre Höhe selbst setzen (Rohre, Schilder, Fernseher, OP-Lampen), wurden doppelt angehoben und hingen teils in der Decke oder im Boden. Ihre Höhe gilt jetzt relativ zum örtlichen Boden.
+- Schild- und Bildschirmtexte wurden über breite Flächen gekachelt („ELEKTRO MAX ELEKTRO MAX …“) bzw. abgeschnitten. Beschriftete Flächen werden jetzt eingepasst.
+- Checkpoints in Verfolgungen: Nach der Brandschutztür und dem Schott wird nur gespeichert, wenn kein Verfolger mehr im Raum ist.
 - Die Pausetaste P und Gamepad-Start waren belegt, wurden aber nie ausgewertet.
 - Entscheidungen, Menüs, Todesbildschirm und Abspann ließen sich nicht per Gamepad bedienen.
 - Hindernisse auf Zellgrenzen wurden für die KI nicht markiert, Zombies blieben hängen. Die Markierung erfasst jetzt einen Rand.

@@ -273,6 +273,32 @@ Nicht an NEXARA übergeben.
 
 Bei Alarm: Schleusen verriegeln **automatisch** (Sterilisationsprotokoll).`,
   },
+  // ---------------- Kapitel 2, Teil 2 ----------------
+  c2b_wartung: {
+    title: 'Wartungsbuch Pumpwerk U4', where: 'Werkstatt Haustechnik', kind: 'log',
+    body: `Di., 11.11.
+03:21 – Stromausfall Sektion C/U4. Pumpen P1–P3 aus. Notstrom springt nicht automatisch an (ARGUS-Fehler?).
+04:05 – Becken 2 läuft voll. Wasser steht im Versorgungstunnel zum Parkhaus. Spätschicht (Kowalski, Brandt, Yilmaz, Peters) geht runter, Pumpen manuell anfahren.
+04:40 – Kein Funkkontakt zur Spätschicht.
+
+Mi., 12.11.
+09:15 – Anweisung NEXARA-Sicherheit (Dr. Brenner): **Pumpen NICHT wieder anfahren.** Ebene U4 bleibt geflutet. Begründung: „Kontaminationsrisiko“.
+
+> Darunter, mit Bleistift:
+Kontamination? Da unten liegt alles, was aus Sektion C rausgeschwemmt wurde. Die wollen nicht, dass es jemand findet. – İ. D.`,
+  },
+  c2b_schicht: {
+    title: 'Schichtbuch Schaltwarte', where: 'Schaltwarte Pumpwerk', kind: 'log',
+    body: `Di., 11.11. – Spätschicht
+
+04:12 – Warte besetzt (Peters). Notstrom bereit, Freigabe fehlt.
+04:20 – Kowalski meldet: „Leute im Becken. Patienten? Laborkittel.“
+04:26 – Brandt gebissen. Wir ziehen ihn raus.
+04:31 – Brandt steht wieder auf.
+04:33 – Kowalski und Yilmaz antworten nicht. Ich schließe das Schott.
+04:50 – Wenn ich den Notstrom einschalte, geht der Alarm los. Dann wissen sie, wo ich bin.
+05:10 – Sie kommen durch das Wasser`,
+  },
   // ---------------- Kapitel 3 ----------------
   c3_zettel: {
     title: 'Zettel unter dem Scheibenwischer', where: 'Parkhaus · Ebene −3', kind: 'note',

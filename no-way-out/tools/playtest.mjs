@@ -106,6 +106,7 @@ await page.evaluate(() => {
 });
 
 const SEQ = args.includes('--seq');
+const TIMES = [];
 async function runChapter(ch, first = true) {
   const route = ROUTES[ch];
   if (!route) { console.log('Keine Route für', ch); return false; }
@@ -114,6 +115,7 @@ async function runChapter(ch, first = true) {
   await page.waitForFunction((c) => window.NWO.mode === 'play' && window.NWO.chapter && window.NWO.chapter.id === c, ch, { timeout: 90000 });
   if (SEQ && !first) { const st = await page.evaluate(() => ({ frags: window.NWO.state.fragments.size, serum: window.NWO.inventory.has('serum'), flags: Object.keys(window.NWO.state.flags).filter((k) => !k.startsWith('read:') && !k.startsWith('used:')).length, hp: window.NWO.player.hp, npcs: window.NWO.npcs.filter((n) => n.active).map((n) => n.id) })); console.log('Übernommener Zustand:', JSON.stringify(st)); }
   await page.evaluate((god) => { window.NWO.godMode = god; window.NWO.godInvisible = god; window.NWO.noAutoPause = true; }, args.includes('--god'));
+  const t0 = await page.evaluate(() => window.NWO.time || 0);
   let ok = true;
   for (const [k, step] of route.entries()) {
     const res = await page.evaluate(`(async () => { ${step.js.replace(/__CHOICE__/g, process.env.CHOICE || 'hope')} })()`);
@@ -122,12 +124,16 @@ async function runChapter(ch, first = true) {
     if (shots) await page.screenshot({ path: `tools/out/pt_${ch}_${k}.png` });
     if (res === false || st.pmode === 'dead') { ok = false; console.log('!! Schritt fehlgeschlagen'); break; }
   }
+  const t1 = await page.evaluate(() => window.NWO.time || 0);
+  console.log(`Spielzeit Autopilot ${ch}: ${((t1 - t0) / 60).toFixed(1)} min`);
+  TIMES.push([ch, (t1 - t0) / 60]);
   return ok;
 }
 
 const list = which === 'all' ? Object.keys(ROUTES) : [which];
 let allOk = true;
 for (const [i, ch] of list.entries()) { const ok = await runChapter(ch, i === 0); allOk = allOk && ok; if (!ok && SEQ) break; }
+if (TIMES.length > 1) console.log('Spielzeit Autopilot gesamt:', TIMES.reduce((a, t) => a + t[1], 0).toFixed(1), 'min');
 console.log('\nFehler:', errs.length ? '\n' + errs.slice(0, 20).join('\n') : 'keine');
 console.log(allOk && !errs.length ? 'ERGEBNIS: OK' : 'ERGEBNIS: PROBLEME');
 await browser.close(); srv.close();

@@ -31,7 +31,8 @@ no-way-out/
 │  ├─ systems/                audio (Synthese, Musik, Stimmen), phone, photos, story, inventory
 │  ├─ ui/                     hud, menu, docs (Dokumentenansicht)
 │  └─ data/
-│     ├─ chapters/ch1…ch5     Level-Aufbau + Skripte je Kapitel
+│     ├─ chapters/            Level-Aufbau + Skripte: ch1, ch1b, ch2, ch2b, ch3, ch4, ch4b, ch5
+│     │                       (die b-Dateien sind Teilabschnitte eines Kapitels, index.js legt die Reihenfolge fest)
 │     ├─ story/               documents, endings, voicemanifest (automatisch erzeugt)
 │     └─ zombietypes.js       datengetriebene Gegnertypen
 └─ tools/                     build, playtest (Autopilot), routes, map, views, shot, voicelines, genvoice
@@ -41,7 +42,9 @@ no-way-out/
 
 ### Welt: Raster + Level-DSL
 - Die Welt ist ein **1-m-Raster** mit Bitflags (Wand, Boden, Tür, Requisit, sichtblockierend, Glas, Schacht, Kletterhindernis, Deckung, verriegelt, geschlossen). Pro Zelle gibt es Boden- und Deckenhöhe sowie optional Rampen und Treppen.
-- Kapitel werden mit einer **DSL** beschrieben: `room()`, `door()`, `door2()`, `glass()`, `vent()`, `ramp()`, `prop()`, `light()`, `zombie()`, `item()`, `interact()`, `trigger()`, `checkpoint()`. Der `LevelBuilder` erzeugt daraus Wände, Böden, Decken, Stufen und Stürze mit Welt-UVs und Vertex-AO. Die Geometrie wird pro Material und 16-m-Chunk zusammengefasst, das spart Draw-Calls bei weiterhin funktionierendem Frustum-Culling.
+- Kapitel werden mit einer **DSL** beschrieben: `room()`, `door()`, `door2()`, `glass()`, `vent()`, `ramp()`, `heights()`, `water()`, `prop()`, `light()`, `zombie()`, `item()`, `interact()`, `trigger()`, `checkpoint()`. Der `LevelBuilder` erzeugt daraus Wände, Böden, Decken, Stufen und Stürze mit Welt-UVs und Vertex-AO. Die Geometrie wird pro Material und 16-m-Chunk zusammengefasst, das spart Draw-Calls bei weiterhin funktionierendem Frustum-Culling.
+- **Wasserflächen** (`water()`): ein Wasserspiegel über abgesenkten Zellen. Wer darin watet, ist langsamer (Spieler ca. 70 %, Zombies 75 %) und lauter (Schrittgeräusch ×1,7, geduckt ×2,5).
+- **Höhenangaben von Requisiten:** Requisiten, die ihre Höhe selbst setzen (Lampen, Schilder, Rohre, Fernseher), stehen immer auf dem örtlichen Boden, ihr `y` ist relativ. Bei allen anderen ist `y` absolut. Beschriftete Flächen (Schilder, Bildschirme) werden eingepasst statt gekachelt.
 - Daraus entstehen auch die Kollision (Kreis gegen Zellen und gedrehte Quader), die Sichtlinien (DDA), die Geräuschausbreitung (Flood-Fill entlang der Gänge) und die Pfadsuche (A* mit 8 Richtungen).
 
 ### Licht
@@ -66,6 +69,7 @@ Bewegung mit Beschleunigung, Head-Bob, Hinken, Schwanken bei Verletzung, Ausdaue
 ### Story-Engine (`systems/story.js`)
 - Kapitel definieren `script: [{ when, if, once, do: async (c) => … }]`. Auslöser sind `start`, `enter:<zone>`, `interact:<id>`, `pickup:<id>`, `unlock:<tür>`, `locked:<tür>`, `read:/closed:<dok>`, `cond` und `restore:<checkpoint>`.
 - Der Kontext `c` bietet unter anderem: `wait`, `lines`, `say`, `msg`, `call`, `pa`, `choice`, `objective`, `fact`, `photo`, `door/unlock/lock/open/close`, `power/lightMode`, `spawn/chase/wake`, `addNpc/npc`, `checkpoint`, `endChapter`, `ending`.
+- **Kapitel und Teilabschnitte:** `CHAPTER_ORDER` enthält die fünf Kapitel (für die Nummerierung), `CHAPTER_SEQ` die vollständige Abfolge mit den Teilabschnitten `ch1b`, `ch2b` und `ch4b` (Kapitelauswahl, Debug-Sprung). Teilabschnitte tragen `part: true` und zeigen beim Wechsel nur eine kurze Ortsangabe.
 - Wartezeiten laufen über die Spielzeit. Beim Laden eines Checkpoints werden laufende Abläufe abgebrochen (Generationszähler).
 
 ### Speichern

@@ -495,10 +495,9 @@ export default {
     },
     {
       id: 'c2_exit', when: 'enter:exit', do: async (c) => {
-        c.msg('unknown', 'UNBEKANNT', 'Parkhaus Am Klinikum. Ebene minus drei. Achte auf die Autos.');
-        await c.wait(1.5);
-        c.setClock('05:02');
-        await c.endChapter('ch3');
+        await c.wait(1.0);
+        c.setClock('04:55');
+        await c.endChapter('ch2b');
       },
     },
   ],

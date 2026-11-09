@@ -70,7 +70,7 @@ export class FX {
   puff(x, y, z, o = {}) {
     const n = o.n || 120;
     const pos = new Float32Array(n * 3), vel = [];
-    for (let i = 0; i < n; i++) { pos.set([x + (Math.random() - 0.5) * (o.w || 2), y + Math.random() * 0.5, z + (Math.random() - 0.5) * (o.d || 2)], i * 3); vel.push([(Math.random() - 0.5) * 0.6, -0.2 - Math.random() * 0.5, (Math.random() - 0.5) * 0.6]); }
+    for (let i = 0; i < n; i++) { pos.set([x + (Math.random() - 0.5) * (o.w || 2), y + Math.random() * 0.5, z + (Math.random() - 0.5) * (o.d || 2)], i * 3); vel.push([(Math.random() - 0.5) * 0.6, o.rise ? 0.4 + Math.random() * 0.9 : -0.2 - Math.random() * 0.5, (Math.random() - 0.5) * 0.6]); }
     const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
     const m = new THREE.PointsMaterial({ size: o.size || 0.35, map: this.dustTex, transparent: true, opacity: 0.35, depthWrite: false, color: o.color || 0xdfe8f0 });
     const pts = new THREE.Points(g, m);
