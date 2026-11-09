@@ -90,6 +90,7 @@ export default {
 
     // ================= Decals =================
     L.decal('blood_trail', 30, 26.5, { size: 2.6, rot: PI / 2 });
+    L.prop('body', 28.0, 25.25, { cloth: 'scrubs', rot: 1.5, blood: true });
     L.decal('blood_hand', 40.02, 25.4, { wall: 'w', y: 1.2, size: 0.4 });
     L.decal('blood_smear', 56.0, 24.0, { size: 1.0 });
     L.decal('paper', 61.5, 23.5); L.decal('paper', 59.0, 25.8);
@@ -108,9 +109,9 @@ export default {
     L.interact('power_lever', 59.2, 21.2, { prompt: 'Notstrom einschalten (gedrückt halten)', y: 1.2, radius: 1.3, mesh: 'panel', rot: 0, hold: 1.5, enabled: (g) => !g.state.flags.pump_power });
 
     // ================= Gegner =================
-    L.zombie(9, 26, { id: 'zl_1', type: 'wanderer', outfit: 'hazmat', patrol: [[8, 26], [37, 26]] });
-    L.zombie(26.5, 26.9, { id: 'zl_2', type: 'shambler', yaw: PI / 2, outfit: 'labcoat' });
-    L.zombie(35.0, 27.4, { id: 'zl_3', type: 'sleeper', pose: 'sitting', yaw: 0, outfit: 'scrubs', wake: 3 });
+    L.zombie(30, 26, { id: 'zl_1', type: 'wanderer', outfit: 'hazmat', patrol: [[37, 26], [14, 26]] });
+    L.zombie(28.0, 25.5, { id: 'zl_2', type: 'sleeper', pose: 'kneel', yaw: 0.15, outfit: 'labcoat', wake: 2.8 });
+    L.zombie(35.0, 27.4, { id: 'zl_3', type: 'sleeper', pose: 'sitting', yaw: PI - 0.3, outfit: 'scrubs', wake: 3 });
     L.zombie(23.6, 21.6, { id: 'zw_1', type: 'sleeper', pose: 'lying', yaw: 1.0, outfit: 'civilian2', wake: 3 });
     L.zombie(48.6, 19.4, { id: 'zd_1', type: 'shambler', yaw: 0.3, outfit: 'hazmat' });
     L.zombie(49.8, 22.6, { id: 'zd_2', type: 'shambler', yaw: 2.2, outfit: 'civilian' });

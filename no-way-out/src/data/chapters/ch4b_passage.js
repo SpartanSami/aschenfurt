@@ -168,12 +168,12 @@ export default {
     L.interact('gate_btn', 74.5, 7.1, { prompt: 'Rolltor öffnen (gedrückt halten)', y: 1.35, radius: 1.3, mesh: 'panel', rot: 0, hold: 1.5, enabled: (g) => !g.state.flags.gate_started });
 
     // ================= Gegner =================
-    L.zombie(18, 21.5, { id: 'zp_w', type: 'wanderer', outfit: 'civilian2', patrol: [[12, 21.5], [29, 20], [29, 23], [12, 22.5]] });
+    L.zombie(18, 22.5, { id: 'zp_w', type: 'wanderer', outfit: 'civilian2', patrol: [[24, 22.8], [14, 22.8], [14, 20.6], [24, 20.6]] });
     L.zombie(14.4, 28.6, { id: 'zp_cafe1', type: 'sleeper', pose: 'sitting', yaw: -PI / 2, outfit: 'civilian', wake: 3 });
     L.zombie(18.0, 30.6, { id: 'zp_cafe2', type: 'sleeper', pose: 'lying', yaw: 0.5, outfit: 'suit', wake: 3 });
-    L.zombie(28.0, 11.6, { id: 'zm_1', type: 'stalker', stalker: true, yaw: 2.6, outfit: 'civilian' });
-    L.zombie(33.2, 10.6, { id: 'zm_2', type: 'stalker', stalker: true, yaw: -2.2, outfit: 'civilian2' });
-    L.zombie(24.6, 15.0, { id: 'zm_3', type: 'stalker', stalker: true, yaw: PI, outfit: 'suit' });
+    L.zombie(28.0, 10.8, { id: 'zm_1', type: 'stalker', stalker: true, yaw: 0.6, outfit: 'civilian' });
+    L.zombie(33.4, 10.2, { id: 'zm_2', type: 'stalker', stalker: true, yaw: 1.2, outfit: 'civilian2' });
+    L.zombie(25.6, 10.0, { id: 'zm_3', type: 'stalker', stalker: true, yaw: -0.6, outfit: 'suit' });
     L.zombie(30.6, 14.6, { id: 'z_dummy', type: 'hunter', state: 'dormant', wake: 99, yaw: PI - 0.4, outfit: 'mannequin2', skin: 'plastic', hairStyle: 'none' });
     L.zombie(45.6, 11.4, { id: 'zd_1', type: 'sleeper', pose: 'lying', yaw: 1.2, outfit: 'civilian', wake: 3.2 });
     L.zombie(44.5, 23.6, { id: 'zp_st', type: 'stalker', stalker: true, yaw: 0.3, outfit: 'civilian' });

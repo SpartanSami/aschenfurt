@@ -148,11 +148,11 @@ export default {
     // Keller
     L.prop('pipe', 36, 33.15, { len: 40, y: 2.7, r: 0.12, rot: PI / 2, mat: 'metal_rust' });
     L.prop('pipe', 36, 35.85, { len: 40, y: 2.55, r: 0.07, rot: PI / 2, mat: 'metal_dark' });
-    L.prop('cart', 51.0, 33.6, { rot: 0.2 });
+    L.prop('cart', 50.2, 35.45, { rot: 1.5 });
     L.prop('boxes', 41.5, 35.4, { n: 3 });
     L.prop('barrels', 33.0, 35.4, { n: 2, mat: 'metal_rust' });
     L.prop('gurney', 29.0, 33.6, { rot: PI / 2, body: true });
-    L.prop('wheelchair', 18.0, 35.3, { rot: 2.0 });
+    L.prop('wheelchair', 43.2, 33.4, { rot: 2.0 });
     L.sign('← LASTENAUFZUG U1–U3', 25.5, 33.03, { w: 1.6, h: 0.26, y: K + 2.3, face: 'n', bg: '#e9ecef' });
     L.sign('PATHOLOGIE', 25.5, 35.97, { w: 1.2, h: 0.24, y: K + 2.45, face: 's', bg: '#e9ecef' });
     L.prop('label', 15.03, 34.6, { text: 'NEXARA · NUR BEFUGTE', w: 0.6, h: 0.14, y: 1.5, rot: PI / 2 });
@@ -224,7 +224,7 @@ export default {
     const crowd = [[32.6, 15.2, 'civilian'], [34.3, 14.6, 'suit'], [35.6, 15.3, 'gown'], [36.9, 14.2, 'civilian2'], [38.1, 15.1, 'civilian'], [39.6, 14.7, 'scrubs'], [35.0, 13.4, 'civilian2']];
     crowd.forEach(([x, z, outfit], i) => L.zombie(x, z, { id: 'w' + (i + 1), type: 'shambler', state: 'dormant', wake: 99, yaw: PI + (i % 3 - 1) * 0.35, outfit, spawnIf: (f) => !f['glass:wait'] }));
     L.zombie(48.6, 25.6, { id: 'z_shock', type: 'sleeper', pose: 'lying', yaw: -PI / 2, outfit: 'gown', wake: 2.8 });
-    L.zombie(22.0, 34.4, { id: 'z_k_w', type: 'wanderer', outfit: 'security', patrol: [[20, 34.5], [52, 34.5]] });
+    L.zombie(40.0, 34.4, { id: 'z_k_w', type: 'wanderer', outfit: 'security', patrol: [[33, 34.5], [52, 34.5]] });
     L.zombie(49.0, 41.4, { id: 'z_laundry', type: 'shambler', yaw: PI / 2, outfit: 'scrubs' });
     L.zombie(21.2, 42.6, { id: 'z_p1', type: 'sleeper', pose: 'lying', yaw: 0.4, outfit: 'gown', wake: 3.2 });
     L.zombie(29.6, 38.6, { id: 'z_p2', type: 'sleeper', pose: 'lying', yaw: -1.4, outfit: 'gown', wake: 3.2 });

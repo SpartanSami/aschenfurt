@@ -15,19 +15,27 @@ export class Input {
     this.touch = { active: false, moveX: 0, moveY: 0, lookDX: 0, lookDY: 0, buttons: new Set(), pressed: new Set() };
     this.lastLockChange = 0;
     this.onLockChange = null;
+    this.onLockFail = null;
+    this.lockFailed = false;  // Pointer Lock verweigert (z. B. eingebettetes Fenster)
+    this.dragLook = false;    // Umsehen per Ziehen ist aktiv, solange gespielt wird
+    this.dragging = false;
 
     window.addEventListener('keydown', (e) => this._key(e, true));
     window.addEventListener('keyup', (e) => this._key(e, false));
     window.addEventListener('blur', () => { this.keys.clear(); });
     document.addEventListener('mousemove', (e) => {
-      if (this.locked) { this.mouseDX += e.movementX || 0; this.mouseDY += e.movementY || 0; }
+      // Ersatz, falls der Browser den Mauszeiger nicht einfangen lässt: Umsehen mit gedrückter Maustaste
+      if (this.locked || (this.dragLook && this.dragging)) { this.mouseDX += e.movementX || 0; this.mouseDY += e.movementY || 0; }
     });
+    document.addEventListener('pointerlockerror', () => { this.lockFailed = true; if (this.onLockFail) this.onLockFail(); });
     document.addEventListener('mousedown', (e) => {
       const code = 'Mouse' + e.button;
       if (this.captureCallback) { e.preventDefault(); const cb = this.captureCallback; this.captureCallback = null; cb(code); return; }
       if (this.locked) { this.keys.add(code); this.pressedThisFrame.add(code); }
+      else if (this.dragLook && e.target === this.canvas) { this.dragging = true; this.requestLock(); }
     });
     document.addEventListener('mouseup', (e) => {
+      this.dragging = false;
       const code = 'Mouse' + e.button;
       this.keys.delete(code); this.releasedThisFrame.add(code);
     });
@@ -147,10 +155,12 @@ export class Input {
   requestLock() {
     if (this.locked) return;
     // Browser verlangen nach dem Verlassen eine kurze Pause vor dem erneuten Sperren
+    const fail = () => { this.lockFailed = true; if (this.onLockFail) this.onLockFail(); };
+    if (!this.canvas.requestPointerLock) { fail(); return; }
     try {
       const r = this.canvas.requestPointerLock();
-      if (r && r.catch) r.catch(() => {});
-    } catch (e) { /* ignorieren */ }
+      if (r && r.catch) r.catch(fail);
+    } catch (e) { fail(); }
   }
   exitLock() { if (document.pointerLockElement) document.exitPointerLock(); }
 

@@ -43,9 +43,9 @@ export class HUD {
     setTimeout(() => { line.classList.add('out'); setTimeout(() => line.remove(), 500); }, dur * 1000);
     while (this.subs.children.length > 3) this.subs.firstChild.remove();
   }
-  toast(text) {
+  toast(text, dur = 2.8) {
     const t = el('div', 'toast', this.toasts, text);
-    setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 600); }, 2800);
+    setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 600); }, dur * 1000);
     while (this.toasts.children.length > 4) this.toasts.firstChild.remove();
   }
   pickup(name) { this.toast('＋ ' + name); }

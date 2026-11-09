@@ -81,6 +81,12 @@ export class Game {
     this.godMode = false;
     this.renderer.onResize = (w, h) => { this.camera.aspect = w / h; this.camera.updateProjectionMatrix(); this.hands.resize(w, h); this.secCam.aspect = w / h; this.secCam.updateProjectionMatrix(); };
     this.renderer.resize();
+    // Kann der Mauszeiger nicht eingefangen werden (z. B. eingebettetes Fenster), hilft Umsehen per Ziehen
+    this.input.onLockFail = () => {
+      if (this.mode !== 'play' || this._lockHintShown) return;
+      this._lockHintShown = true;
+      this.hud.toast('Mauszeiger kann hier nicht eingefangen werden: <b>mit gedrückter Maustaste ziehen</b>, um dich umzusehen.', 7);
+    };
     this.input.onLockChange = (locked) => {
       if (!locked && this.mode === 'play' && !this.modal && !this._allowUnlock && !this.noAutoPause) this.pause();
       this._allowUnlock = false;
@@ -655,6 +661,7 @@ export class Game {
   update(dt) {
     const inp = this.input;
     if (this.debug) this._debugKeys();
+    this.input.dragLook = this.mode === 'play';
     if (this.mode === 'play') {
       this.time += dt;
       if (this.docs.isOpen()) { this.docs.update(inp); }

@@ -14,6 +14,8 @@ Sami erwacht ohne Erinnerung in einem Krankenhaus. In seiner Akte steht kein Nam
 | **Projektordner** | `index.html` öffnen (lädt `dist/game.js`). Über einen lokalen Webserver (`npx http-server .`) werden die Sprachaufnahmen aus `assets/audio/` geladen. |
 | **Online** | Den Ordner zum Beispiel über GitHub Pages veröffentlichen und `…/no-way-out/` aufrufen. |
 
+**Falls die Maus nicht eingefangen wird** (manche eingebetteten Fenster erlauben das nicht): mit gedrückter Maustaste ziehen, um sich umzusehen.
+
 **Voraussetzungen:** ein aktueller Desktop-Browser (Chrome, Edge oder Firefox) mit WebGL 2, Maus und Tastatur oder Gamepad (Standard-Layout, z. B. Xbox/PlayStation). Kopfhörer werden dringend empfohlen.
 
 Der Fortschritt wird automatisch an Checkpoints im Browser gespeichert (localStorage).
@@ -80,7 +82,7 @@ Debug-Modus: `index.html?debug` öffnet das Spiel mit F3 (Statistik), F4 (unverw
 ## ⚠️ Ehrliche Einordnung
 
 - Die Grafik ist **atmosphärisch, aber nicht fotorealistisch**. Alle Modelle bestehen aus prozeduralen Grundkörpern, die Animationen sind prozedural statt per Motion-Capture. Die Systeme sind so gebaut, dass sich echte 3D-Modelle (glTF) und Sounddateien später einsetzen lassen.
-- Die Spielzeit liegt je nach Spielweise bei etwa **1,5 bis 2 Stunden**, wer alle Dokumente liest und vorsichtig schleicht, braucht länger. Das ist die untere Grenze der angestrebten 2–3 Stunden. Gemessen ist nur die Untergrenze: Der Autopilot, der unsichtbar die kürzesten Wege rennt, braucht 27 Minuten reine Spielzeit. Die Angabe für menschliche Spieler ist eine Schätzung, keine gemessene Spielsitzung.
+- Die Spielzeit liegt je nach Spielweise bei etwa **1,5 bis 2 Stunden**. Gemessen ist nur die Untergrenze: Der Autopilot, der unsichtbar die kürzesten Wege rennt, braucht 27 Minuten reine Spielzeit.
 - Die vertonten Stimmen stammen von englischsprachigen ElevenLabs-Stimmen, die über das mehrsprachige Modell Deutsch sprechen. Ein leichter Akzent ist möglich.
 - Begleiter werden von Zombies bewusst ignoriert, damit keine frustrierenden Eskortpassagen entstehen. Gefahr für sie entsteht nur durch die Inszenierung.
 - Touch-Steuerung für Smartphones ist nicht enthalten. Das Spiel ist für Desktop mit Maus und Tastatur oder Gamepad ausgelegt. Die Gamepad-Belegung ist fest, nur die Tastatur ist frei belegbar.

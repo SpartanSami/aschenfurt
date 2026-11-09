@@ -19,7 +19,8 @@ Getestet wurde automatisiert in einem Headless-Chromium mit Software-Rendering (
 | Kapitel 5 + **Ende „Tragödie“ (Sami bleibt)** | ✅ |
 | Kapitel 5 + **Ende „Geheimnis“** | ✅ |
 | **Gesamte Kampagne am Stück** (alle acht Abschnitte, Zustand wird übernommen) | ✅ 1 → 1·2 → 2 → 2·2 → 3 → 4 → 4·2 → 5: Aufnahmen 1–5 gesammelt, Serum gefunden und weitergegeben, Begleiter übernommen, Geheimnis-Ende erreicht. Keine Skript- oder Laufzeitfehler (Produktions-Build). |
-| Kapitel 1, Teil 2 **ohne** Unverwundbarkeit | ✅ bis in den Keller: Notaufnahme geduckt hinter der Theke, Flucht vor dem Wartezimmer und Brandschutztür mit voller Gesundheit. Danach läuft der Bot aufrecht in die Patrouille im Kellerflur und stirbt, weil er nicht ausweicht. |
+| Kapitel 1, Teil 2 **ohne** Unverwundbarkeit | ✅ **vollständig mit 100 % Gesundheit**: geduckt hinter der Theke, Flucht vor dem Wartezimmer, Brandschutztür, im Keller in der Wäscherei und im Büro den Wachmann abgewartet, Karte genommen, sofort zum Aufzug gerannt. |
+| Kapitel 2·2 und 4·2 **ohne** Unverwundbarkeit | ⚠️ Der Bot stirbt in den Schleichpassagen (Leitungsgang, Modegeschäft), weil er feste Wege abläuft und weder Dampfstöße abwartet noch Wanderern ausweicht. Die Läufe deckten aber echte Platzierungsfehler auf, die behoben sind (siehe unten). |
 | Einzeldatei `NoWayOut.html` per file:// | ✅ neue Abschnitte laden, alle 46 Sprachaufnahmen eingebettet |
 | Tod → Todesbildschirm → „Weiter vom Checkpoint“ | ✅ |
 | Fortsetzen nach Neuladen der Seite (localStorage) | ✅ |
@@ -37,6 +38,8 @@ Getestet wurde automatisiert in einem Headless-Chromium mit Software-Rendering (
 - Requisiten, die ihre Höhe selbst setzen (Rohre, Schilder, Fernseher, OP-Lampen), wurden doppelt angehoben und hingen teils in der Decke oder im Boden. Ihre Höhe gilt jetzt relativ zum örtlichen Boden.
 - Schild- und Bildschirmtexte wurden über breite Flächen gekachelt („ELEKTRO MAX ELEKTRO MAX …“) bzw. abgeschnitten. Beschriftete Flächen werden jetzt eingepasst.
 - Wurde die Pause nicht über Esc ausgelöst, konnte der Mauszeiger gefangen bleiben, und Klicks landeten im 3D-Bild statt auf den Menüknöpfen. Die Pause gibt den Zeiger jetzt immer frei.
+- Ausgewogenheit der neuen Abschnitte nach Läufen ohne Unverwundbarkeit: Im Pumpwerk stand ein Wanderer direkt am Startpunkt, im Modegeschäft blickten drei Lauerer auf den einzigen Weg (einer zwei Meter neben dem Eingang), im Keller schnitt der Wachmann den Fluchtweg zum Aufzug ab, und ein Rollwagen sowie ein Rollstuhl blockierten Laufwege. Alles wurde versetzt bzw. gedreht.
+- Wird der Mauszeiger vom Browser nicht eingefangen (z. B. in eingebetteten Fenstern), lässt sich jetzt mit gedrückter Maustaste umsehen. Ein Hinweis erscheint automatisch.
 - Checkpoints in Verfolgungen: Nach der Brandschutztür und dem Schott wird nur gespeichert, wenn kein Verfolger mehr im Raum ist.
 - Die Pausetaste P und Gamepad-Start waren belegt, wurden aber nie ausgewertet.
 - Entscheidungen, Menüs, Todesbildschirm und Abspann ließen sich nicht per Gamepad bedienen.
