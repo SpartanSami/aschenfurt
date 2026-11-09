@@ -68,7 +68,7 @@ Getestet wurde automatisiert in einem Headless-Chromium mit Software-Rendering (
 Die Schaufensterpuppen der Linden-Passage werden zu wenigen Meshes zusammengefasst (vorher bis zu ~1180 Draw-Calls). Das ist für aktuelle Desktop-GPUs unkritisch. Auf schwachen Laptops hilft die Grafikstufe „Niedrig“.
 
 ## Spielzeit
-Der Autopilot braucht für die gesamte Kampagne **27 Minuten reine Spielzeit** (1: 4,0 · 1·2: 2,8 · 2: 4,3 · 2·2: 1,9 · 3: 3,0 · 4: 3,6 · 4·2: 3,5 · 5: 3,9 Minuten). Er rennt unsichtbar die kürzesten Wege ab, schleicht nicht, wartet keine Patrouillen ab, stirbt nie und liest Dokumente nicht. Das ist eine Untergrenze. Für menschliche Spieler ergibt sich daraus die Schätzung von etwa 1,5 bis 2 Stunden. Gemessen wurde das nicht.
+Der Autopilot braucht für die gesamte Kampagne **rund 31 Minuten reine Spielzeit** (1: 4,0 · 1·2: 3,9 · 2: 4,3 · 2·2: 4,8 · 3: 3,7 · 4: 3,6 · 4·2: 3,1 · 5: 3,9 Minuten; in 1·2 und 2·2 wartet er Patrouillen ab). Er rennt sonst unsichtbar die kürzesten Wege ab, stirbt nie und liest Dokumente nicht. Das ist eine Untergrenze. Für menschliche Spieler ergibt sich daraus die Schätzung von etwa 1,5 bis 2 Stunden. Gemessen wurde das nicht.
 
 ## Grenzen der Tests
 - Der Autopilot fährt feste Routen ab. Er **schleicht und weicht nicht wie ein Mensch aus**, deshalb liefen die vollständigen Routen mit Unverwundbarkeit. Ob Verfolgungen fair sind, wurde zusätzlich ohne Unverwundbarkeit (Kapitel 1) und über die Zeitabstände der Skripte geprüft. Ein Feinschliff der Balance durch echte Spieltests wird empfohlen.
