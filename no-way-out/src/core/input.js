@@ -1,6 +1,13 @@
 // Eingabesystem: Tastatur, Maus (Pointer Lock), Gamepad, Touch. Aktionen sind frei belegbar.
 import { DEFAULT_BINDINGS } from './config.js';
 
+// Knopfnamen der Touch-Steuerung (für Hinweise im HUD)
+const TOUCH_LABEL = {
+  interact: 'Benutzen', vault: 'Klettern', crouch: 'Ducken', throw: 'Werfen', heal: 'Heilen',
+  flashlight: 'Lampe', phone: 'Handy', pause: 'Pause', sprint: 'Stick ganz nach außen',
+  forward: '▲', back: '▼', left: '◀', right: '▶',
+};
+
 export class Input {
   constructor(canvas, settings) {
     this.canvas = canvas;
@@ -12,12 +19,13 @@ export class Input {
     this.locked = false;
     this.enabled = true;
     this.captureCallback = null;  // für Tastenbelegung
-    this.touch = { active: false, moveX: 0, moveY: 0, lookDX: 0, lookDY: 0, buttons: new Set(), pressed: new Set() };
+    this.touch = { active: false, moveX: 0, moveY: 0, lookDX: 0, lookDY: 0, buttons: new Set(), pressed: new Set(), pending: new Set() };
     this.lastLockChange = 0;
     this.onLockChange = null;
     this.onLockFail = null;
     this.lockFailed = false;  // Pointer Lock verweigert (z. B. eingebettetes Fenster)
     this.dragLook = false;    // Umsehen per Ziehen ist aktiv, solange gespielt wird
+    this.touchMode = false;   // Touch-Steuerung aktiv (Tablet)
     this.dragging = false;
 
     window.addEventListener('keydown', (e) => this._key(e, true));
@@ -143,7 +151,8 @@ export class Input {
     return !!this.padButtons[i] && !this.prevPadButtons[i];
   }
 
-  beginFrame() { this._pollPad(); }
+  // Touch-Tipps aus den Ereignissen zwischen zwei Bildern gelten genau für das nächste vollständige Bild
+  beginFrame() { this._pollPad(); for (const a of this.touch.pending) this.touch.pressed.add(a); this.touch.pending.clear(); }
   endFrame() {
     this.pressedThisFrame.clear();
     this.releasedThisFrame.clear();
@@ -153,7 +162,7 @@ export class Input {
   }
 
   requestLock() {
-    if (this.locked) return;
+    if (this.locked || this.touchMode) return;
     // Browser verlangen nach dem Verlassen eine kurze Pause vor dem erneuten Sperren
     const fail = () => { this.lockFailed = true; if (this.onLockFail) this.onLockFail(); };
     if (!this.canvas.requestPointerLock) { fail(); return; }
@@ -179,5 +188,8 @@ export class Input {
     if (code.startsWith('Digit')) return code.slice(5);
     return code;
   }
-  label(action) { const b = this.bindings()[action]; return Input.keyLabel(b && b[0]); }
+  label(action) {
+    if (this.touchMode) return TOUCH_LABEL[action] || action;
+    const b = this.bindings()[action]; return Input.keyLabel(b && b[0]);
+  }
 }

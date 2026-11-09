@@ -7,11 +7,21 @@ let TEX_SIZE = 512;
 let ANISO = 4;
 export function setTextureQuality(size, aniso) { TEX_SIZE = size; ANISO = aniso; }
 
+
 function mkCanvas(w, h) {
   const c = document.createElement('canvas');
   c.width = w; c.height = h;
   return c;
 }
+function releaseSource(t) {
+  const c = t.image;
+  if (!c || typeof c.getContext !== 'function') return;
+  t.image = { width: c.width, height: c.height };
+  c.width = 1; c.height = 1;
+}
+// Kann keine Zeichenfläche mehr angelegt werden (Speichergrenze), liefert der Browser null.
+// Dann mit einer kleinen Ersatzfläche weitermachen statt abzustürzen.
+const _getCtx = (c, o) => c.getContext('2d', o) || (c.width = c.height = 4, c.getContext('2d', o));
 
 // Kachelbares Value-Noise
 function makeNoise(rng, period) {
@@ -32,9 +42,9 @@ class Painter {
   constructor(seed, w = TEX_SIZE, h = TEX_SIZE) {
     this.w = w; this.h = h;
     this.rng = new RNG(seed);
-    this.cC = mkCanvas(w, h); this.C = this.cC.getContext('2d', { willReadFrequently: true });
-    this.cH = mkCanvas(w, h); this.H = this.cH.getContext('2d', { willReadFrequently: true });
-    this.cR = mkCanvas(w, h); this.R = this.cR.getContext('2d', { willReadFrequently: true });
+    this.cC = mkCanvas(w, h); this.C = _getCtx(this.cC, { willReadFrequently: true });
+    this.cH = mkCanvas(w, h); this.H = _getCtx(this.cH, { willReadFrequently: true });
+    this.cR = mkCanvas(w, h); this.R = _getCtx(this.cR, { willReadFrequently: true });
     this.cE = null;
     this.noises = [];
     for (let o = 0; o < 6; o++) this.noises.push(makeNoise(this.rng, 4 << o));
@@ -100,13 +110,13 @@ class Painter {
     this.wrapped((ox, oy) => this.stroke(pts.map((p) => [p[0] + ox, p[1] + oy]), width, 'rgba(20,18,16,0.55)', '#000', '#fff', 0.8));
   }
   emissive() {
-    if (!this.cE) { this.cE = mkCanvas(this.w, this.h); this.E = this.cE.getContext('2d'); this.E.fillStyle = '#000'; this.E.fillRect(0, 0, this.w, this.h); }
+    if (!this.cE) { this.cE = mkCanvas(this.w, this.h); this.E = _getCtx(this.cE); this.E.fillStyle = '#000'; this.E.fillRect(0, 0, this.w, this.h); }
     return this.E;
   }
   normalFromHeight(strength = 2) {
     const { w, h } = this;
     const src = this.H.getImageData(0, 0, w, h).data;
-    const c = mkCanvas(w, h), ctx = c.getContext('2d');
+    const c = mkCanvas(w, h), ctx = _getCtx(c);
     const out = ctx.createImageData(w, h);
     const H = (x, y) => src[((((y + h) % h) * w + ((x + w) % w)) * 4)] / 255;
     for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
@@ -127,6 +137,9 @@ class Painter {
       t.anisotropy = ANISO;
       if (srgb) t.colorSpace = THREE.SRGBColorSpace;
       t.needsUpdate = true;
+      // Nach dem Hochladen auf die Grafikkarte wird die Zeichenfläche nicht mehr gebraucht. Freigeben,
+      // sonst sammeln sich Hunderte MB an (Safari auf iPad/iPhone bricht bei ca. 256–384 MB ab).
+      t.onUpdate = releaseSource;
       return t;
     };
     const res = {
@@ -135,6 +148,7 @@ class Painter {
       roughnessMap: mk(this.cR, false),
     };
     if (this.cE) res.emissiveMap = mk(this.cE, true);
+    this.cH.width = 1; this.cH.height = 1;
     return res;
   }
 }

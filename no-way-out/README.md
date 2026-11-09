@@ -14,6 +14,14 @@ Sami erwacht ohne Erinnerung in einem Krankenhaus. In seiner Akte steht kein Nam
 | **Projektordner** | `index.html` öffnen (lädt `dist/game.js`). Über einen lokalen Webserver (`npx http-server .`) werden die Sprachaufnahmen aus `assets/audio/` geladen. |
 | **Online** | Den Ordner zum Beispiel über GitHub Pages veröffentlichen und `…/no-way-out/` aufrufen. |
 
+**iPad und Tablets:** Das Spiel erkennt Touch-Geräte und blendet eine eigene Steuerung ein:
+- **Linke Bildschirmhälfte:** Stick zum Bewegen. Ganz nach außen geschoben wird gerannt.
+- **Rechte Hälfte:** Wischen zum Umsehen.
+- **Knöpfe rechts unten:** Benutzen, Klettern, Ducken, Werfen, Heilen, Lampe und Handy.
+- **Je nach Lage:** Beim Handy, an den Überwachungskameras und beim Losreißen erscheinen passende Knöpfe.
+
+Tablets nutzen automatisch kleinere Texturen und eine begrenzte Auflösung, damit Safari nicht an seine Speichergrenze stößt. Der Ton läuft auch, wenn das iPad auf „stumm“ steht.
+
 **Falls die Maus nicht eingefangen wird** (manche eingebetteten Fenster erlauben das nicht): mit gedrückter Maustaste ziehen, um sich umzusehen.
 
 **Voraussetzungen:** ein aktueller Desktop-Browser (Chrome, Edge oder Firefox) mit WebGL 2, Maus und Tastatur oder Gamepad (Standard-Layout, z. B. Xbox/PlayStation). Kopfhörer werden dringend empfohlen.
@@ -85,6 +93,6 @@ Debug-Modus: `index.html?debug` öffnet das Spiel mit F3 (Statistik), F4 (unverw
 - Die Spielzeit liegt je nach Spielweise bei etwa **1,5 bis 2 Stunden**. Gemessen ist nur die Untergrenze: Der Autopilot, der unsichtbar die kürzesten Wege rennt, braucht rund 31 Minuten reine Spielzeit.
 - Die vertonten Stimmen stammen von englischsprachigen ElevenLabs-Stimmen, die über das mehrsprachige Modell Deutsch sprechen. Ein leichter Akzent ist möglich.
 - Begleiter werden von Zombies bewusst ignoriert, damit keine frustrierenden Eskortpassagen entstehen. Gefahr für sie entsteht nur durch die Inszenierung.
-- Touch-Steuerung für Smartphones ist nicht enthalten. Das Spiel ist für Desktop mit Maus und Tastatur oder Gamepad ausgelegt. Die Gamepad-Belegung ist fest, nur die Tastatur ist frei belegbar.
+- Die Touch-Steuerung und die Anpassungen für iPad/Safari (Ton, Speicher) wurden in einer iPad-Emulation im Chromium-Browser getestet, nicht auf einem echten iPad. Am besten spielt es sich weiterhin mit Maus und Tastatur oder Gamepad. Die Gamepad-Belegung ist fest, nur die Tastatur ist frei belegbar.
 
 Alle Personen, Firmen und Orte sind frei erfunden.

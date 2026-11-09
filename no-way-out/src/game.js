@@ -2,12 +2,13 @@
 // Tod/Neustart, Angriffe, Verstecke, Gegenstände und die Hauptschleife.
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
-import { loadSettings, saveSettings, DIFFICULTY, QUALITY } from './core/config.js';
+import { loadSettings, saveSettings, DIFFICULTY, QUALITY, IS_TOUCH } from './core/config.js';
 import { Input } from './core/input.js';
 import { SaveManager } from './core/save.js';
 import { bus } from './core/events.js';
 import { Renderer } from './render/renderer.js';
 import { setTextureQuality } from './render/textures.js';
+import { TouchControls } from './ui/touch.js';
 import { FX } from './render/fx.js';
 import { AudioEngine } from './systems/audio.js';
 import { Phone } from './systems/phone.js';
@@ -40,7 +41,12 @@ export class Game {
     this.input = new Input(this.canvas, this.settings);
     this.renderer = new Renderer(this.canvas, this.settings);
     const q = QUALITY[this.settings.quality] || QUALITY.medium;
-    setTextureQuality(q.texSize, Math.min(8, this.renderer.r.capabilities.getMaxAnisotropy()));
+    // Tablets: kleinere Texturen (Speichergrenze für Zeichenflächen in Safari)
+    setTextureQuality(IS_TOUCH ? Math.min(q.texSize, 256) : q.texSize, Math.min(8, this.renderer.r.capabilities.getMaxAnisotropy()));
+    // Grafikkontext verloren (z. B. iPad im Hintergrund unter Speicherdruck): nach der Wiederherstellung neu laden,
+    // der Spielstand liegt am letzten Checkpoint.
+    this.canvas.addEventListener('webglcontextlost', (e) => { e.preventDefault(); this.contextLost = true; });
+    this.canvas.addEventListener('webglcontextrestored', () => { try { location.reload(); } catch (err) { /* */ } });
     this.audio = new AudioEngine(this.settings);
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(this.settings.fov, window.innerWidth / window.innerHeight, 0.05, 90);
@@ -70,6 +76,9 @@ export class Game {
     this.hud = new HUD(this, this.ui);
     this.docs = new DocViewer(this, this.ui);
     this.menu = new Menu(this, this.ui);
+    // Touch-Steuerung auf Tablets (oder zum Testen mit ?touch in der Adresse)
+    let forceTouch = false; try { forceTouch = /[?&]touch\b/.test(location.search); } catch (e) { /* */ }
+    if (IS_TOUCH || forceTouch) { this.input.touchMode = true; this.touchUI = new TouchControls(this); document.body.classList.add('is-touch'); }
     this.zombies = []; this.npcs = [];
     this.level = null; this.chapter = null;
     this.mode = 'menu'; this.modal = null;
@@ -83,7 +92,7 @@ export class Game {
     this.renderer.resize();
     // Kann der Mauszeiger nicht eingefangen werden (z. B. eingebettetes Fenster), hilft Umsehen per Ziehen
     this.input.onLockFail = () => {
-      if (this.mode !== 'play' || this._lockHintShown) return;
+      if (this.mode !== 'play' || this._lockHintShown || this.input.touchMode) return;
       this._lockHintShown = true;
       this.hud.toast('Mauszeiger kann hier nicht eingefangen werden: <b>mit gedrückter Maustaste ziehen</b>, um dich umzusehen.', 7);
     };
@@ -154,7 +163,18 @@ export class Game {
     await this.loadChapter(snap.chapter, snap.checkpoint, snap);
   }
 
+  // Laden mit Fehlerbehandlung: Schlägt der Aufbau fehl, erscheint eine Meldung statt eines endlosen Ladebildschirms
   async loadChapter(id, cp = 'start', snap = null) {
+    try { return await this._loadChapter(id, cp, snap); }
+    catch (e) {
+      console.error('Kapitel konnte nicht geladen werden', e);
+      this.menu.loading(false);
+      this.mode = 'menu';
+      this.hud.setVisible(false);
+      this.menu.showLoadError(e && e.message ? e.message : String(e));
+    }
+  }
+  async _loadChapter(id, cp = 'start', snap = null) {
     this.mode = 'loading';
     this.menu.hideAll();
     this.menu.loading(true);
@@ -659,6 +679,7 @@ export class Game {
   }
 
   update(dt) {
+    if (this.touchUI) this.touchUI.update();
     const inp = this.input;
     if (this.debug) this._debugKeys();
     this.input.dragLook = this.mode === 'play';

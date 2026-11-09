@@ -5,6 +5,19 @@ import { clamp } from '../core/rng.js';
 import { VOICE_IDS } from '../data/story/voicemanifest.js';
 
 const SR = 44100;
+// iPhone / iPad (iPadOS meldet sich als Mac mit Touch-Bildschirm)
+const IS_IOS = typeof navigator !== 'undefined' && (/iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
+// Kurze stille WAV-Datei (8 kHz, 8 bit, 0,1 s) als data:-URI
+function silentWav() {
+  const n = 800, buf = new Uint8Array(44 + n), dv = new DataView(buf.buffer);
+  const str = (o, t) => { for (let i = 0; i < t.length; i++) buf[o + i] = t.charCodeAt(i); };
+  str(0, 'RIFF'); dv.setUint32(4, 36 + n, true); str(8, 'WAVE'); str(12, 'fmt ');
+  dv.setUint32(16, 16, true); dv.setUint16(20, 1, true); dv.setUint16(22, 1, true);
+  dv.setUint32(24, 8000, true); dv.setUint32(28, 8000, true); dv.setUint16(32, 1, true); dv.setUint16(34, 8, true);
+  str(36, 'data'); dv.setUint32(40, n, true); buf.fill(128, 44);
+  let bin = ''; for (let i = 0; i < buf.length; i++) bin += String.fromCharCode(buf[i]);
+  return 'data:audio/wav;base64,' + btoa(bin);
+}
 
 // ---------- DSP-Helfer ----------
 function buf(ctx, seconds, fn, channels = 1) {
@@ -162,11 +175,13 @@ export class AudioEngine {
   }
 
   init() {
-    if (this.ctx) { if (this.ctx.state === 'suspended') this.ctx.resume(); return; }
+    if (this.ctx) { this.unlock(); return; }
     const AC = window.AudioContext || window.webkitAudioContext;
     if (!AC) return;
-    this.ctx = new AC({ latencyHint: 'interactive' });
+    try { this.ctx = new AC({ latencyHint: 'interactive' }); } catch (e) { this.ctx = new AC(); }
     const c = this.ctx;
+    this._installUnlock();
+    this.unlock();
     this.master = c.createGain(); this.master.connect(c.destination);
     this.comp = c.createDynamicsCompressor(); this.comp.threshold.value = -14; this.comp.ratio.value = 4;
     this.comp.connect(this.master);
@@ -314,7 +329,7 @@ export class AudioEngine {
           if (!r.ok) return null;
           ab = await r.arrayBuffer();
         }
-        return await this.ctx.decodeAudioData(ab);
+        return await new Promise((res, rej) => { const p = this.ctx.decodeAudioData(ab, res, rej); if (p && p.then) p.then(res, rej); });
       } catch (e) { return null; }
     })();
     this.voices.set(id, p);
@@ -340,8 +355,43 @@ export class AudioEngine {
     this.music.update(dt, game);
   }
 
-  suspend() { if (this.ctx && this.ctx.state === 'running') this.ctx.suspend(); }
-  resume() { if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume(); }
+  suspend() { this.userSuspended = true; if (this.ctx && this.ctx.state === 'running') this.ctx.suspend(); }
+  resume() { this.userSuspended = false; this.unlock(); }
+
+  // ---------- iPhone/iPad: Ton freischalten ----------
+  // iOS/iPadOS startet Web Audio nur aus einer Berührung heraus, unterbricht es bei Sperrbildschirm,
+  // Mitteilungen oder App-Wechsel ("interrupted") und schaltet es im Stummmodus ab. Deshalb:
+  // Audio-Sitzung auf Wiedergabe stellen, bei jeder Eingabe fortsetzen und einmal ein stilles
+  // HTML-Audio abspielen (schaltet ältere iOS-Versionen von "Umgebung" auf "Wiedergabe").
+  unlock() {
+    const c = this.ctx;
+    if (!c) return;
+    try { if (navigator.audioSession && navigator.audioSession.type !== 'playback') navigator.audioSession.type = 'playback'; } catch (e) { /* nicht unterstützt */ }
+    if (!this.userSuspended && c.state !== 'running') { try { const p = c.resume(); if (p && p.catch) p.catch(() => {}); } catch (e) { /* */ } }
+    if (!this._primed) {
+      // ein stiller Puffer im selben Eingabe-Ereignis startet die Ausgabe zuverlässig
+      try { const b = c.createBuffer(1, 1, c.sampleRate); const src = c.createBufferSource(); src.buffer = b; src.connect(c.destination); src.start(0); this._primed = true; } catch (e) { /* */ }
+    }
+    if (IS_IOS && !this._silentOk) {
+      try {
+        if (!this._silentEl) {
+          const el = document.createElement('audio');
+          el.setAttribute('x-webkit-airplay', 'deny'); el.setAttribute('playsinline', '');
+          el.preload = 'auto'; el.loop = false; el.src = silentWav();
+          this._silentEl = el;
+        }
+        const p = this._silentEl.play();
+        if (p && p.then) p.then(() => { this._silentOk = true; }).catch(() => {});
+      } catch (e) { /* */ }
+    }
+  }
+  _installUnlock() {
+    if (this._unlockInstalled) return;
+    this._unlockInstalled = true;
+    const h = () => this.unlock();
+    for (const ev of ['touchend', 'pointerdown', 'mousedown', 'keydown', 'click']) document.addEventListener(ev, h, { capture: true, passive: true });
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) this.unlock(); });
+  }
 }
 
 // ---------- Dynamische Musik ----------

@@ -64,6 +64,8 @@ export const NOISE = {
   gasp: 7,
 };
 
+// Tablet/Smartphone (iPadOS meldet sich als Mac mit Touch-Bildschirm)
+export const IS_TOUCH = typeof navigator !== 'undefined' && (/iP(hone|ad|od)|Android/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1) || (navigator.maxTouchPoints > 1 && typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches));
 export const DEFAULT_SETTINGS = {
   sensitivity: 1.0,
   invertY: false,
@@ -114,7 +116,7 @@ export function loadSettings() {
   let s = {};
   try { s = JSON.parse(localStorage.getItem(SKEY) || '{}') || {}; } catch (e) { s = {}; }
   const out = { ...DEFAULT_SETTINGS, ...s };
-  out.bindings = { ...structuredClone(DEFAULT_BINDINGS), ...(s.bindings || {}) };
+  out.bindings = { ...JSON.parse(JSON.stringify(DEFAULT_BINDINGS)), ...(s.bindings || {}) };
   return out;
 }
 

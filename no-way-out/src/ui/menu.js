@@ -66,7 +66,7 @@ export class Menu {
         <button data-a="credits">Mitwirkende</button>
         <button data-a="quit">Spiel verlassen</button>
       </nav>
-      <div class="hint">Kopfhörer empfohlen · Maus &amp; Tastatur oder Gamepad · Speichert automatisch</div>
+      <div class="hint">Kopfhörer empfohlen · ${g.input.touchMode ? 'Touch-Steuerung, Tastatur oder Gamepad' : 'Maus &amp; Tastatur oder Gamepad'} · Speichert automatisch</div>
     </div>`);
     el.addEventListener('click', (e) => {
       const a = e.target.closest('button')?.dataset.a; if (!a) return;
@@ -122,6 +122,17 @@ export class Menu {
       if (e.target.closest('button')?.dataset.a === 'back') back();
     });
     this._set(el, g.mode === 'menu' ? 'main' : 'overlay');
+  }
+
+  // Fehler beim Laden eines Abschnitts
+  showLoadError(msg) {
+    const g = this.game;
+    const el = h(`<div class="panel"><h2>Abschnitt konnte nicht geladen werden</h2>
+      <p class="sub">Das Gerät hat beim Aufbau des Levels einen Fehler gemeldet. Oft hilft es, unter <b>Einstellungen</b> die Grafikqualität auf <b>Niedrig</b> zu stellen und den Abschnitt erneut zu starten. Dein Spielstand bleibt erhalten.</p>
+      <p class="small">${String(msg).replace(/[<>&]/g, '')}</p>
+      <div class="row"><button data-a="back" class="primary">Zum Hauptmenü</button></div></div>`);
+    el.addEventListener('click', (e) => { if (e.target.closest('button')?.dataset.a === 'back') g.toMainMenu(); });
+    this._set(el, 'main');
   }
 
   showChapters() {
@@ -213,7 +224,7 @@ export class Menu {
       }
       const a = e.target.closest('button')?.dataset.a;
       if (a === 'back') back();
-      if (a === 'resetkeys') { s.bindings = structuredClone(DEFAULT_BINDINGS); g.applySettings(); this.showSettings(back); }
+      if (a === 'resetkeys') { s.bindings = JSON.parse(JSON.stringify(DEFAULT_BINDINGS)); g.applySettings(); this.showSettings(back); }
       if (a === 'fs') { if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen?.().catch(() => {}); setTimeout(() => this.showSettings(back), 300); }
     });
     this._set(el, this.game.mode === 'menu' ? 'main' : 'overlay');
@@ -242,7 +253,7 @@ export class Menu {
   showHelp() {
     const g = this.game, L = (a) => g.input.label(a);
     const el = h(`<div class="panel help"><h2>Steuerung</h2><div class="grid">
-      <span>Bewegen</span><b>${L('forward')} ${L('left')} ${L('back')} ${L('right')}</b>
+      ${g.input.touchMode ? `<span>Bewegen</span><b>linke Bildschirmhälfte: Stick</b><span>Umsehen</span><b>rechte Bildschirmhälfte: wischen</b>` : `<span>Bewegen</span><b>${L('forward')} ${L('left')} ${L('back')} ${L('right')}</b>`}
       <span>Rennen (begrenzte Ausdauer)</span><b>${L('sprint')}</b>
       <span>Schleichen / Ducken</span><b>${L('crouch')}</b>
       <span>Interagieren / Tür / Verstecken</span><b>${L('interact')}</b>

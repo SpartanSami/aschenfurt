@@ -21,6 +21,8 @@ Getestet wurde automatisiert in einem Headless-Chromium mit Software-Rendering (
 | **Gesamte Kampagne am Stück** (alle acht Abschnitte, Zustand wird übernommen) | ✅ 1 → 1·2 → 2 → 2·2 → 3 → 4 → 4·2 → 5: Aufnahmen 1–5 gesammelt, Serum gefunden und weitergegeben, Begleiter übernommen, Geheimnis-Ende erreicht. Keine Skript- oder Laufzeitfehler (Produktions-Build). |
 | Kapitel 1, Teil 2 **ohne** Unverwundbarkeit | ✅ **vollständig mit 100 % Gesundheit**: geduckt hinter der Theke, Flucht vor dem Wartezimmer, Brandschutztür, im Keller in der Wäscherei und im Büro den Wachmann abgewartet, Karte genommen, sofort zum Aufzug gerannt. |
 | Kapitel 2·2 und 4·2 **ohne** Unverwundbarkeit | ⚠️ Der Bot stirbt in den Schleichpassagen (Leitungsgang, Modegeschäft), weil er feste Wege abläuft und weder Dampfstöße abwartet noch Wanderern ausweicht. Die Läufe deckten aber echte Platzierungsfehler auf, die behoben sind (siehe unten). |
+| Touch-Steuerung (iPad-Emulation, echte Touch-Gesten) | ✅ Stick bewegt, Wischen dreht die Sicht, Handy öffnen/schließen über das Kontext-Steuerkreuz, Pause und Weiterspielen, Knopfnamen in Hinweisen („Benutzen“) |
+| Ton: Freigabe beim ersten Antippen, stumm in der Pause, wieder an nach Fortsetzen | ✅ (Chromium; iOS-Stummmodus und Unterbrechungen nur nach Spezifikation umgesetzt, nicht am Gerät geprüft) |
 | Einzeldatei `NoWayOut.html` per file:// | ✅ neue Abschnitte laden, alle 46 Sprachaufnahmen eingebettet |
 | Tod → Todesbildschirm → „Weiter vom Checkpoint“ | ✅ |
 | Fortsetzen nach Neuladen der Seite (localStorage) | ✅ |
@@ -40,6 +42,8 @@ Getestet wurde automatisiert in einem Headless-Chromium mit Software-Rendering (
 - Wurde die Pause nicht über Esc ausgelöst, konnte der Mauszeiger gefangen bleiben, und Klicks landeten im 3D-Bild statt auf den Menüknöpfen. Die Pause gibt den Zeiger jetzt immer frei.
 - Ausgewogenheit der neuen Abschnitte nach Läufen ohne Unverwundbarkeit: Im Pumpwerk stand ein Wanderer direkt am Startpunkt, im Modegeschäft blickten drei Lauerer auf den einzigen Weg (einer zwei Meter neben dem Eingang), im Keller schnitt der Wachmann den Fluchtweg zum Aufzug ab, und ein Rollwagen sowie ein Rollstuhl blockierten Laufwege. Alles wurde versetzt bzw. gedreht.
 - Wird der Mauszeiger vom Browser nicht eingefangen (z. B. in eingebetteten Fenstern), lässt sich jetzt mit gedrückter Maustaste umsehen. Ein Hinweis erscheint automatisch.
+- iPad: Das Spiel blieb auf dem Ladebildschirm hängen. Ursache war vermutlich der Speicher. Alle Oberflächen werden als Zeichenflächen erzeugt, schon Kapitel 1 belegte etwa 140–185 MB, im Laufe der Kampagne bis 360 MB. Safari begrenzt das auf 256–384 MB, dazu kam die volle Retina-Auflösung. Behoben: Zeichenflächen werden nach dem Hochladen freigegeben, Tablets nutzen kleinere Texturen und eine begrenzte Auflösung. Ein Fehler beim Laden zeigt jetzt eine Meldung statt eines endlosen Ladebildschirms.
+- iPad ohne Ton: Web-Audio wird unter iOS/iPadOS nur aus einer Berührung heraus gestartet, bleibt nach Unterbrechungen aus und ist im Stummmodus stumm. Behoben: Freigabe bei jeder Eingabe, Audio-Sitzung „Wiedergabe“, stilles HTML-Audio für ältere iOS-Versionen.
 - Checkpoints in Verfolgungen: Nach der Brandschutztür und dem Schott wird nur gespeichert, wenn kein Verfolger mehr im Raum ist.
 - Die Pausetaste P und Gamepad-Start waren belegt, wurden aber nie ausgewertet.
 - Entscheidungen, Menüs, Todesbildschirm und Abspann ließen sich nicht per Gamepad bedienen.

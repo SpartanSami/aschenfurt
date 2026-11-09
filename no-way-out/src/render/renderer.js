@@ -6,7 +6,7 @@ import { Pass, FullScreenQuad } from 'three/examples/jsm/postprocessing/Pass.js'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
-import { QUALITY } from '../core/config.js';
+import { QUALITY, IS_TOUCH } from '../core/config.js';
 import { GRID_UNIFORMS } from './materials.js';
 
 class DualRenderPass extends Pass {
@@ -129,7 +129,7 @@ export class Renderer {
 
   resize() {
     const w = window.innerWidth, h = window.innerHeight;
-    const pr = Math.min(window.devicePixelRatio || 1, 2) * this.quality.pixelRatio * (this.settings.renderScale || 1);
+    const pr = Math.min(window.devicePixelRatio || 1, IS_TOUCH ? 1.5 : 2) * this.quality.pixelRatio * (this.settings.renderScale || 1);
     this.r.setPixelRatio(pr);
     this.r.setSize(w, h, false);
     this.canvas.style.width = w + 'px'; this.canvas.style.height = h + 'px';
