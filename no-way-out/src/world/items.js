@@ -17,6 +17,8 @@ export const ITEM_INFO = {
   phone: { name: 'Smartphone', kind: 'story', verb: 'Nehmen' },
   drive: { name: 'Festplatte', kind: 'story' },
   photo: { name: 'Foto', kind: 'doc', verb: 'Ansehen' },
+  glock: { name: 'Glock 17', kind: 'weapon', verb: 'Nehmen' },
+  ammo: { name: 'Munition 9 mm', kind: 'ammo', verb: 'Nehmen' },
 };
 
 export function makeItemMesh(type) {
@@ -85,6 +87,21 @@ export function makeItemMesh(type) {
     case 'panel':
       add(new THREE.BoxGeometry(0.25, 0.35, 0.06), getMat('metal_dark'), 0, 0, 0);
       add(new THREE.BoxGeometry(0.15, 0.08, 0.01), emissiveMat(0xff4040, 2), 0, 0.08, 0.035);
+      break;
+    case 'glock': {
+      // liegend: Schlitten, Griffstück, Abzugsbügel, Magazinboden
+      const poly = colorMat(0x1b1d1f, 0.55, 0.15), steel = colorMat(0x2a2c2f, 0.35, 0.7);
+      add(new THREE.BoxGeometry(0.03, 0.03, 0.186), steel, 0, 0.032, 0);
+      add(new THREE.BoxGeometry(0.028, 0.02, 0.17), poly, 0, 0.012, 0.006);
+      add(new THREE.BoxGeometry(0.03, 0.022, 0.11), poly, 0, 0.011, 0.11, 0.25, 0, 0);
+      add(new THREE.CylinderGeometry(0.006, 0.006, 0.01, 8), colorMat(0x050505, 0.4), 0, 0.034, -0.094, Math.PI / 2, 0, 0);
+      break;
+    }
+    case 'ammo':
+      // Patronenschachtel 9 × 19 mm
+      add(new THREE.BoxGeometry(0.12, 0.04, 0.08), colorMat(0x2a4a7a, 0.7), 0, 0.02, 0);
+      add(new THREE.BoxGeometry(0.122, 0.006, 0.082), colorMat(0xd8c060, 0.6), 0, 0.03, 0);
+      for (let i = 0; i < 3; i++) add(new THREE.CylinderGeometry(0.0045, 0.0045, 0.02, 8), colorMat(0xc8a040, 0.3, 0.8), -0.03 + i * 0.03, 0.05, 0.05);
       break;
     default:
       add(new THREE.BoxGeometry(0.1, 0.1, 0.1), colorMat(0xff00ff, 0.5));

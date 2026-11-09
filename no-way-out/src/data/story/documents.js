@@ -10,6 +10,8 @@ Aufnahme: Mo., 10.11., 04:02 Uhr – ohne Personalien
 
 Geführt als: **PROBAND 017** (Übernahme Halden-Institut, Sektion B)
 
+Mitgeführt: Smartphone, Pistole Glock 17 mit Waffenbesitzkarte (ehem. Polizeibeamter), 1 Magazin. Verbleib beim Patienten – Anweisung Dr. M. A.
+
 # Befund
 Bewusstlos, Vitalwerte stabil. Pupillen verzögert lichtreagibel. Keine Biss- oder Kratzverletzungen. Auffällige Blutwerte (siehe Anlage – fehlt).
 

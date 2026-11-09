@@ -163,6 +163,8 @@ export default {
     L.item('bottle', 57.0, 7.0, { id: 'b4b_m4', h: 0.9 });
     L.item('can', 60.0, 13.4, { id: 'c4b_m5', h: 0.05 });
     L.item('bottle', 66.4, 20.4, { id: 'b4b_m6', h: 0.05 });
+    L.item('ammo', 19.4, 29.3, { id: 'ammo4b_a', h: 1.08, rounds: 12 });
+    L.item('ammo', 75.5, 12.6, { id: 'ammo4b_b', h: 0.82, rounds: 15 });
 
     L.interact('tv_news', 45, 24.4, { prompt: 'Nachrichten ansehen', y: 1.6, radius: 2.2, repeat: true, mesh: null });
     L.interact('gate_btn', 74.5, 7.1, { prompt: 'Rolltor öffnen (gedrückt halten)', y: 1.35, radius: 1.3, mesh: 'panel', rot: 0, hold: 1.5, enabled: (g) => !g.state.flags.gate_started });

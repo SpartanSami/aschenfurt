@@ -24,6 +24,8 @@ export class TouchControls {
         <button class="t-btn" data-t="flashlight">Lampe</button>
         <button class="t-btn" data-t="phone">Handy</button>
       </div>
+      <button class="t-btn t-fire" data-t="fire">Schießen</button>
+      <button class="t-btn t-reload" data-t="reload">Laden</button>
       <button class="t-btn t-pause" data-t="pause" aria-label="Pause">II</button>
       <div class="t-rotate">Tipp: Handy quer halten – mehr Sicht, mehr Platz zum Steuern</div>`;
     ui.insertBefore(this.base, ui.firstChild);
@@ -119,6 +121,8 @@ export class TouchControls {
   // Pro Bild: passende Ebene zeigen
   update() {
     const g = this.game;
+    const armed = !!(g.weapon && g.weapon.has);
+    if (armed !== this._armed) { this._armed = armed; this.base.classList.toggle('armed', armed); }
     let st = '';
     if (g.mode === 'play') {
       if (g.qte) st = 'qte';

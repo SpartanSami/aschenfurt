@@ -16,7 +16,7 @@
 - Kostendruck: Arendt ließ die Schleusen von Sektion C an das Überwachungssystem **ARGUS** koppeln – mit Ausfallverhalten „offen“ (Dokument in Kapitel 2).
 
 ## Figuren
-**Sami Yıldız (34)** – Systemarchitekt bei NEXARA, hat ARGUS entworfen (Kameras, Türen, Durchsagen).
+**Sami Yıldız (34)** – früher Polizeibeamter, danach Systemarchitekt bei NEXARA, hat ARGUS entworfen (Kameras, Türen, Durchsagen). Besitzt privat eine Glock 17 (Waffenbesitzkarte). Mine legte sie mit dem Telefon neben ihn.
 - Schwester **Elif (27)** hatte früh einsetzendes Kessler-Syndrom → **Probandin 009** in Phase I → überschrieben. Der Familie wurde ihr Tod gemeldet. Sami entdeckte in ARGUS-Protokollen, dass sie in Sektion C „lebt“.
 - Sami trägt das Kessler-Gen selbst. Er meldete sich freiwillig als **Proband 017** für Phase II – um an Beweise zu kommen, und aus Hoffnung.
 - Sein Körper reagierte einzigartig (**„017-Antwort“**): Antikörper neutralisieren die Überschreibung, der heilende Effekt bleibt. Nebenwirkung: fortschreitender Gedächtnisverlust (Umbau des Hippocampus), erwartet nach ca. 72 Stunden.

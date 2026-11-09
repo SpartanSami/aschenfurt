@@ -194,6 +194,8 @@ export default {
     L.item('doc', 41.5, 27.2, { id: 'doc_eve', doc: 'c2_eve', h: 0.92 });
     L.item('doc', 40.0, 24.5, { id: 'doc_ph1', doc: 'c2_phase1', h: 0.92 });
     L.item('doc', 30.6, 35.1, { id: 'doc_memo', doc: 'c2_memo', h: 0.78 });
+    L.item('ammo', 18.4, 35.4, { id: 'ammo2_a', h: 0.03, rounds: 13 });
+    L.item('ammo', 61.4, 55.8, { id: 'ammo2_b', h: 0.03, rounds: 12 });
     L.item('bandage', 39.6, 37.4, { id: 'b_store', h: 0.7 });
     L.item('medkit', 51.8, 25.2, { id: 'mk_labc', h: 0.92, notHard: true });
     L.item('pills', 46.5, 35.0, { id: 'p_hazmat', h: 0.02, extra: true });
@@ -217,7 +219,7 @@ export default {
     L.zombie(44.5, 37.5, { id: 'z_hazmat', type: 'sleeper', pose: 'lying', yaw: PI / 2, outfit: 'hazmat' });
     L.zombie(71.5, 26.2, { id: 'z_c005', type: 'shambler', yaw: PI, outfit: 'gown', wander: 0.6 });
     L.zombie(79.5, 36.3, { id: 'z_c019', type: 'shambler', yaw: 0, outfit: 'gown', wander: 0.6 });
-    L.zombie(79.5, 25.8, { id: 'z_elif', type: 'sleeper', pose: 'sitting', yaw: 0, outfit: 'gown_clean', hairStyle: 'long', hair: 0x2a1a10, scale: 0.92, wake: 99, blind: true });
+    L.zombie(79.5, 25.8, { id: 'z_elif', type: 'sleeper', pose: 'sitting', yaw: 0, outfit: 'gown_clean', hairStyle: 'long', hair: 0x2a1a10, scale: 0.92, wake: 99, blind: true, protect: 'Nein. Nicht auf Elif.' });
     L.zombie(67.4, 36.4, { id: 'z_c013', type: 'sleeper', pose: 'lying', yaw: PI / 2, outfit: 'gown', wake: 4 });
     L.zombie(70.3, 44.2, { id: 'z_arendt', type: 'stalker', yaw: PI / 2, outfit: 'labcoat', stalker: true, hairStyle: 'long', hair: 0x8a7a68 });
     L.zombie(46.0, 41.6, { id: 'z_cold', type: 'stalker', yaw: -PI / 2 - 0.3, outfit: 'hazmat', stalker: true });

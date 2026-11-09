@@ -29,6 +29,8 @@ export class HUD {
     this.callEl = el('div', 'hud-call', this.root);
     this.camEl = el('div', 'hud-cam', this.root);
     this.debugEl = el('div', 'hud-debug', this.root);
+    this.ammoEl = el('div', 'hud-ammo', this.root);
+    this.ammoT = 0;
     this.subQueue = [];
     this.statusT = 0; this.objT = 0; this.notifT = 0; this.saveT = 0;
     this.choiceState = null;
@@ -64,6 +66,7 @@ export class HUD {
   }
   saved() { this.saveEl.classList.add('show'); this.saveT = 2.5; }
   showStatus() { this.statusT = 3.5; }
+  showAmmo() { this.ammoT = 4; }
 
   titleCard(a, b, dur = 4.5) {
     this.titleEl.innerHTML = `<small>${a}</small><div>${b}</div>`;
@@ -130,8 +133,18 @@ export class HUD {
     const hp = t && t.hold ? p.holdT / t.hold : 0;
     this.hold.classList.toggle('show', hp > 0.01);
     this.holdFg.style.strokeDashoffset = String(94.2 * (1 - hp));
-    // Fadenkreuz nur bei Ziel
+    // Fadenkreuz nur bei Ziel – beim Zielen mit der Glock als Zielkreuz
     this.cross.classList.toggle('active', !!t);
+    const w = g.weapon;
+    this.cross.classList.toggle('aim', !!(w && w.aimT > 0.5));
+    // Munition
+    this.ammoT -= dt;
+    if (w && w.has) {
+      const txt = `<b>${w.mag}</b><span>/ ${w.reserve}</span>${w.reloading ? '<em>lädt nach …</em>' : w.mag === 0 && w.reserve === 0 ? '<em>leer</em>' : ''}`;
+      if (txt !== this._ammoTxt) { this.ammoEl.innerHTML = txt; this._ammoTxt = txt; }
+      this.ammoEl.classList.toggle('show', w.drawn || this.ammoT > 0);
+      this.ammoEl.classList.toggle('low', w.mag <= 3);
+    } else this.ammoEl.classList.remove('show');
     this.cross.style.opacity = p.mode === 'normal' && !g.phone.isOpen() ? '' : '0';
     // Ausdauer
     const sm = p.staminaMax();

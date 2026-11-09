@@ -206,12 +206,14 @@ export default {
     L.item('pills', 32.0, 22.95, { id: 'p1b_lst', h: 1.1, extra: true });
     L.item('can', 27.0, 25.8, { id: 'c1b_can', h: 0.95 });
     L.item('bandage', 45.0, 23.0, { id: 'b1b_shock', h: 0.95 });
-    L.item('medkit', 36.0, 38.4, { id: 'mk1b_off', h: K + 0.78 });
-    L.item('doc', 37.0, 38.4, { id: 'doc_patho', doc: 'c1b_patho', h: K + 0.78 });
-    L.item('pills', 50.5, 39, { id: 'p1b_laundry', h: K + 1.2, notHard: true });
-    L.item('bottle', 41.5, 35, { id: 'b1b_bottle2', h: K + 0.95 });
-    L.item('keycard', 31.0, 44.4, { id: 'card_nexara', keyId: 'card_nexara', name: 'NEXARA-Zugangskarte (Kurier)', h: K + 0.08 });
-    L.item('doc', 30.4, 45.4, { id: 'doc_kurier', doc: 'c1b_kurier', h: K + 0.03 });
+    L.item('ammo', 34.6, 24.6, { id: 'ammo1b_a', h: 1.08, rounds: 12 });
+    L.item('medkit', 36.0, 38.4, { id: 'mk1b_off', h: 0.78 });
+    L.item('doc', 37.0, 38.4, { id: 'doc_patho', doc: 'c1b_patho', h: 0.78 });
+    L.item('pills', 50.5, 39, { id: 'p1b_laundry', h: 1.2, notHard: true });
+    L.item('bottle', 41.5, 35, { id: 'b1b_bottle2', h: 0.95 });
+    L.item('keycard', 31.0, 44.4, { id: 'card_nexara', keyId: 'card_nexara', name: 'NEXARA-Zugangskarte (Kurier)', h: 0.08 });
+    L.item('doc', 30.4, 45.4, { id: 'doc_kurier', doc: 'c1b_kurier', h: 0.03 });
+    L.item('ammo', 31.9, 45.4, { id: 'ammo1b_b', h: 0.03, rounds: 15 });
 
     L.interact('fire_btn', 53.35, 21.9, { prompt: 'Brandschutztür schließen', y: 1.35, radius: 1.3, mesh: 'panel', rot: PI, enabled: (g) => !g.state.flags.fire_closed });
 

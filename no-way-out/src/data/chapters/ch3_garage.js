@@ -112,6 +112,8 @@ export default {
     L.item('doc', 13.1, 21.0, { id: 'doc_zettel', doc: 'c3_zettel', h: 1.0, rot: 0.1 });
     L.item('bandage', 9.0, 45.4, { id: 'b_l3', h: 0.9 });
     L.item('can', 30.2, 39.6, { id: 'can_l3', h: 0.02 });
+    L.item('ammo', 26.1, 37.7, { id: 'ammo3_a', h: 0.03, rounds: 12 });
+    L.item('ammo', 59.3, 4.6, { id: 'ammo3_b', h: 1.2, rounds: 13 });
     L.item('pills', 42.2, 20.7, { id: 'p_l3', h: 0.02, extra: true });
     L.item('medkit', 88.6, 39.4, { id: 'mk_l2', h: 0.02, notHard: true });
     L.item('bottle', 70.6, 24, { id: 'bottle_l2', h: 0.02 });

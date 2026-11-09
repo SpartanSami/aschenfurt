@@ -158,6 +158,7 @@ export class Player {
     if (phoneOpen) speed *= 0.55;
     if (this.carry) speed *= 0.97;
     if (this.exhausted && !this.crouched) speed *= 0.85;
+    if (this.game.weapon && this.game.weapon.aimT > 0.3) speed *= 0.55;
     // Waten im Wasser: langsamer
     this.wading = this.game.level.waterDepth(this.pos.x, this.pos.z, this.pos.y) > 0.25;
     if (this.wading) speed *= this.sprinting ? 0.62 : 0.72;

@@ -244,6 +244,7 @@ export default {
 
     // ================= Gegenstände & Dokumente =================
     L.item('phone', 10.1, 8.0, { id: 'phone', h: 0.93, noAuto: true });
+    L.item('glock', 10.5, 8.3, { id: 'glock', h: 0.93, noAuto: true, mag: 10, reserve: 7 });
     L.item('doc', 14.1, 11.9, { id: 'doc_akte', doc: 'c1_akte', h: 0.78 });
     L.item('bandage', 20.4, 11.6, { id: 'b302', h: 0.65 });
     L.item('doc', 22.2, 17.5, { id: 'doc_dienst', doc: 'c1_dienstplan', h: 1.1 });
@@ -258,6 +259,7 @@ export default {
     L.item('pills', 23.8, 46.0, { id: 'p_aufwach', h: 0.02, extra: true });
     L.item('doc', 23.4, 39.8, { id: 'doc_liefer', doc: 'c1_lieferschein', h: 1.0 });
     L.item('doc', 41.0, 47.2, { id: 'doc_wach', doc: 'c1_wachbuch', h: 0.78 });
+    L.item('ammo', 43.8, 47.9, { id: 'ammo1', h: 0.03, rounds: 12 });
     L.item('recorder', 49.6, 46.2, { id: 'frag1', h: 0.78, fragment: FRAG1 });
     L.item('doc', 37.0, 54.2, { id: 'doc_nea', doc: 'c1_notstrom', h: 1.4 });
     L.item('can', 40.5, 52.3, { id: 'can1', h: 0.9 });
@@ -358,6 +360,15 @@ export default {
         c.fact('Ein unbekannter Anrufer kennt meinen Namen. Er hat nicht auf meine Fragen reagiert.');
         await c.wait(2);
         c.checkpoint('start');
+      },
+    },
+    {
+      id: 'c1_glock', when: 'pickup:glock', do: async (c) => {
+        await c.wait(0.6);
+        c.say('sami', 'Meine Glock. Aus der Zeit bei der Polizei … das weiß ich noch.', { d: 3.2 });
+        c.fact('Ich war Polizist, bevor ich zu NEXARA ging. Die Glock 17 ist meine eigene. Zehn Schuss im Magazin, sieben in Reserve.');
+        await c.wait(3.6);
+        if (c.g.state.hasPhone) c.msg('unknown', 'UNBEKANNT', 'Die Waffe ist laut. Jeder Schuss holt alles, was in der Nähe ist. Zähl deine Patronen.');
       },
     },
     { id: 'c1_akte_read', when: 'closed:c1_akte', do: async (c) => { await c.wait(0.4); c.say('sami', 'Proband 017 … das bin ich?', { d: 2.5 }); c.fact('In meiner Akte steht kein Name, nur „Proband 017“. Unterschrieben mit „M.“'); } },

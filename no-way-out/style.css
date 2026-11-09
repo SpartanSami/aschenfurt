@@ -233,3 +233,21 @@ input[type=checkbox] { accent-color: var(--accent); width: 18px; height: 18px; }
 .t-rotate { display: none; position: absolute; left: 50%; top: calc(14px + env(safe-area-inset-top, 0px)); transform: translateX(-50%); max-width: 70%; padding: 6px 12px; font-size: 12px; line-height: 1.35; text-align: center; color: #e8ecef; background: rgba(12,14,16,.6); border: 1px solid rgba(255,255,255,.18); pointer-events: none; }
 @media (orientation: portrait) { .touch-base.show .t-rotate { display: block; } }
 @media (max-height: 500px) { .t-btns { grid-template-columns: repeat(3, 50px); gap: 8px 12px; width: 180px; right: calc(12px + env(safe-area-inset-right, 0px)); bottom: calc(10px + env(safe-area-inset-bottom, 0px)); } .t-btn { width: 50px; height: 50px; font-size: 10.5px; } .t-btn.t-big { width: 66px; height: 66px; font-size: 12px; } .t-pause { width: 40px; height: 40px; } .t-pad .t-btn, .t-side .t-btn { height: 46px; } }
+
+/* ---------- Glock: Munition und Zielkreuz ---------- */
+.hud-ammo { right: calc(28px + env(safe-area-inset-right, 0px)); bottom: calc(24px + env(safe-area-inset-bottom, 0px)); display: flex; align-items: baseline; gap: 6px; font-family: var(--mono); color: #e6e9ec; text-shadow: 0 1px 3px #000; opacity: 0; }
+.hud-ammo.show { opacity: 1; }
+.hud-ammo b { font-size: 30px; font-weight: 600; letter-spacing: .02em; }
+.hud-ammo span { font-size: 15px; color: #a9b1b8; }
+.hud-ammo em { font-style: normal; font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: var(--accent2); margin-left: 8px; }
+.hud-ammo.low b { color: #e8574f; }
+body.is-touch .hud-ammo { bottom: auto; top: calc(16px + env(safe-area-inset-top, 0px)); right: calc(78px + env(safe-area-inset-right, 0px)); }
+.hud-cross.aim { width: 22px; height: 22px; margin: -11px; background: transparent; border: 1.5px solid rgba(255,255,255,.55); box-shadow: inset 0 0 0 9px transparent; }
+.hud-cross.aim::after { content: ""; position: absolute; left: 50%; top: 50%; width: 3px; height: 3px; margin: -1.5px; border-radius: 50%; background: rgba(255,90,80,.95); }
+
+.t-fire, .t-reload { position: absolute; display: none; }
+.touch-base.armed .t-fire, .touch-base.armed .t-reload { display: flex; }
+.t-fire { width: 84px; height: 84px; font-size: 13px; right: calc(272px + env(safe-area-inset-right, 0px)); bottom: calc(18px + env(safe-area-inset-bottom, 0px)); border-color: rgba(232,87,79,.6); }
+.t-reload { right: calc(282px + env(safe-area-inset-right, 0px)); bottom: calc(116px + env(safe-area-inset-bottom, 0px)); }
+@media (max-width: 700px) { .t-fire { width: 70px; height: 70px; right: calc(220px + env(safe-area-inset-right, 0px)); } .t-reload { right: calc(228px + env(safe-area-inset-right, 0px)); bottom: calc(100px + env(safe-area-inset-bottom, 0px)); } }
+@media (max-height: 500px) { .t-fire { width: 64px; height: 64px; right: calc(204px + env(safe-area-inset-right, 0px)); bottom: calc(10px + env(safe-area-inset-bottom, 0px)); } .t-reload { width: 50px; height: 50px; right: calc(211px + env(safe-area-inset-right, 0px)); bottom: calc(84px + env(safe-area-inset-bottom, 0px)); } }

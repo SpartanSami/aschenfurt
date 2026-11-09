@@ -136,6 +136,8 @@ export default {
     L.item('doc', 37.5, 72.0, { id: 'doc_kuehl', doc: 'c5_zettel', h: 1.1 });
     L.item('recorder', 31.2, 72.9, { id: 'frag5', h: 0.78, fragment: FRAG5 });
     L.item('medkit', 37.6, 71.3, { id: 'mk5', h: 1.1, notHard: true });
+    L.item('ammo', 26.2, 67.8, { id: 'ammo5_a', h: 0.03, rounds: 12 });
+    L.item('ammo', 36.0, 28.1, { id: 'ammo5_b', h: 0.03, rounds: 20 });
     L.item('bandage', 25.2, 72.5, { id: 'b5h', h: 0.02 });
     L.item('doc', 22.5, 36.0, { id: 'doc_flug', doc: 'c5_flugblatt', h: 0.02 });
     L.item('medkit', 4.0, 31.0, { id: 'mk5p', h: 1.1 });

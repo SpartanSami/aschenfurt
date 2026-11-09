@@ -55,7 +55,7 @@ export class Menu {
     const has = g.save.hasSave();
     const meta = g.save.meta();
     const el = h(`<div class="main-menu">
-      <div class="title-wrap"><h1 class="glitch" data-t="NO WAY OUT">NO WAY OUT</h1><p class="tag">Du kannst nicht kämpfen. Du kannst nur überleben.</p></div>
+      <div class="title-wrap"><h1 class="glitch" data-t="NO WAY OUT">NO WAY OUT</h1><p class="tag">Jede Kugel zählt. Du kannst nur überleben.</p></div>
       <nav>
         <button data-a="new">Neues Spiel</button>
         <button data-a="cont" ${has ? '' : 'disabled'}>Fortsetzen</button>
@@ -262,6 +262,7 @@ export class Menu {
       <span>Taschenlampe</span><b>${L('flashlight')}</b>
       <span>Heilen</span><b>${L('heal')}</b>
       <span>Gegenstand werfen (Ablenkung)</span><b>${L('throw')}</b>
+      <span>Glock: zielen · schießen · nachladen</span><b>${L('aim')} · ${L('fire')} · ${L('reload')}</b>
       <span>Losreißen, wenn gepackt</span><b>${L('left')} / ${L('right')} abwechselnd</b>
     </div><p class="small">Zombies hören Schritte, Türen und Würfe, sehen Bewegung und Licht. Im Dunkeln und geduckt bist du schwer zu sehen. Verstecke helfen – aber nicht immer.</p><div class="row"><button data-a="back">Zurück</button></div></div>`);
     el.addEventListener('click', (e) => { if (e.target.closest('button')?.dataset.a === 'back') this.showPause(); });

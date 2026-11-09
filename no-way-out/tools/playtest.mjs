@@ -98,6 +98,8 @@ await page.evaluate(() => {
     if (!ia) { A.log('Interaktion nicht verfügbar:', id); return false; }
     const d = Math.hypot(ia.pos.x - gm.player.pos.x, ia.pos.z - gm.player.pos.z);
     if (d > 2.5) A.log('WARN Interaktion aus Distanz', d.toFixed(1), id);
+    const dy = Math.abs(ia.pos.y - (gm.player.pos.y + 1.0));
+    if (dy > 1.8) { A.log('FEHLER Interaktion außer Reichweite (Höhe)', dy.toFixed(1), id); return false; }
     gm.player._doInteract(ia);
     return true;
   };

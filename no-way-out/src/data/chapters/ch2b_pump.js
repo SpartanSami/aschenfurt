@@ -97,6 +97,7 @@ export default {
 
     // ================= Gegenstände & Dokumente =================
     L.item('bandage', 20.4, 19.6, { id: 'b2b_werk', h: 0.95 });
+    L.item('ammo', 19.2, 19.6, { id: 'ammo2b_a', h: 0.95, rounds: 8 });
     L.item('doc', 21.2, 19.6, { id: 'doc_wartung', doc: 'c2b_wartung', h: 0.95 });
     L.item('pills', 25.3, 21.0, { id: 'p2b_werk', h: 1.2, notHard: true });
     L.item('can', 16.5, 26.9, { id: 'c2b_can1', h: 0.6 });
@@ -105,6 +106,7 @@ export default {
     L.item('can', 43.6, 17.0, { id: 'c2b_can2', h: 0.05 });
     L.item('bandage', 62.6, 25.2, { id: 'b2b_warte', h: 0.78, extra: true });
     L.item('doc', 62.6, 26.0, { id: 'doc_schicht', doc: 'c2b_schicht', h: 0.78 });
+    L.item('ammo', 62.6, 24.9, { id: 'ammo2b_b', h: 0.78, rounds: 12 });
 
     L.interact('power_lever', 59.2, 21.2, { prompt: 'Notstrom einschalten (gedrückt halten)', y: 1.2, radius: 1.3, mesh: 'panel', rot: 0, hold: 1.5, enabled: (g) => !g.state.flags.pump_power });
 

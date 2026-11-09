@@ -52,6 +52,9 @@ export class Zombie {
     this.scripted = !!def.scripted;
     this.noAttack = !!def.noAttack;
     this.ghost = false;
+    // Lebenspunkte für die Glock (Körpertreffer 1, Kopftreffer 4)
+    this.hp = (game.difficulty.zHp || 4) * (type.hpMul || 1);
+    this.dead = false; this.deadT = 0;
     this.investigateT = 0;
     this.searchPoints = 0;
     this.footT = 0;
@@ -119,7 +122,7 @@ export class Zombie {
 
   onNoise(evt, loud) {
     if (!this.alive || this.state === ZS.SCRIPT) return;
-    const isPlayer = ['step', 'vault', 'land', 'door', 'gasp', 'hide', 'phone', 'breath'].includes(evt.kind);
+    const isPlayer = ['step', 'vault', 'land', 'door', 'gasp', 'hide', 'phone', 'breath', 'gunshot'].includes(evt.kind);
     if (this.state === ZS.CHASE || this.state === ZS.ATTACK || this.state === ZS.GRAB || this.state === ZS.BASH) {
       if (isPlayer && loud > 0.2) { this.lastKnown = { x: evt.x, z: evt.z }; this.lastSeenT = Math.max(this.lastSeenT, this.time - 0.6); }
       return;
@@ -252,7 +255,7 @@ export class Zombie {
 
   // ---------------- Update ----------------
   update(dt) {
-    if (!this.alive) return;
+    if (!this.alive) { if (this.dead) this._corpse(dt); return; }
     this.time += dt; this.stateT += dt;
     const game = this.game, p = game.player, diff = game.difficulty, type = this.type;
     const m = this.model;
@@ -546,6 +549,43 @@ export class Zombie {
   }
   command(cmd) { this.setState(ZS.SCRIPT); this.cmd = cmd; }
   release(state = ZS.IDLE) { this.cmd = null; this.state = null; this.setState(state); }
+
+  // ---------------- Treffer und Tod ----------------
+  takeHit(dmg, head) {
+    if (!this.alive || this.dead || this.def.protect) return false;
+    const game = this.game, p = game.player.pos;
+    this.hp -= dmg;
+    this.lastKnown = { x: p.x, z: p.z }; this.lastSeenT = this.time; this.suspicion = 1;
+    if (this.hp <= 0) { this.die(head); return true; }
+    game.audio.zombie('attack', tmpV.set(this.pos.x, this.pos.y + 1.5, this.pos.z), 0.9);
+    if (this.state === ZS.DORMANT) { this.setState(ZS.GETUP); this.afterGetup = ZS.CHASE; }
+    else if (this.state === ZS.SCRIPT) { /* Skriptzombies bleiben im Ablauf */ }
+    else if (this.state !== ZS.GRAB && this.state !== ZS.GETUP) {
+      // Treffer bringen sie kurz aus dem Tritt – ein Kopftreffer länger
+      this.cmd = null; this.staggerDur = head ? 0.9 : 0.4; this.setState(ZS.STAGGER);
+    }
+    return false;
+  }
+  die(head) {
+    const game = this.game;
+    this.dead = true; this.alive = false; this.deadT = 0;
+    this.cmd = null; this.speed = 0;
+    this.model.setPose('lying'); this.model.poseBlend = 0; this.model.mode = 'idle'; this.model.speed = 0;
+    this.model.jawOpen = head ? 0 : 0.4;
+    game.state.removed.add(this.id);
+    game.audio.zombie('chase', tmpV.set(this.pos.x, this.pos.y + 1.4, this.pos.z), 0.7);
+    setTimeout(() => { if (this.dead) game.audio.play('land', { pos: tmpV.set(this.pos.x, this.pos.y + 0.2, this.pos.z), vol: 0.7 }); }, 450);
+  }
+  // Leiche: zusammensacken, danach liegen bleiben
+  _corpse(dt) {
+    if (this.deadT > 1.2) return;
+    this.deadT += dt;
+    const m = this.model;
+    m.poseBlend = Math.min(1, this.deadT / 0.55);
+    m.speed = 0; m.mode = 'idle';
+    m.update(dt, {});
+    this.root.position.copy(this.pos);
+  }
 
   despawn() {
     this.alive = false;

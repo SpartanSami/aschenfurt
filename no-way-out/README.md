@@ -1,6 +1,6 @@
 # NO WAY OUT
 
-**First-Person-Survival-Horror.** Du kannst nicht kämpfen. Du kannst nur überleben.
+**First-Person-Survival-Horror.** Jede Kugel zählt. Du kannst nur überleben.
 
 Sami erwacht ohne Erinnerung in einem Krankenhaus. In seiner Akte steht kein Name, nur **„Proband 017“**. Ein Unbekannter ruft ihn an und kennt den Weg nach draußen. Darunter liegt ein Forschungsinstitut, dessen Experiment **PROJECT EVE** die Stadt in eine Quarantänezone verwandelt hat. Bis 06:00 Uhr bleibt Zeit, um 06:00 Uhr wird der Sektor „sterilisiert“.
 
@@ -40,16 +40,17 @@ Der Fortschritt wird automatisch an Checkpoints im Browser gespeichert (localSto
 | Smartphone | Q oder Tab |
 | Taschenlampe | F |
 | Heilen | H |
-| Werfen (Ablenkung) | G oder linke Maustaste |
+| Werfen (Ablenkung) | G |
+| Zielen · Schießen · Nachladen | rechte Maustaste · linke Maustaste · R |
 | Losreißen, wenn gepackt | A und D abwechselnd |
 | Pause | Esc oder P |
 | Entscheidungen | Maus, Zahlentasten 1–3 oder W/S + E |
 
-**Gamepad:** linker Stick bewegen, rechter Stick umsehen, A interagieren, B klettern/Atem anhalten, X ducken, Y Smartphone, LB Taschenlampe, RB heilen, RT werfen, LT/L3 rennen, Steuerkreuz für Smartphone-Menüs (X = zurück) und Losreißen, Start für Pause. Alle Menüs lassen sich mit Steuerkreuz bzw. Stick und A bedienen, B geht zurück.
+**Gamepad:** linker Stick bewegen, rechter Stick umsehen, A interagieren, B klettern/Atem anhalten, X ducken, Y Smartphone, LB Taschenlampe, RB heilen, LT zielen, RT schießen, Ansicht-Taste nachladen, R3 werfen, L3 rennen, Steuerkreuz für Smartphone-Menüs (X = zurück) und Losreißen, Start für Pause. Alle Menüs lassen sich mit Steuerkreuz bzw. Stick und A bedienen, B geht zurück.
 
 ## 🧟 Was das Spiel ausmacht
 
-- **Keine Waffen, kein Kampf.** Sami kann rennen, schleichen, sich verstecken, klettern, Türen schließen und Zombies mit Würfen ablenken.
+- **Eine Glock, wenig Munition.** Sami war Polizist. Seine Glock 17 liegt beim Erwachen neben dem Telefon, mit einem halb vollen Magazin. Unterwegs findet er Patronen, genug für die meisten Zombies, aber nicht für alle. Ein Kopftreffer tötet sofort, am Körper braucht es vier Treffer (Mittel). Jeder Schuss ist laut und lockt alles in der Nähe an. Schleichen, Verstecken, Ablenken mit Würfen und Türen bleiben deshalb wichtig.
 - **Zombie-KI mit sieben Kernzuständen** (Ruhe, Patrouille, Untersuchen, Alarm, Verfolgung, Suche, Rückkehr) sowie Angriff, Packen, Taumeln, Tür einschlagen, Versteck prüfen, Schlafen und Aufstehen. Die Wahrnehmung hängt von Sichtfeld, Entfernung, Licht, Bewegung, Haltung und der Taschenlampe ab. Geräusche breiten sich entlang der Gänge aus, Wände und Türen dämpfen sie.
 - **Verstecke ohne Garantie:** Spinde, unter Betten, hinter Fahrzeugen und Containern. Wer beim Verstecken gesehen wird oder zu laut atmet, wird herausgezogen.
 - **Verletzungssystem** mit den Zuständen Gesund, Verletzt und Schwer verletzt. Es bremst, kürzt die Ausdauer und trübt die Sicht. Heilmittel sind knapp, Wunden heilen nicht von selbst.

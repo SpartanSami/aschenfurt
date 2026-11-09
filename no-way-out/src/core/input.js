@@ -4,7 +4,7 @@ import { DEFAULT_BINDINGS } from './config.js';
 // Knopfnamen der Touch-Steuerung (für Hinweise im HUD)
 const TOUCH_LABEL = {
   interact: 'Benutzen', vault: 'Klettern', crouch: 'Ducken', throw: 'Werfen', heal: 'Heilen',
-  flashlight: 'Lampe', phone: 'Handy', pause: 'Pause', sprint: 'Stick ganz nach außen',
+  flashlight: 'Lampe', phone: 'Handy', pause: 'Pause', sprint: 'Stick ganz nach außen', fire: 'Schießen', aim: 'Zielen (automatisch)', reload: 'Nachladen',
   forward: '▲', back: '▼', left: '◀', right: '▶',
 };
 
@@ -137,12 +137,11 @@ export class Input {
     for (const p of pads) { if (p && p.connected) { this.pad = p; break; } }
     if (this.pad) this.padButtons = this.pad.buttons.map((b) => b.pressed);
   }
-  static PAD = { interact: 0, vault: 1, crouch: 2, phone: 3, flashlight: 4, heal: 5, throw: 7, sprint: 10, pause: 9, forward: 12, back: 13, left: 14, right: 15 };
+  static PAD = { interact: 0, vault: 1, crouch: 2, phone: 3, flashlight: 4, heal: 5, aim: 6, fire: 7, reload: 8, pause: 9, sprint: 10, throw: 11, forward: 12, back: 13, left: 14, right: 15 };
   padPressed(action) { return this._padPressed(action); }
   _padDown(action) {
     const i = Input.PAD[action];
     if (i === undefined || !this.padButtons) return false;
-    if (action === 'sprint' && this.pad && (this.pad.buttons[6]?.pressed)) return true;
     return !!this.padButtons[i];
   }
   _padPressed(action) {

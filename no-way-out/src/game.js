@@ -15,6 +15,7 @@ import { Phone } from './systems/phone.js';
 import { Story } from './systems/story.js';
 import { Inventory } from './systems/inventory.js';
 import { Player } from './player/player.js';
+import { Weapon } from './player/weapon.js';
 import { Hands } from './player/hands.js';
 import { NoiseSystem } from './ai/noise.js';
 import { Zombie, ZS } from './ai/zombie.js';
@@ -67,6 +68,7 @@ export class Game {
     this.inventory = new Inventory();
     this.noise = new NoiseSystem(this);
     this.player = new Player(this, this.camera);
+    this.weapon = new Weapon(this);
     this.phone = new Phone(this);
     this.hands = new Hands(this, this.phone.canvas);
     this.story = new Story(this);
@@ -131,7 +133,7 @@ export class Game {
     this.settings.difficulty = diffId; saveSettings(this.settings);
     this.difficulty = DIFFICULTY[diffId];
     this.state = freshState();
-    this.inventory.reset(); this.phone.reset();
+    this.inventory.reset(); this.phone.reset(); this.weapon.reset();
     this.player.hp = 100;
     this.save.newRun();
     await this.loadChapter('ch1', 'start', null);
@@ -146,7 +148,7 @@ export class Game {
     this.audio.init();
     const snap = this.save.chapterStart(id);
     if (snap) await this.restore(snap);
-    else { this.state = freshState(); this.inventory.reset(); this.phone.reset(); await this.loadChapter(id, 'start', null); }
+    else { this.state = freshState(); this.inventory.reset(); this.phone.reset(); this.weapon.reset(); if (id !== 'ch1') this.weapon.give(17, 17); await this.loadChapter(id, 'start', null); }
   }
   async restore(snap) {
     this.difficulty = DIFFICULTY[snap.difficulty] || this.difficulty;
@@ -156,6 +158,7 @@ export class Game {
     st.hasPhone = snap.hasPhone; st.fragments = new Set(snap.fragments || []);
     this.state = st;
     this.inventory.load(snap.inventory);
+    this.weapon.load(snap.weapon);
     this.phone.load(snap.phone);
     this.phone.clock = snap.clock || this.phone.clock;
     this.player.hp = snap.hp;
@@ -301,7 +304,7 @@ export class Game {
       flags: JSON.parse(JSON.stringify(this.state.flags, (k, v) => (v && typeof v === 'object' && (v.isObject3D || v.root || v.model)) ? undefined : v)), done: [...this.state.done], picked: [...this.state.picked],
       doors, power: { ...this.state.power }, removed: [...this.state.removed], hasPhone: this.state.hasPhone,
       fragments: [...this.state.fragments],
-      inventory: this.inventory.serialize(), hp: Math.max(this.player.hp, cp === 'start' ? this.player.hp : 1), phone: this.phone.serialize(), clock: this.phone.clock,
+      inventory: this.inventory.serialize(), weapon: this.weapon.serialize(), hp: Math.max(this.player.hp, cp === 'start' ? this.player.hp : 1), phone: this.phone.serialize(), clock: this.phone.clock,
       flashlight: this.player.flashlight,
       npcs: this.npcs.filter((n) => n.active).map((n) => ({ id: n.id, mode: n.mode === 'goto' ? 'follow' : n.mode, x: n.pos.x, z: n.pos.z })),
     };
@@ -470,6 +473,18 @@ export class Game {
       if (this.player.carry) { this.hud.toast('Die Hand ist schon belegt'); return; }
       this.player.carry = it.type; this.hands.setCarry(it.type);
       this.hud.toast(info.name + ' genommen — werfen, um abzulenken');
+    } else if (kind === 'weapon') {
+      // Samis eigene Glock aus seiner Zeit bei der Polizei – mit einem halb vollen Magazin
+      this.weapon.give(it.mag ?? 10, it.reserve ?? 7);
+      this.state.flags['has:glock'] = true;
+      this.hud.pickup('Glock 17 · ' + this.weapon.mag + ' + ' + this.weapon.reserve + ' Schuss');
+      this.hud.toast(`<kbd>${this.input.label('aim')}</kbd> Zielen · <kbd>${this.input.label('fire')}</kbd> Schießen · <kbd>${this.input.label('reload')}</kbd> Nachladen — Schüsse sind laut`, 6);
+      this.hud.showAmmo();
+    } else if (kind === 'ammo') {
+      const n = Math.max(2, Math.round((it.rounds || 12) * (this.difficulty.ammoMul || 1)));
+      this.weapon.addAmmo(n);
+      this.hud.pickup(info.name + ' (+' + n + ')');
+      this.hud.showAmmo();
     } else if (kind === 'story') {
       if (it.type === 'phone') { this.state.hasPhone = true; }
       else this.inventory.add(it.type, it.keyId || it.id, it.name || info.name);
@@ -705,7 +720,7 @@ export class Game {
       } else {
         this.phone.update(dt, inp);
         if (this.qte) { this._updateQTE(dt); this.player.update(dt, inp); }
-        else this.player.update(dt, inp);
+        else { this.player.update(dt, inp); this.weapon.update(dt, inp); }
         this._world(dt, false);
       }
       this.hands.update(dt);
@@ -777,6 +792,8 @@ export class Game {
   }
 
   render(dt) {
+    // Beim Zielen leicht heranzoomen
+    if (this.weapon) { const fov = this.settings.fov - this.weapon.aimT * 9; if (Math.abs(this.camera.fov - fov) > 0.05) { this.camera.fov = fov; this.camera.updateProjectionMatrix(); } }
     if (!this.level) {
       this.renderer.render(this.menuScene || this.scene, this.camera, null, null, dt);
       return;

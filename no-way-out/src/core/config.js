@@ -3,7 +3,7 @@
 export const DIFFICULTY = {
   easy: {
     id: 'easy', name: 'LEICHT',
-    desc: 'Mehr Heilmittel, großzügigere Reaktionsfenster, etwas weniger gefährliche Zombies.',
+    desc: 'Mehr Heilmittel und Munition, großzügigere Reaktionsfenster, schwächere Zombies.',
     healBonus: 1,          // zusätzliche Heilmittel-Fundorte werden aktiv (Level-Markierung "extra")
     healRemove: false,     // Fundorte mit Markierung "notHard" bleiben
     qteMul: 1.45,          // längeres Zeitfenster beim Losreißen
@@ -16,6 +16,8 @@ export const DIFFICULTY = {
     chaseTime: 1.3,        // Zeitpuffer in inszenierten Verfolgungen
     searchTime: 0.75,      // wie lange Zombies suchen
     hideCheck: 0.35,       // Wahrscheinlichkeit, dass ein Zombie ein beobachtetes Versteck öffnet
+    zHp: 3,                // Treffer, die ein Zombie aushält (Körper 1, Kopf 4)
+    ammoMul: 1.5,          // Menge der gefundenen Munition
   },
   normal: {
     id: 'normal', name: 'MITTEL',
@@ -24,14 +26,16 @@ export const DIFFICULTY = {
     qteMul: 1.0, qtePresses: 9,
     zSpeed: 1.0, zDetect: 1.0, zHearing: 1.0,
     damage: 1.0, injuryMul: 1.0, chaseTime: 1.0, searchTime: 1.0, hideCheck: 0.6,
+    zHp: 4, ammoMul: 1.0,
   },
   hard: {
     id: 'hard', name: 'SCHWER',
-    desc: 'Weniger Heilmittel, aggressivere Gegner, kürzere Reaktionsfenster.',
+    desc: 'Weniger Heilmittel und Munition, zähere und aggressivere Gegner, kürzere Reaktionsfenster.',
     healBonus: 0, healRemove: true,
     qteMul: 0.72, qtePresses: 11,
     zSpeed: 1.1, zDetect: 1.3, zHearing: 1.2,
     damage: 1.25, injuryMul: 1.25, chaseTime: 0.85, searchTime: 1.35, hideCheck: 0.85,
+    zHp: 5, ammoMul: 0.6,
   },
 };
 
@@ -99,7 +103,10 @@ export const DEFAULT_BINDINGS = {
   phone: ['KeyQ', 'Tab'],
   flashlight: ['KeyF'],
   heal: ['KeyH'],
-  throw: ['KeyG', 'Mouse0'],
+  throw: ['KeyG'],
+  fire: ['Mouse0'],
+  aim: ['Mouse2'],
+  reload: ['KeyR'],
   pause: ['KeyP', 'Escape'],
 };
 
@@ -107,7 +114,7 @@ export const ACTION_NAMES = {
   forward: 'Vorwärts', back: 'Rückwärts', left: 'Links', right: 'Rechts',
   sprint: 'Rennen', crouch: 'Schleichen / Ducken', interact: 'Interagieren',
   vault: 'Klettern / Atem anhalten', phone: 'Smartphone', flashlight: 'Taschenlampe',
-  heal: 'Heilen', throw: 'Werfen', pause: 'Pause',
+  heal: 'Heilen', throw: 'Werfen', fire: 'Schießen', aim: 'Zielen', reload: 'Nachladen', pause: 'Pause',
 };
 
 const SKEY = 'nwo.settings.v1';
@@ -117,6 +124,8 @@ export function loadSettings() {
   try { s = JSON.parse(localStorage.getItem(SKEY) || '{}') || {}; } catch (e) { s = {}; }
   const out = { ...DEFAULT_SETTINGS, ...s };
   out.bindings = { ...JSON.parse(JSON.stringify(DEFAULT_BINDINGS)), ...(s.bindings || {}) };
+  // Ältere Spielstände: Linksklick war Werfen, jetzt Schießen
+  if (s.bindings && s.bindings.throw && !s.bindings.fire) out.bindings.throw = s.bindings.throw.filter((k) => k !== 'Mouse0');
   return out;
 }
 

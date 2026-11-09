@@ -25,6 +25,28 @@ function buildHand(mirror = 1) {
   return g;
 }
 
+// Glock 17 im Viewmodel (Lauf zeigt nach -z, Griff nach unten in die Hand)
+function buildGlock() {
+  const g = new THREE.Group();
+  const poly = new THREE.MeshStandardMaterial({ color: 0x1c1e20, roughness: 0.6, metalness: 0.1 });
+  const steel = new THREE.MeshStandardMaterial({ color: 0x2b2d30, roughness: 0.32, metalness: 0.75 });
+  const add = (geo, mat, x, y, z, rx = 0) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); m.rotation.x = rx; g.add(m); return m; };
+  add(new THREE.BoxGeometry(0.03, 0.032, 0.19), steel, 0, 0.058, -0.06);           // Schlitten
+  add(new THREE.BoxGeometry(0.028, 0.02, 0.17), poly, 0, 0.034, -0.052);          // Griffstück oben
+  add(new THREE.BoxGeometry(0.03, 0.105, 0.05), poly, 0, -0.012, 0.012, -0.28);   // Griff
+  add(new THREE.BoxGeometry(0.004, 0.022, 0.04), poly, 0, 0.012, -0.03);          // Abzugsbügel
+  add(new THREE.BoxGeometry(0.006, 0.008, 0.006), steel, 0, 0.078, -0.148);       // Korn
+  add(new THREE.BoxGeometry(0.02, 0.008, 0.006), steel, 0, 0.078, 0.03);          // Kimme
+  const mz = add(new THREE.CylinderGeometry(0.006, 0.006, 0.004, 8), new THREE.MeshBasicMaterial({ color: 0x050505 }), 0, 0.058, -0.156, Math.PI / 2);
+  // Mündungsfeuer
+  const flashMat = new THREE.MeshBasicMaterial({ color: 0xffc070, transparent: true, opacity: 0.95, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false });
+  const fl = new THREE.Group();
+  for (let i = 0; i < 3; i++) { const p = new THREE.Mesh(new THREE.PlaneGeometry(0.09, 0.09), flashMat); p.rotation.z = i * 1.05; fl.add(p); }
+  fl.position.set(0, 0.058, -0.2); fl.visible = false; g.add(fl);
+  g.userData.flash = fl; void mz;
+  return g;
+}
+
 export class Hands {
   constructor(game, phoneCanvas) {
     this.game = game;
@@ -59,6 +81,9 @@ export class Hands {
     this.rightHand = rh;
     this.carryMesh = null;
     this.healMesh = null;
+    this.gun = buildGlock(); this.gun.visible = false;
+    this.gun.position.set(0.0, 0.035, -0.045); this.right.add(this.gun);
+    this.shotT = 0;
 
     this.leftPose = new THREE.Vector3(-0.22, -0.42, -0.3); this.leftRot = new THREE.Euler();
     this.rightPose = new THREE.Vector3(0.25, -0.5, -0.32);
@@ -93,6 +118,7 @@ export class Hands {
   cancel() { this.anim = null; if (this.healMesh) { this.right.remove(this.healMesh); this.healMesh = null; } }
   throw() { this.anim = 'throw'; this.animT = 0; }
   push() { this.anim = 'push'; this.animT = 0; }
+  shoot() { this.shotT = 0.06; }
   setFlashlight(on) { this.flashlightOn = on; this.led.material.color.setHex(on ? 0xffffff : 0x222222); }
   setCarry(type) {
     if (this.carryMesh) { this.right.remove(this.carryMesh); this.carryMesh = null; }
@@ -138,6 +164,23 @@ export class Hands {
       else if (a === 'throw') { const k = clamp(t / 0.35, 0, 1); rt.set(0.22 - k * 0.1, -0.2 - k * 0.3, -0.35 - k * 0.2); rrx = -0.6 + k; show = true; if (t > 0.35) this.anim = null; }
       else if (a === 'push') { const k = Math.sin(clamp(t / 0.35, 0, 1) * Math.PI); rt.set(0.12, -0.24, -0.3 - k * 0.3); rrx = 0.3; show = true; this.left.position.set(-0.12, -0.24, -0.3 - k * 0.3); this.left.visible = true; if (t > 0.35) this.anim = null; }
     } else if (this.healMesh) { this.right.remove(this.healMesh); this.healMesh = null; }
+    // Glock: bereit, zielen, nachladen, Rückstoß
+    const w = game.weapon;
+    const gunOn = !!(w && w.drawn && !this.carryMesh && !this.anim && p.mode === 'normal');
+    this.gun.visible = gunOn && this.visibleRight > 0.2;
+    this.rightHand.visible = true;
+    if (gunOn) {
+      const a = w.aimT;
+      // Hüfte: leicht seitlich, damit das Profil der Waffe sichtbar ist – Zielen: tief und mittig über Kimme und Korn
+      rt.set(0.17 - a * 0.135, -0.21 + a * 0.045, -0.44 - a * 0.04); rrx = -0.03 + a * 0.02;
+      this.gun.rotation.y = 0.16 * (1 - a) - 0.02 * a;
+      if (w.reloading) { const k = Math.sin(this.time * 9) * 0.03; rt.set(0.14, -0.3 + k, -0.36); rrx = -0.75; }
+      rt.z += w.kick * 0.05; rrx += w.kick * 0.32;
+      show = true;
+    }
+    this.shotT = Math.max(0, this.shotT - dt);
+    this.gun.userData.flash.visible = this.shotT > 0;
+    if (this.shotT > 0) this.gun.userData.flash.rotation.z = Math.random() * 3;
     if (p.mode === 'grabbed') { const k = 0.5 + 0.5 * Math.sin(this.time * 18); rt.set(0.12, -0.22, -0.28 - k * 0.06); rrx = 0.2; show = true; this.left.position.set(-0.12, -0.22, -0.28 - (1 - k) * 0.06); this.left.rotation.set(0.2, 0, 0); this.left.visible = true; }
     this.visibleRight = damp(this.visibleRight, show ? 1 : 0, 12, dt);
     this.rightPose.lerp(rt, 1 - Math.exp(-14 * dt));
