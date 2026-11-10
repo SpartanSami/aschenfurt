@@ -5,6 +5,7 @@ import { F } from './grid.js';
 import { Batcher } from './batcher.js';
 import { PROPS, PropCtx } from './props.js';
 import './props2.js';
+import { buildClutter } from './clutter.js';
 import { getMat, colorMat, emissiveMat, decalMat, signMat, UV_SCALE, V_FULL, GRID_UNIFORMS } from '../render/materials.js';
 import { LightSystem } from '../render/lighting.js';
 import { Door } from './door.js';
@@ -74,6 +75,8 @@ export class Level {
     }
     for (const l of def.lights) this._addLight(l);
     for (const d of def.decals) this._addDecal(d);
+    // Raumdetails (Schmutz, Papier, Schutt, Pfützen, Wasserflecken, Deckenplatten)
+    try { this.clutterCount = buildClutter(this, this.chapter.id, { density: quality.clutter ?? 1 }); } catch (e) { console.error('Raumdetails:', e); }
     for (const s of def.signs) this._addSign(batch, s);
     for (const it of def.items) this._addItem(it);
     for (const ia of def.interacts) this._addInteract(ia);
@@ -418,7 +421,7 @@ export class Level {
   // ---------------- Decals / Schilder ----------------
   _addDecal(d) {
     const mat = decalMat(d.kind);
-    const s = d.size || (d.kind === 'paper' ? 0.3 : 1.2);
+    const s = d.size || (d.kind === 'paper' ? 0.3 : d.kind === 'hole' ? 0.05 : 1.2);
     const geo = new THREE.PlaneGeometry(s * (d.sx || 1), s * (d.sy || (d.kind === 'paper' ? 1.4 : 1)));
     const m = new THREE.Mesh(geo, mat);
     if (d.wall) {
@@ -430,11 +433,20 @@ export class Level {
       m.rotation.y = map[2];
     } else {
       m.rotation.x = -Math.PI / 2; m.rotation.z = d.rot ?? (d.x * 3.1 + d.z * 1.7);
-      m.position.set(d.x, this.grid.heightAt(d.x, d.z) + 0.006, d.z);
+      m.position.set(d.x, (d.fy ?? this.grid.heightAt(d.x, d.z)) + 0.006 + (d.lift || 0), d.z);
     }
     m.receiveShadow = true;
     m.renderOrder = 1;
     this.root.add(m);
+    return m;
+  }
+  // Zur Laufzeit entstehende Spuren (Blutlachen, Einschusslöcher, Blutspritzer); die ältesten verschwinden
+  addDecal(d) {
+    const m = this._addDecal(d);
+    this.dynDecals = this.dynDecals || [];
+    this.dynDecals.push(m);
+    if (this.dynDecals.length > 60) { const o = this.dynDecals.shift(); this.root.remove(o); o.geometry.dispose(); }
+    return m;
   }
   _addSign(batch, s) {
     const w = s.w || 1.2, h = s.h || 0.3;

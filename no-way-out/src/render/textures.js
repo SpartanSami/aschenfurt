@@ -357,10 +357,22 @@ const GEN = {
       c = mix(c, rgb(70, 75, 85), Math.max(0, n2 - 0.55) * 1.4 + vein * 0.35);
       return { ...c, h: 0.5 + n * 0.15, ro: 0.6 + n2 * 0.2 };
     });
-    for (let i = 0; i < (o.wounds ?? 4); i++) {
+    const wounds = o.wounds ?? 4;
+    if (wounds > 0) {
+      // Zombiehaut: fleckige Blutergüsse (violett/grünlich) und dunkle Adern
+      for (let i = 0; i < 9; i++) p.blob(p.rng.range(0, s), p.rng.range(0, s), p.rng.range(20, 70), i % 2 ? 'rgba(78,58,92,0.32)' : 'rgba(88,100,58,0.26)', null, null);
+      for (let i = 0; i < 7; i++) {
+        let x = p.rng.range(0, s), y = p.rng.range(0, s); const pts = [[x, y]];
+        for (let k = 0; k < 9; k++) { x += p.rng.range(-9, 9); y += p.rng.range(3, 11); pts.push([x, y]); }
+        p.stroke(pts, p.rng.range(1, 2.2), 'rgba(52,48,78,0.55)', '#5a5a5a', null);
+      }
+    }
+    for (let i = 0; i < wounds; i++) {
       const x = p.rng.range(0, s), y = p.rng.range(0, s);
       p.blob(x, y, p.rng.range(10, 40), 'rgba(60,8,8,0.9)', '#000', 'rgba(60,60,60,0.8)');
       p.blob(x, y, p.rng.range(25, 60), 'rgba(80,60,70,0.4)', null, null);
+      // eingetrocknetes Blut läuft von der Wunde nach unten
+      for (let k = 0; k < 3; k++) { const sx = x + p.rng.range(-10, 10); p.stroke([[sx, y], [sx + p.rng.range(-3, 3), y + p.rng.range(18, 55)]], p.rng.range(1.5, 4), 'rgba(58,10,8,0.7)', null, 'rgba(90,90,90,0.6)'); }
     }
   },
   door(p, o) {
@@ -417,10 +429,27 @@ const GEN = {
     const C = p.C;
     const kind = o.kind || 'splat';
     C.fillStyle = 'rgba(70,4,4,0.95)';
-    if (kind === 'pool') {
-      C.beginPath();
-      for (let a = 0; a <= Math.PI * 2 + 0.01; a += 0.2) { const r = s * 0.3 * (0.75 + p.rng.next() * 0.35); C.lineTo(s / 2 + Math.cos(a) * r, s / 2 + Math.sin(a) * r); }
-      C.fill();
+    if (kind === 'pool' || kind === 'splat') {
+      // Unregelmäßiger Rand über Rauschen statt Zackenpolygon; zur Mitte dunkler (geronnen)
+      const img = C.createImageData(s, s), d = img.data;
+      const R0 = kind === 'pool' ? 0.62 : 0.34;
+      for (let y = 0; y < s; y++) for (let x = 0; x < s; x++) {
+        const u = x / s, v = y / s, r = Math.hypot(u - 0.5, v - 0.5) * 2;
+        const n = p.fbm(u, v, 5), n2 = p.fbm(u + 0.5, v + 0.2, 3, 2);
+        const a = Math.max(0, Math.min(1, (R0 + (n - 0.5) * 0.6 - r) * 16));
+        const t = Math.min(1, r / R0);
+        const i = (y * s + x) * 4;
+        d[i] = 38 + t * 50 + n2 * 20; d[i + 1] = 2 + t * 5; d[i + 2] = 2 + t * 4; d[i + 3] = a * 240;
+      }
+      C.putImageData(img, 0, 0);
+      if (kind === 'splat') {
+        // Spritzer: Tropfen und längliche Ausläufer nach außen
+        for (let i = 0; i < 34; i++) {
+          const a = p.rng.range(0, Math.PI * 2), dd = p.rng.range(s * 0.18, s * 0.47), r = p.rng.range(1.5, s * 0.025);
+          C.fillStyle = `rgba(${70 + p.rng.int(0, 30)},5,4,${p.rng.range(0.75, 0.95)})`;
+          C.beginPath(); C.ellipse(s / 2 + Math.cos(a) * dd, s / 2 + Math.sin(a) * dd, r * p.rng.range(1, 2.6), r, a, 0, Math.PI * 2); C.fill();
+        }
+      }
     } else if (kind === 'smear') {
       for (let i = 0; i < 9; i++) { C.globalAlpha = 0.25 + p.rng.next() * 0.4; C.fillRect(s * 0.1, s * (0.35 + i * 0.03 + p.rng.next() * 0.02), s * (0.4 + p.rng.next() * 0.5), s * 0.025); }
       C.globalAlpha = 1;
@@ -431,15 +460,87 @@ const GEN = {
       for (let k = 0; k < 5; k++) C.fillRect(s * (0.4 + k * 0.05), s * 0.6, s * 0.02, s * (0.2 + p.rng.next() * 0.25));
     } else if (kind === 'trail') {
       for (let i = 0; i < 14; i++) { const x = s * (0.1 + i * 0.06), y = s * (0.5 + Math.sin(i) * 0.05); C.beginPath(); C.arc(x, y, s * (0.02 + p.rng.next() * 0.03), 0, Math.PI * 2); C.fill(); }
-    } else {
-      C.beginPath(); C.arc(s / 2, s / 2, s * 0.15, 0, Math.PI * 2); C.fill();
-      for (let i = 0; i < 26; i++) {
-        const a = p.rng.range(0, Math.PI * 2), d = p.rng.range(s * 0.1, s * 0.45), r = p.rng.range(2, s * 0.04);
-        C.beginPath(); C.arc(s / 2 + Math.cos(a) * d, s / 2 + Math.sin(a) * d, r, 0, Math.PI * 2); C.fill();
-      }
     }
     p.H.fillStyle = '#808080'; p.H.fillRect(0, 0, s, s);
     p.R.fillStyle = '#404040'; p.R.fillRect(0, 0, s, s);
+  },
+  bullethole(p) { // Alpha-Decal: Einschussloch
+    const s = p.w, C = p.C;
+    C.clearRect(0, 0, s, s);
+    const g = C.createRadialGradient(s / 2, s / 2, 0, s / 2, s / 2, s / 2);
+    g.addColorStop(0, 'rgba(5,5,5,1)'); g.addColorStop(0.28, 'rgba(10,10,10,0.95)'); g.addColorStop(0.42, 'rgba(70,66,60,0.55)'); g.addColorStop(1, 'rgba(70,66,60,0)');
+    C.fillStyle = g; C.beginPath(); C.arc(s / 2, s / 2, s / 2, 0, Math.PI * 2); C.fill();
+    C.strokeStyle = 'rgba(20,20,20,0.6)'; C.lineWidth = 1;
+    for (let i = 0; i < 7; i++) { const a = p.rng.range(0, Math.PI * 2), l = p.rng.range(s * 0.25, s * 0.48); C.beginPath(); C.moveTo(s / 2 + Math.cos(a) * s * 0.12, s / 2 + Math.sin(a) * s * 0.12); C.lineTo(s / 2 + Math.cos(a) * l, s / 2 + Math.sin(a) * l); C.stroke(); }
+    p.H.fillStyle = '#808080'; p.H.fillRect(0, 0, s, s);
+    p.R.fillStyle = '#e0e0e0'; p.R.fillRect(0, 0, s, s);
+  },
+  // ---- Raumdetails (render/world/clutter.js) ----
+  grime(p, o) { // Alpha-Decal: Schmutz-, Wasser- oder Ölfleck am Boden
+    const s = p.w, C = p.C, img = C.createImageData(s, s), d = img.data;
+    const col = o.oil ? [12, 12, 14] : o.rust ? [70, 38, 18] : [34, 29, 22];
+    for (let y = 0; y < s; y++) for (let x = 0; x < s; x++) {
+      const u = x / s, v = y / s, r = Math.hypot(u - 0.5, v - 0.5) * 2;
+      const n = p.fbm(u, v, 5), n2 = p.fbm(u + 0.37, v + 0.71, 3, 2);
+      let a = (1 - r * 1.15) + (n - 0.5) * 1.6;
+      a = Math.max(0, Math.min(1, a)); a = a * a * (0.55 + n2 * 0.6);
+      const i = (y * s + x) * 4; d[i] = col[0]; d[i + 1] = col[1]; d[i + 2] = col[2]; d[i + 3] = Math.min(255, a * 255 * (o.a ?? 0.95));
+    }
+    C.putImageData(img, 0, 0);
+    p.H.fillStyle = '#808080'; p.H.fillRect(0, 0, s, s);
+    p.R.fillStyle = o.oil ? '#2a2a2a' : '#d0d0d0'; p.R.fillRect(0, 0, s, s);
+  },
+  leak(p, o) { // Alpha-Decal: Wasserlaufspuren von der Decke die Wand hinunter
+    const w = p.w, h = p.h, C = p.C, img = C.createImageData(w, h), d = img.data;
+    const col = o.rust ? [92, 52, 22] : [62, 52, 34];
+    const len = []; for (let x = 0; x < w; x++) len.push(0.25 + p.fbm(x / w, 0.5, 4, 1) * 0.9 + (p.noises[4](x / w * 64, 3) - 0.5) * 0.35);
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+      const v = y / h, u = x / w, side = Math.min(1, Math.min(u, 1 - u) * 5);
+      const L = len[x];
+      let a = v < L ? (1 - v / L) * 0.75 + 0.12 : 0;
+      if (Math.abs(v - L) < 0.012) a += 0.35;          // Rand der Laufspur
+      a *= side * (0.6 + p.fbm(u, v, 4) * 0.6);
+      if (v < 0.06) a = Math.max(a, (1 - v / 0.06) * 0.8 * side);
+      const i = (y * w + x) * 4; d[i] = col[0]; d[i + 1] = col[1]; d[i + 2] = col[2]; d[i + 3] = Math.max(0, Math.min(255, a * 255 * 0.9));
+    }
+    C.putImageData(img, 0, 0);
+    p.H.fillStyle = '#808080'; p.H.fillRect(0, 0, w, h);
+    p.R.fillStyle = '#c8c8c8'; p.R.fillRect(0, 0, w, h);
+  },
+  litter(p, o) { // Papierkram: 0 Blatt, 1 Zeitung, 2 Pappe, 3 Flugblatt
+    const s = p.w, C = p.C, v = o.v || 0;
+    const base = [[226, 223, 212], [196, 194, 186], [150, 112, 70], [232, 230, 226]][v];
+    p.fill((u, w) => { const n = p.fbm(u, w, 4); const k = 0.86 + n * 0.22; return { r: base[0] * k, g: base[1] * k, b: base[2] * k, h: 0.5 + n * 0.3, ro: 0.92 }; });
+    if (v === 0) for (let i = 0; i < 14; i++) p.rect(s * 0.1, s * (0.12 + i * 0.055), s * p.rng.range(0.4, 0.8), 2, 'rgba(40,40,60,0.5)', null, null);
+    if (v === 1) { p.rect(s * 0.06, s * 0.05, s * 0.88, s * 0.12, 'rgba(20,20,20,0.85)', null, null); for (let c = 0; c < 3; c++) for (let i = 0; i < 18; i++) p.rect(s * (0.06 + c * 0.3), s * (0.22 + i * 0.04), s * 0.26, 2, 'rgba(30,30,30,0.55)', null, null); p.rect(s * 0.38, s * 0.24, s * 0.26, s * 0.2, 'rgba(60,60,60,0.6)', null, null); }
+    if (v === 2) { p.rect(0, s * 0.45, s, s * 0.1, 'rgba(200,180,120,0.55)', null, null); for (let i = 0; i < 4; i++) p.rect(s * 0.1, s * (0.15 + i * 0.07), s * 0.3, 3, 'rgba(40,30,20,0.6)', null, null); }
+    if (v === 3) { p.rect(0, 0, s, s * 0.22, o.color || 'rgba(180,30,30,0.9)', null, null); for (let i = 0; i < 9; i++) p.rect(s * 0.12, s * (0.32 + i * 0.07), s * p.rng.range(0.5, 0.76), 3, 'rgba(40,40,40,0.6)', null, null); }
+    // Knicke
+    for (let i = 0; i < 3; i++) { const y = p.rng.range(0.15, 0.85) * s; p.stroke([[0, y], [s, y + p.rng.range(-20, 20)]], 2, 'rgba(0,0,0,0.12)', '#606060', null); }
+  },
+  puddle(p) { // Alpha-Decal: Pfütze (glatt, spiegelt Lichter)
+    const s = p.w, C = p.C, img = C.createImageData(s, s), d = img.data;
+    for (let y = 0; y < s; y++) for (let x = 0; x < s; x++) {
+      const u = x / s, v = y / s, r = Math.hypot(u - 0.5, v - 0.5) * 2;
+      const n = p.fbm(u, v, 4);
+      let a = (1 - r) * 2.2 + (n - 0.5) * 2.0;
+      a = Math.max(0, Math.min(1, a));
+      const i = (y * s + x) * 4; d[i] = 16; d[i + 1] = 18; d[i + 2] = 20; d[i + 3] = a * 205;
+    }
+    C.putImageData(img, 0, 0);
+    p.H.fillStyle = '#808080'; p.H.fillRect(0, 0, s, s);
+    p.R.fillStyle = '#101010'; p.R.fillRect(0, 0, s, s);
+  },
+  leaf(p) { // Alpha-Decal: welkes Blatt (Farbe pro Exemplar)
+    const s = p.w, C = p.C;
+    C.clearRect(0, 0, s, s);
+    C.fillStyle = 'rgb(235,235,235)';
+    C.beginPath(); C.moveTo(s * 0.5, s * 0.05);
+    C.bezierCurveTo(s * 0.95, s * 0.3, s * 0.85, s * 0.75, s * 0.5, s * 0.92);
+    C.bezierCurveTo(s * 0.15, s * 0.75, s * 0.05, s * 0.3, s * 0.5, s * 0.05); C.fill();
+    C.strokeStyle = 'rgba(90,70,50,0.7)'; C.lineWidth = s / 40; C.beginPath(); C.moveTo(s * 0.5, s * 0.08); C.lineTo(s * 0.5, s * 0.98); C.stroke();
+    p.H.fillStyle = '#808080'; p.H.fillRect(0, 0, s, s);
+    p.R.fillStyle = '#d0d0d0'; p.R.fillRect(0, 0, s, s);
   },
   paper(p) {
     const s = p.w;

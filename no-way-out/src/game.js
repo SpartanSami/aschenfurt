@@ -10,8 +10,10 @@ import { Renderer } from './render/renderer.js';
 import { setTextureQuality } from './render/textures.js';
 import { TouchControls } from './ui/touch.js';
 import { FX } from './render/fx.js';
+import { FlashBeam } from './render/beam.js';
 import { AudioEngine } from './systems/audio.js';
 import { Phone } from './systems/phone.js';
+import { AutoMap } from './systems/automap.js';
 import { Story } from './systems/story.js';
 import { Inventory } from './systems/inventory.js';
 import { Player } from './player/player.js';
@@ -28,6 +30,7 @@ import { DocViewer } from './ui/docs.js';
 import { Menu } from './ui/menu.js';
 import { CHAPTERS, CHAPTER_ORDER, CHAPTER_SEQ } from './data/chapters/index.js';
 import { RNG } from './core/rng.js';
+import { freshStats } from './systems/stats.js';
 
 function freshState() {
   return { flags: {}, done: new Set(), picked: new Set(), doors: {}, power: {}, removed: new Set(), hasPhone: false, fragments: new Set() };
@@ -65,15 +68,20 @@ export class Game {
     this.secCam = new THREE.PerspectiveCamera(70, 1, 0.1, 60);
     this.state = freshState();
     this.save = new SaveManager();
+    this.stats = freshStats();
     this.inventory = new Inventory();
     this.noise = new NoiseSystem(this);
     this.player = new Player(this, this.camera);
     this.weapon = new Weapon(this);
     this.phone = new Phone(this);
+    this.automap = new AutoMap(this);
     this.hands = new Hands(this, this.phone.canvas);
     this.story = new Story(this);
     this.fx = new FX(this);
     this.fx.attach(this.scene);
+    // Sichtbarer Lichtkegel mit Schwebstaub
+    this.beam = new FlashBeam(this, IS_TOUCH ? 1500 : 3200);
+    this.beam.attach(this.scene);
     this.ui = root.querySelector('#ui');
     this.hud = new HUD(this, this.ui);
     this.docs = new DocViewer(this, this.ui);
@@ -136,17 +144,23 @@ export class Game {
     this.inventory.reset(); this.phone.reset(); this.weapon.reset();
     this.player.hp = 100;
     this.save.newRun();
+    this.stats = freshStats('ch1'); this.save.saveStats(this.stats);
     await this.loadChapter('ch1', 'start', null);
   }
   async continueGame() {
     this.audio.init();
     const s = this.save.get();
     if (!s || !s.snapshot) return;
+    this.stats = { ...freshStats(s.snapshot.chapter), ...(s.stats || {}) };
     await this.restore(s.snapshot);
   }
   async startChapter(id) {
     this.audio.init();
     const snap = this.save.chapterStart(id);
+    // Kapitelwahl: laufende Statistik weiterführen, sonst neu (vermerkt, ab welchem Kapitel gespielt wurde)
+    const old = this.save.stats();
+    this.stats = old ? { ...freshStats(), ...old } : freshStats(id);
+    if (id !== 'ch1' && (!old || old.from !== 'ch1')) this.stats.from = id;
     if (snap) await this.restore(snap);
     else { this.state = freshState(); this.inventory.reset(); this.phone.reset(); this.weapon.reset(); if (id !== 'ch1') this.weapon.give(17, 17); await this.loadChapter(id, 'start', null); }
   }
@@ -194,6 +208,7 @@ export class Game {
     const level = new Level(this, chapter, def);
     this.level = level;
     level.build(this.scene, this.renderer.quality);
+    this.automap.reset(level, snap && snap.map);
     // Welt-Zustand anwenden
     for (const d of level.doors) {
       const s = this.state.doors[d.id];
@@ -306,6 +321,7 @@ export class Game {
       fragments: [...this.state.fragments],
       inventory: this.inventory.serialize(), weapon: this.weapon.serialize(), hp: Math.max(this.player.hp, cp === 'start' ? this.player.hp : 1), phone: this.phone.serialize(), clock: this.phone.clock,
       flashlight: this.player.flashlight,
+      map: this.automap.serialize(),
       npcs: this.npcs.filter((n) => n.active).map((n) => ({ id: n.id, mode: n.mode === 'goto' ? 'follow' : n.mode, x: n.pos.x, z: n.pos.z })),
     };
   }
@@ -315,6 +331,7 @@ export class Game {
     const snap = this.snapshot(cp);
     this.lastSnapshot = snap;
     this.save.saveSnapshot(snap);
+    this.save.saveStats(this.stats);
     this.hud.saved();
   }
   reloadCheckpoint() {
@@ -615,6 +632,7 @@ export class Game {
     this.phone.close();
     this.mode = 'dead';
     this.deathT = 0;
+    this.stats.deaths++; this.save.saveStats(this.stats);
     this.audio.music.setForced(0);
     this.audio.play('sting', { vol: 0.6, rate: 0.6 });
     this.fx.fadeTo(0.85, 2.5);
@@ -693,6 +711,8 @@ export class Game {
     this.input.beginFrame();
     try { this.update(dt); } catch (e) { console.error(e); if (this.debug) this.hud.toast('Fehler: ' + e.message); }
     this.render(dt);
+    // nur im laufenden Spiel nachregeln (Ladepausen und Menüs verfälschen die Bildrate)
+    if (this.mode === 'play' && !this.renderer.noAdapt) this.renderer.adapt();
     this.input.endFrame();
   }
 
@@ -703,6 +723,7 @@ export class Game {
     this.input.dragLook = this.mode === 'play';
     if (this.mode === 'play') {
       this.time += dt;
+      this.stats.time += dt;
       if (this.docs.isOpen()) { this.docs.update(inp); }
       else if (this.modal === 'choice') {
         // Welt pausiert; Auswahl per Tastatur/Gamepad
@@ -755,6 +776,7 @@ export class Game {
     for (const z of this.zombies) z.update(dt);
     for (const n of this.npcs) n.update(dt);
     this.level.update(dt, this.camera.position);
+    this.automap.update(dt);
     this._tickEmitters(dt);
     // Auslösezonen
     for (const t of this.level.triggers) {
@@ -788,7 +810,7 @@ export class Game {
     fl.target.position.copy(fl.position).addScaledVector(this.flashDir, 10);
     fl.intensity = p.flashlight && p.mode !== 'hidden' ? 26 : (p.flashlight && p.mode === 'hidden' ? 8 : 0);
     fl.visible = p.flashlight;
-    void camMode;
+    this.beam.update(dt, this.camera, fl, this.flashDir, p.flashlight && p.mode !== 'hidden' && !camMode, this.canvas.height);
   }
 
   render(dt) {

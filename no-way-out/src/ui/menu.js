@@ -4,6 +4,7 @@ import { DIFFICULTY, ACTION_NAMES, DEFAULT_BINDINGS } from '../core/config.js';
 import { Input } from '../core/input.js';
 import { CHAPTERS, CHAPTER_ORDER, CHAPTER_SEQ } from '../data/chapters/index.js';
 import { ENDINGS } from '../data/story/endings.js';
+import { rankOf, fmtTime } from '../systems/stats.js';
 
 const h = (html) => { const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstElementChild; };
 
@@ -192,7 +193,7 @@ export class Menu {
       body = slider('sensitivity', 'Mausempfindlichkeit', 0.2, 3, 0.05, (v) => Number(v).toFixed(2)) + check('invertY', 'Y-Achse invertieren') + check('crouchToggle', 'Ducken umschalten (statt halten)') + slider('headBob', 'Kopfbewegung', 0, 1.5, 0.05, pct) +
         `<h4>Tastenbelegung <button class="mini" data-a="resetkeys">Standard</button></h4><div class="binds">${Object.keys(ACTION_NAMES).map((a) => `<div class="bind"><span>${ACTION_NAMES[a]}</span><button data-bind="${a}">${(s.bindings[a] || []).map((c) => Input.keyLabel(c)).join(' / ')}</button></div>`).join('')}</div>`;
     } else if (tab === 'gfx') {
-      body = select('quality', 'Grafikqualität', [['low', 'Niedrig'], ['medium', 'Mittel'], ['high', 'Hoch']]) + slider('renderScale', 'Auflösung (Renderskalierung)', 0.5, 1, 0.05, pct) + slider('fov', 'Sichtfeld', 60, 95, 1, (v) => v + '°') +
+      body = select('quality', 'Grafikqualität', [['low', 'Niedrig'], ['medium', 'Mittel'], ['high', 'Hoch']]) + slider('renderScale', 'Auflösung (Renderskalierung)', 0.5, 1, 0.05, pct) + check('autoRes', 'Auflösung automatisch anpassen (flüssiger)') + slider('fov', 'Sichtfeld', 60, 95, 1, (v) => v + '°') +
         slider('brightness', 'Helligkeit', 0.7, 1.6, 0.02, pct) + check('bloom', 'Leuchteffekte (Bloom)') + check('grain', 'Filmkörnung') + `<label class="set"><span>Vollbild</span><button class="mini" data-a="fs">${document.fullscreenElement ? 'Beenden' : 'Aktivieren'}</button></label>`;
     } else if (tab === 'audio') {
       body = slider('masterVol', 'Gesamtlautstärke', 0, 1, 0.01, pct) + slider('musicVol', 'Musik', 0, 1, 0.01, pct) + slider('sfxVol', 'Soundeffekte', 0, 1, 0.01, pct) + slider('voiceVol', 'Stimmen', 0, 1, 0.01, pct);
@@ -263,6 +264,8 @@ export class Menu {
       <span>Heilen</span><b>${L('heal')}</b>
       <span>Gegenstand werfen (Ablenkung)</span><b>${L('throw')}</b>
       <span>Glock: zielen · schießen · nachladen</span><b>${L('aim')} · ${L('fire')} · ${L('reload')}</b>
+      <span>Schnelle Wende (180°)</span><b>${L('turn')}</b>
+      <span>Karte (Smartphone-App)</span><b>${L('phone')} → Karte</b>
       <span>Losreißen, wenn gepackt</span><b>${L('left')} / ${L('right')} abwechselnd</b>
     </div><p class="small">Zombies hören Schritte, Türen und Würfe, sehen Bewegung und Licht. Im Dunkeln und geduckt bist du schwer zu sehen. Verstecke helfen – aber nicht immer.</p><div class="row"><button data-a="back">Zurück</button></div></div>`);
     el.addEventListener('click', (e) => { if (e.target.closest('button')?.dataset.a === 'back') this.showPause(); });
@@ -307,7 +310,16 @@ export class Menu {
         this._endingNext = null;
         window.removeEventListener('keydown', keyH);
         const meta = g.save.meta();
-        const c = h(`<div class="panel credits endc"><h2>${e.title}</h2><p>${e.summary}</p><p class="small">Erreichte Enden: ${meta.endings.length}/3</p>${meta.endings.length < 3 ? `<p class="small hint">${Object.values(ENDINGS).filter((x) => !meta.endings.includes(x.id)).map((x) => '• ' + x.hint).join('<br>')}</p>` : '<p class="small">Du hast alle Enden gesehen. Danke fürs Spielen.</p>'}<div class="row"><button data-a="menu" class="primary">Hauptmenü</button></div></div>`);
+        g.save.saveStats(g.stats);
+        const st = g.stats, rk = rankOf(st, { fragments: g.state.fragments.size });
+        const docs = (g.phone.data.docs || []).length;
+        const statsHtml = `<div class="results"><div class="rank rank-${rk.letter}"><b>${rk.letter}</b><span>${rk.text}</span></div>
+          <table><tr><td>Spielzeit</td><td>${fmtTime(st.time)}</td></tr><tr><td>Tode</td><td>${st.deaths}</td></tr>
+          <tr><td>Erledigte Zombies</td><td>${st.kills}</td></tr><tr><td>Schüsse · Treffer</td><td>${st.shots} · ${st.hits} (${Math.round(rk.acc * 100)} %)</td></tr>
+          <tr><td>Kopftreffer</td><td>${st.heads}</td></tr><tr><td>Heilmittel benutzt</td><td>${st.heals}</td></tr>
+          <tr><td>Dokumente · Aufnahmen</td><td>${docs} · ${g.state.fragments.size}/5</td></tr></table>
+          ${st.from && st.from !== 'ch1' ? '<p class="small">Über die Kapitelwahl gestartet – die Wertung zählt erst ab dort.</p>' : ''}</div>`;
+        const c = h(`<div class="panel credits endc"><h2>${e.title}</h2><p>${e.summary}</p>${statsHtml}<p class="small">Erreichte Enden: ${meta.endings.length}/3</p>${meta.endings.length < 3 ? `<p class="small hint">${Object.values(ENDINGS).filter((x) => !meta.endings.includes(x.id)).map((x) => '• ' + x.hint).join('<br>')}</p>` : '<p class="small">Du hast alle Enden gesehen. Danke fürs Spielen.</p>'}<div class="row"><button data-a="menu" class="primary">Hauptmenü</button></div></div>`);
         c.addEventListener('click', (ev) => { if (ev.target.closest('button')?.dataset.a === 'menu') { g.toMainMenu(); resolve(); } });
         this._set(c, 'main');
       };

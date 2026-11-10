@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { patchGrid } from '../render/materials.js';
 import { getTex } from '../render/textures.js';
 import { damp, clamp } from '../core/rng.js';
+const sstep = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
 
 const matCache = new Map();
 function mat(key, make) { if (!matCache.has(key)) matCache.set(key, patchGrid(make())); return matCache.get(key); }
@@ -56,6 +57,9 @@ export class Humanoid {
     const top = Array.isArray(outfit.top) ? texMat(outfit.top[0], outfit.top[1]) : skin;
     const bottom = Array.isArray(outfit.bottom) ? texMat(outfit.bottom[0], outfit.bottom[1]) : skin;
     const dark = mat('eyes', () => new THREE.MeshStandardMaterial({ color: 0x050303, roughness: 0.4 }));
+    // Zombieaugen: milchig-trüb, nass glänzend und mit schwachem Schimmer – im Lichtkegel gut sichtbar
+    const zEye = mat('eyes_z', () => new THREE.MeshStandardMaterial({ color: 0xa8a48c, roughness: 0.12, metalness: 0.0, emissive: 0x3a3418, emissiveIntensity: 0.55 }));
+    const teethM = mat('teeth', () => new THREE.MeshStandardMaterial({ color: 0x9a9078, roughness: 0.35 }));
     const hairM = mat('hair' + (o.hair || 0x1a1410), () => new THREE.MeshStandardMaterial({ color: o.hair || 0x1a1410, roughness: 0.8 }));
     const s = o.scale || 1;
     this.root = new THREE.Group();
@@ -73,11 +77,21 @@ export class Humanoid {
     const neckM = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.06, 0.1, 8), skin); neckM.position.y = 0.04; this.neck.add(neckM);
     this.head = J(this.neck, 0, 0.1, 0);
     const skull = new THREE.Mesh(new THREE.SphereGeometry(0.11, 14, 12), skin); skull.scale.set(0.9, 1.08, 1.0); skull.position.set(0, 0.1, 0); skull.castShadow = true; this.head.add(skull);
-    for (const sx of [-0.038, 0.038]) { const e = new THREE.Mesh(new THREE.SphereGeometry(0.022, 8, 6), dark); e.position.set(sx, 0.12, -0.09); e.scale.set(1, 0.7, 0.5); this.head.add(e); }
+    const isHuman = !!outfit.human && o.skin !== 'plastic';
+    for (const sx of [-0.038, 0.038]) {
+      const e = new THREE.Mesh(new THREE.SphereGeometry(0.022, 8, 6), isHuman || o.skin === 'plastic' ? dark : zEye); e.position.set(sx, 0.12, -0.09); e.scale.set(1, 0.7, 0.5); this.head.add(e);
+      // eingefallene, dunkle Augenhöhlen bei Zombies
+      if (!outfit.human) { const so = new THREE.Mesh(new THREE.SphereGeometry(0.03, 8, 6), dark); so.position.set(sx, 0.125, -0.078); so.scale.set(1.15, 0.85, 0.45); this.head.add(so); }
+    }
     const nose = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.04, 0.03), skin); nose.position.set(0, 0.09, -0.105); this.head.add(nose);
     this.jaw = J(this.head, 0, 0.05, -0.02);
     const jawM = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.035, 0.08), skin); jawM.position.set(0, -0.02, -0.05); this.jaw.add(jawM);
     const mouth = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.012, 0.02), dark); mouth.position.set(0, 0.04, -0.105); this.head.add(mouth);
+    if (!outfit.human) {
+      // Zähne oben und im Unterkiefer (sichtbar, wenn der Kiefer aufklappt)
+      const up = new THREE.Mesh(new THREE.BoxGeometry(0.052, 0.012, 0.012), teethM); up.position.set(0, 0.038, -0.1); this.head.add(up);
+      const lo = new THREE.Mesh(new THREE.BoxGeometry(0.048, 0.012, 0.012), teethM); lo.position.set(0, -0.006, -0.086); this.jaw.add(lo);
+    }
     if (o.hairStyle !== 'none') {
       const hair = new THREE.Mesh(new THREE.SphereGeometry(0.118, 12, 8, 0, Math.PI * 2, 0, o.hairStyle === 'long' ? Math.PI * 0.62 : Math.PI * 0.45), hairM);
       hair.scale.set(0.95, 1.08, 1.04); hair.position.set(0, 0.11, 0.005); this.head.add(hair);
@@ -97,7 +111,9 @@ export class Humanoid {
     this.knL.add(limb(0.058, 0.32, bottom === skin ? skin : bottom)); this.knR.add(limb(0.058, 0.32, bottom === skin ? skin : bottom));
     for (const kn of [this.knL, this.knR]) { const f = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.06, 0.22), dark); f.position.set(0, -0.43, -0.05); f.castShadow = true; kn.add(f); }
 
+    if (o.legless) { this.hipL.visible = false; this.hipR.visible = false; }
     this.human = !!outfit.human;
+    this.flinch = 0; this.flinchHead = false; this.deathStyle = 0;
     this.phase = Math.random() * 10;
     this.limp = o.limp ?? (this.human ? 0 : Math.random() < 0.6 ? (Math.random() < 0.5 ? -1 : 1) * (0.3 + Math.random() * 0.5) : 0);
     this.tilt = this.human ? 0 : (Math.random() - 0.5) * 0.6;
@@ -118,7 +134,7 @@ export class Humanoid {
     this.time += dt;
     const sp = this.speed;
     const chase = this.mode === 'chase';
-    const stride = chase ? 0.72 : this.human ? (sp > 2.5 ? 1.25 : 0.85) : 0.62;
+    const stride = this.pose === 'crawl' ? 0.42 : chase ? 0.72 : this.human ? (sp > 2.5 ? 1.25 : 0.85) : 0.62;
     this.phase += (sp / stride) * Math.PI * dt;
     const ph = this.phase;
     const walkAmt = clamp(sp / (this.human ? 1.2 : 0.6), 0, 1);
@@ -187,18 +203,31 @@ export class Humanoid {
       set('shL', -1.2, 0, 0); set('shR', -1.2, 0, 0); set('elL', -0.7, 0, 0); set('elR', -0.7, 0, 0);
     }
     if (st.alertGroan) jaw = 0.5;
+    // Kriechen und Sterben ersetzen die Gelenkziele vollständig
+    if (this.pose === 'crawl') jaw = this._crawlTargets(T, jaw);
+    else if (this.pose === 'dead') jaw = this._deadTargets(T);
+    // Treffer: kurzes Zurückzucken, ein Kopftreffer reißt den Kopf nach hinten
+    if (this.flinch > 0) {
+      const f = this.flinch, sd = this.flinchSide || 1;
+      this.flinch = Math.max(0, f - dt * 4);
+      const add = (k, x, y = 0, z = 0) => { const a = T[k] || [0, 0, 0]; T[k] = [a[0] + x, a[1] + y, a[2] + z]; };
+      add('spine', -0.45 * f, 0.1 * f * sd, 0.18 * f * sd);
+      add('neck', -(this.flinchHead ? 0.8 : 0.2) * f); add('head', -(this.flinchHead ? 1.0 : 0.25) * f, 0.2 * f * sd, 0.35 * f * sd);
+      add('shL', 0.6 * f, 0, -0.35 * f); add('shR', 0.6 * f, 0, 0.35 * f);
+      jaw = Math.max(jaw, 0.35 * f);
+    }
     this.jawOpen = damp(this.jawOpen, jaw, 12, dt);
     this.jaw.rotation.x = this.jawOpen;
     // Haltung (liegen / sitzen / knien) einblenden
     const pb = this.poseBlend;
-    if (pb > 0.001) {
+    if (pb > 0.001 && this.pose !== 'crawl' && this.pose !== 'dead') {
       const P = this._poseTargets(this.pose);
       for (const k of Object.keys(P)) {
         const a = T[k] || [0, 0, 0], b = P[k];
         T[k] = [a[0] + (b[0] - a[0]) * pb, a[1] + (b[1] - a[1]) * pb, a[2] + (b[2] - a[2]) * pb];
       }
     }
-    const rate = this.mode === 'attack' || this.mode === 'grab' ? 22 : this.human ? 12 : 9;
+    const rate = this.mode === 'attack' || this.mode === 'grab' || this.flinch > 0 ? 22 : this.pose === 'dead' ? 14 : this.human ? 12 : 9;
     for (const k of Object.keys(T)) {
       const j = this[k];
       // Konvention der Zielwerte: positiv = nach vorne beugen / Knie anwinkeln; Geometrie erwartet umgekehrtes Vorzeichen
@@ -209,17 +238,74 @@ export class Humanoid {
     // Hüfthöhe
     const bob = Math.abs(Math.sin(ph)) * 0.03 * walkAmt;
     let hipY = 0.95 - bob - Math.abs(this.limp) * 0.02 * Math.max(0, Math.sin(ph)) - this.crouch * 0.32;
-    let hipZ = 0, rootRX = 0;
-    if (pb > 0.001) {
+    let hipZ = 0, rootRX = 0, rootRZ = 0, bx = 0, by = 0, bz = 0;
+    if (this.pose === 'crawl') {
+      // flach auf dem Bauch, Oberkörper leicht aufgerichtet; Brust liegt über dem Standpunkt
+      hipY = 0.95; rootRX = -Math.PI / 2 + (this.dead ? 0.06 : 0.3); bz = 0.9; by = this.dead ? 0.0 : 0.02 + Math.abs(Math.sin(ph)) * 0.025;
+    } else if (this.pose === 'dead') {
+      // erst sacken die Knie weg, dann kippt der Körper um (Drehpunkt an den Füßen)
+      const a = sstep(0, 0.45, pb), b = sstep(0.3, 1, pb);
+      hipY = 0.95 - 0.16 * a * (1 - b);
+      const s = this.deathStyle;
+      if (s === 0) rootRX = Math.PI / 2 * b; else if (s === 1) rootRX = -Math.PI / 2 * b;
+      else rootRZ = (s === 2 ? 1 : -1) * Math.PI / 2 * b;
+      by = 0.12 * b;
+    } else if (pb > 0.001) {
       const py = this.pose === 'lying' ? 0.12 : this.pose === 'sitting' ? 0.18 : this.pose === 'kneel' ? 0.52 : 0.95;
       hipY = hipY + (py - hipY) * pb;
-      if (this.pose === 'lying') { rootRX = -Math.PI / 2 * pb; hipZ = 0; }
+      if (this.pose === 'lying') { rootRX = -Math.PI / 2 * pb; hipZ = 0; bz = 0.8 * pb; }
     }
     this.hips.position.y = hipY;
     this.hips.position.z = hipZ;
     this.body.rotation.x = rootRX;
-    this.body.position.set(0, 0, this.pose === 'lying' ? 0.8 * pb : 0);
+    this.body.rotation.z = rootRZ;
+    this.body.position.set(bx, by, bz);
   }
+
+  // Kriechen (beinloser oder verkrüppelter Zombie): Arme ziehen den Körper abwechselnd nach vorn
+  _crawlTargets(T, jaw) {
+    for (const k of Object.keys(T)) delete T[k];
+    const ph = this.phase, set = (k, x = 0, y = 0, z = 0) => { T[k] = [x, y, z]; };
+    if (this.dead) {
+      set('shL', -2.2, 0, -0.5); set('shR', -1.2, 0, 0.6); set('elL', -0.2, 0, 0); set('elR', -0.6, 0, 0);
+      set('spine', 0, 0, 0.05); set('hips', 0, 0, 0); set('neck', 0.1, 0.4, 0.2); set('head', 0.1, 0.6, 0.3);
+      set('hipL', 0, 0, -0.08); set('hipR', 0, 0, 0.1); set('knL', 0.1, 0, 0); set('knR', 0.2, 0, 0);
+      return 0.35;
+    }
+    const moving = this.speed > 0.05;
+    const sL = moving ? Math.sin(ph) : Math.sin(this.time * 0.8) * 0.15, sR = moving ? Math.sin(ph + Math.PI) : -sL;
+    set('shL', -1.7 - 0.95 * sL, 0, -0.25); set('shR', -1.7 - 0.95 * sR, 0, 0.25);
+    set('elL', -0.25 - 0.7 * Math.max(0, Math.cos(ph)), 0, 0); set('elR', -0.25 - 0.7 * Math.max(0, -Math.cos(ph)), 0, 0);
+    set('spine', -0.15, 0.12 * sL, 0.1 * sL); set('hips', 0, 0, -0.06 * sL);
+    set('neck', -0.45, 0.15 * Math.sin(this.time * 0.7), 0.1 + this.tilt * 0.3); set('head', -0.35 + this.twitch * 0.2, this.lookYaw * 0.5, this.tilt * 0.5);
+    set('hipL', -0.1, 0, -0.08); set('hipR', -0.05, 0, 0.1); set('knL', 0.3, 0, 0); set('knR', 0.15, 0, 0);
+    if (this.mode === 'attack' || this.mode === 'grab' || this.mode === 'bash') {
+      // nach den Knöcheln greifen
+      const k = Math.sin(this.time * 12) * 0.12;
+      set('shL', -2.75 + k, 0.1, -0.15); set('shR', -2.75 - k, -0.1, 0.15); set('elL', -0.3, 0, 0); set('elR', -0.3, 0, 0);
+      set('neck', -0.6, 0, 0); set('head', -0.4, 0, 0);
+      return 0.5 + Math.abs(Math.sin(this.time * 9)) * 0.2;
+    }
+    return Math.max(jaw, 0.2);
+  }
+
+  // Sterben: Knie geben nach, Arme werden schlaff, Kopf fällt zur Seite
+  _deadTargets(T) {
+    for (const k of Object.keys(T)) delete T[k];
+    const pb = this.poseBlend, a = sstep(0, 0.45, pb), b = sstep(0.3, 1, pb), s = this.deathStyle;
+    const side = s === 3 ? -1 : 1;
+    const set = (k, x = 0, y = 0, z = 0) => { T[k] = [x, y, z]; };
+    set('spine', 0.35 * a * (1 - b) + (s === 1 ? -0.1 : 0.1) * b, 0, 0.1 * b * side);
+    set('neck', 0.3 * a, 0.3 * b * side, 0.2 * b * side); set('head', 0.4 * a * (1 - b), 0.7 * b * side, 0.3 * b * side);
+    set('shL', -0.4 * a + (s === 0 ? -0.5 : s === 1 ? 0.3 : -0.3) * b, 0.2 * b, -0.15 - 0.35 * b); set('shR', -0.3 * a + (s === 0 ? -0.15 : s === 1 ? 0.4 : -0.6) * b, -0.3 * b, 0.15 + 0.5 * b);
+    set('elL', -0.5 * a - 0.35 * b, 0, 0); set('elR', -0.4 * a - 0.15 * b, 0, 0);
+    set('hipL', -0.55 * a * (1 - b) - 0.15 * b, 0, -0.05 - 0.12 * b); set('hipR', -0.5 * a * (1 - b) + 0.1 * b, 0, 0.05 + 0.1 * b);
+    set('knL', 1.05 * a * (1 - b) + 0.35 * b, 0, 0); set('knR', 1.0 * a * (1 - b) + 0.1 * b, 0, 0);
+    return 0.25 + 0.2 * b;
+  }
+
+  // Treffer anzeigen (side: von welcher Seite der Treffer kam, ±1)
+  hit(head, side = 1) { this.flinch = 1; this.flinchHead = !!head; this.flinchSide = side; }
 
   _poseTargets(p) {
     if (p === 'lying') return { hips: [0, 0, 0], spine: [0, 0, 0], neck: [0.1, 0, 0], head: [0, 0.6, 0.2], shL: [0.1, 0, -0.4], shR: [0.2, 0, 0.6], elL: [-0.3, 0, 0], elR: [-0.2, 0, 0], hipL: [0, 0, -0.08], hipR: [0, 0, 0.12], knL: [0.2, 0, 0], knR: [0, 0, 0] };
@@ -230,7 +316,10 @@ export class Humanoid {
 
   setPose(p, instant = false) { this.pose = p; if (instant) this.poseBlend = p === 'stand' ? 0 : 1; }
   // Aufstehen: poseBlend -> 0 über die Dauer
-  standUp(dt, dur = 2.2) { this.poseBlend = Math.max(0, this.poseBlend - dt / dur); if (this.poseBlend === 0) this.pose = 'stand'; return this.poseBlend === 0; }
+  standUp(dt, dur = 2.2) {
+    if (this.pose === 'crawl') return true;   // Kriecher stehen nie auf
+    this.poseBlend = Math.max(0, this.poseBlend - dt / dur); if (this.poseBlend === 0) this.pose = 'stand'; return this.poseBlend === 0;
+  }
 
   headWorld(out = new THREE.Vector3()) { this.head.getWorldPosition(out); return out; }
 }

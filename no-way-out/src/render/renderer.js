@@ -39,10 +39,11 @@ const FinalShader = {
     uTint: { value: new THREE.Color(1, 1, 1) },
     uBlur: { value: 0 },
     uCam: { value: 0 },
+    uGrade: { value: 1 },
   },
   vertexShader: /* glsl */`varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
   fragmentShader: /* glsl */`
-    uniform sampler2D tDiffuse; uniform float uTime, uGrain, uVignette, uInjury, uDamage, uFade, uBright, uPulse, uBlur, uCam;
+    uniform sampler2D tDiffuse; uniform float uTime, uGrain, uVignette, uInjury, uDamage, uFade, uBright, uPulse, uBlur, uCam, uGrade;
     uniform vec3 uFadeColor, uTint; uniform vec2 uRes; varying vec2 vUv;
     float hash(vec2 p){ return fract(sin(dot(p, vec2(12.9898,78.233))) * 43758.5453); }
     void main(){
@@ -51,7 +52,8 @@ const FinalShader = {
       float r = length(c);
       // Überwachungskamera: Linsenverzerrung
       if (uCam > 0.5) { uv = 0.5 + c * (1.0 + 0.12 * r * r); }
-      float ca = (uInjury * 0.004 + uDamage * 0.012) * r;
+      // leichte Farbsäume zum Bildrand hin (Objektiv), stärker bei Verletzung und Treffern
+      float ca = (0.0035 + uInjury * 0.004 + uDamage * 0.012) * r;
       vec3 col;
       col.r = texture2D(tDiffuse, uv + c * ca).r;
       col.g = texture2D(tDiffuse, uv).g;
@@ -65,6 +67,12 @@ const FinalShader = {
         col = mix(col, acc / 5.0, clamp(bl, 0.0, 1.0));
       }
       col *= uTint;
+      // Farbgebung: kühle, grünstichige Schatten, warme Lichter, sanfte S-Kurve
+      float lum0 = dot(col, vec3(0.2126, 0.7152, 0.0722));
+      vec3 tone = mix(vec3(0.93, 1.0, 1.07), vec3(1.05, 1.0, 0.92), smoothstep(0.03, 0.45, lum0));
+      col *= mix(vec3(1.0), tone, uGrade);
+      vec3 sc = clamp(col, 0.0, 1.0);
+      col = mix(col, sc * sc * (3.0 - 2.0 * sc), 0.22 * uGrade);
       // Entsättigung bei Verletzung
       float l = dot(col, vec3(0.299, 0.587, 0.114));
       col = mix(col, vec3(l), uInjury * 0.45);
@@ -100,6 +108,7 @@ export class Renderer {
     r.shadowMap.type = THREE.PCFSoftShadowMap;
     this.r = r;
     this.quality = QUALITY[settings.quality] || QUALITY.medium;
+    this.dyn = 1; this._fpsN = 0; this._t0 = 0; this._tLast = 0; this._goodT = 0;
     this._buildComposer();
     window.addEventListener('resize', () => this.resize());
     this.resize();
@@ -129,7 +138,7 @@ export class Renderer {
 
   resize() {
     const w = window.innerWidth, h = window.innerHeight;
-    const pr = Math.min(window.devicePixelRatio || 1, IS_TOUCH ? 1.5 : 2) * this.quality.pixelRatio * (this.settings.renderScale || 1);
+    const pr = Math.min(window.devicePixelRatio || 1, IS_TOUCH ? 1.5 : 2) * this.quality.pixelRatio * (this.settings.renderScale || 1) * (this.settings.autoRes === false ? 1 : this.dyn);
     this.r.setPixelRatio(pr);
     this.r.setSize(w, h, false);
     this.canvas.style.width = w + 'px'; this.canvas.style.height = h + 'px';
@@ -149,6 +158,25 @@ export class Renderer {
     u.uBright.value = this.settings.brightness || 1;
     this.bloom.enabled = this.quality.bloom && this.settings.bloom;
     this.composer.render(dt);
+  }
+
+  // Dynamische Auflösung: Fällt die Bildrate dauerhaft unter ~45 fps, wird intern kleiner gerechnet
+  // (bis 60 %); läuft es wieder lange flüssig, geht es schrittweise zurück auf 100 %.
+  adapt() {
+    if (this.settings.autoRes === false) { if (this.dyn !== 1) { this.dyn = 1; this.resize(); } return; }
+    // gemessen wird echte Zeit (nicht die gedeckelte Spielzeit); nach Pausen beginnt die Messung neu
+    const now = performance.now();
+    if (!this._t0 || now - this._tLast > 500) { this._t0 = now; this._fpsN = 0; }
+    this._tLast = now; this._fpsN++;
+    const span = now - this._t0;
+    if (span < 2000) return;
+    const fps = this._fpsN * 1000 / span;
+    this._t0 = now; this._fpsN = 0;
+    let d = this.dyn;
+    if (fps < 45 && d > 0.6) { d = Math.max(0.6, d - (fps < 30 ? 0.15 : 0.08)); this._goodT = 0; }
+    else if (fps > 57) { this._goodT += 2; if (this._goodT >= 6 && d < 1) { d = Math.min(1, d + 0.05); this._goodT = 0; } }
+    else this._goodT = 0;
+    if (Math.abs(d - this.dyn) > 0.001) { this.dyn = d; this.resize(); }
   }
 
   get fx() { return this.final.uniforms; }

@@ -228,6 +228,10 @@ export function decalMat(kind) {
   if (kind.startsWith('blood')) {
     const t = getTex('blood', { kind: kind.split('_')[1] || 'splat' }, 256);
     m = std({ map: t.map, transparent: true, roughness: 0.25, metalness: 0, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
+  } else if (kind === 'hole') {
+    // Einschussloch: dunkler Kern, aufgesplitterter Rand
+    const t = getTex('bullethole', {}, 64);
+    m = std({ map: t.map, transparent: true, roughness: 0.9, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -3, polygonOffsetUnits: -3 });
   } else {
     const t = getTex('paper', {}, 128);
     m = std({ map: t.map, roughness: 0.9, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });

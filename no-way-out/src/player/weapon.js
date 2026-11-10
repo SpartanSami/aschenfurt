@@ -124,18 +124,25 @@ export class Weapon {
     g.hands.shoot();
     // Treffer
     const hit = this._pick(tmpO, tmpD, 0, RANGE);
-    const wall = this._wallDist(tmpO, tmpD);
+    const wh = this._rayHit(tmpO, tmpD, RANGE);
+    const wall = wh.t;
+    this.stats('shots');
     if (hit && hit.t < wall) {
       const z = hit.zombie;
       const dmg = hit.head ? 4 : 1;
       g.fx.puff(hit.point.x, hit.point.y, hit.point.z, { n: hit.head ? 50 : 30, w: 0.25, d: 0.25, size: 0.12, life: 0.9, color: 0x6a0c0a });
       g.audio.play('hit', { pos: hit.point.clone(), vol: 0.5 });
+      this.stats('hits'); if (hit.head) this.stats('heads');
+      // Blutspritzer auf Wand oder Boden hinter dem Getroffenen
+      const bh = this._rayHit(hit.point, tmpD, 2.6, 0.05);
+      if (bh.t < 2.6) this._mark(bh, hit.point, tmpD, 'blood_splat', 0.45 + Math.random() * 0.45);
       const killed = z.takeHit(dmg, hit.head);
-      if (killed) g.stats && (g.stats.kills = (g.stats.kills || 0) + 1);
+      if (killed) this.stats('kills');
     } else if (wall < RANGE) {
       tmpA.copy(tmpO).addScaledVector(tmpD, wall - 0.03);
       g.fx.puff(tmpA.x, tmpA.y, tmpA.z, { n: 18, w: 0.15, d: 0.15, size: 0.08, life: 0.7, color: 0xb8b0a0 });
       g.audio.play('click', { pos: tmpA.clone(), vol: 0.4 });
+      this._mark(wh, tmpO, tmpD, 'hole', 0.05 + Math.random() * 0.02);
     }
     if (this.mag === 0 && this.reserve > 0) setTimeout(() => this.startReload(), 250);
   }
@@ -182,19 +189,48 @@ export class Weapon {
     return best;
   }
 
-  // Entfernung bis zum ersten Hindernis (Wand, geschlossene Tür, Glas, Boden, Decke)
-  _wallDist(o, d) {
+  // Statistik für die Auswertung am Spielende
+  stats(k) { const st = this.game.stats; if (st) st[k] = (st[k] || 0) + 1; }
+
+  // Strahl durch das Raster: erstes Hindernis (Wand, geschlossene Tür, Glas, Boden, Decke)
+  // Liefert Entfernung, Art und die letzte freie Zelle samt Wandseite – für Einschusslöcher und Blutspritzer.
+  _rayHit(o, d, maxT, start = 0.2) {
     const grid = this.game.level.grid;
-    const step = 0.06;
-    for (let t = 0.2; t < RANGE; t += step) {
+    const step = 0.05;
+    let pi = Math.floor(o.x + d.x * start), pj = Math.floor(o.z + d.z * start);
+    for (let t = start; t < maxT; t += step) {
       const x = o.x + d.x * t, y = o.y + d.y * t, z = o.z + d.z * t;
       const cx = Math.floor(x), cz = Math.floor(z);
-      if (!grid.inb(cx, cz)) return t;
+      if (!grid.inb(cx, cz)) return { t, kind: 'out' };
       const f = grid.get(cx, cz);
-      if (f & (F.SOLID | F.DOORSHUT | F.GLASS)) return t;
+      if (f & (F.SOLID | F.DOORSHUT | F.GLASS)) {
+        const side = cx !== pi ? (d.x > 0 ? 'e' : 'w') : (d.z > 0 ? 's' : 'n');
+        return { t, kind: f & F.SOLID ? 'wall' : 'door', ci: pi, cj: pj, side };
+      }
       const k = grid.idx(cx, cz);
-      if (y < grid.floorY[k] - 0.02 || y > grid.ceilY[k]) return t;
+      if (y < grid.floorY[k] - 0.02) return { t, kind: 'floor', ci: cx, cj: cz };
+      if (y > grid.ceilY[k]) return { t, kind: 'ceil' };
+      pi = cx; pj = cz;
     }
-    return RANGE;
+    return { t: maxT, kind: 'none' };
+  }
+  _wallDist(o, d) { return this._rayHit(o, d, RANGE).t; }
+
+  // Spur hinterlassen: auf Wänden senkrecht, auf dem Boden flach (nicht auf Türen/Glas, die sich bewegen)
+  _mark(h, o, d, kind, size) {
+    const lv = this.game.level;
+    if (h.kind !== 'wall' && h.kind !== 'floor') return;
+    const x = o.x + d.x * (h.t - 0.02), y = o.y + d.y * (h.t - 0.02), z = o.z + d.z * (h.t - 0.02);
+    try {
+      if (h.kind === 'wall') {
+        const k = lv.grid.idx(h.ci, h.cj), fy = lv.grid.floorY[k];
+        const yy = y - fy;
+        if (yy < 0.04 || y > lv.grid.ceilY[k] - 0.04) return;
+        const m = lv.addDecal({ kind, x: Math.min(h.ci + 0.98, Math.max(h.ci + 0.02, x)), z: Math.min(h.cj + 0.98, Math.max(h.cj + 0.02, z)), wall: h.side, y: yy, size });
+        if (m) m.rotation.z = Math.random() * 6.28;
+      } else {
+        lv.addDecal({ kind, x, z, size, rot: Math.random() * 6.28, lift: Math.random() * 0.002 });
+      }
+    } catch (e) { /* Dekoration darf nie den Schuss stören */ }
   }
 }

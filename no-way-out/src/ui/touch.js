@@ -23,6 +23,7 @@ export class TouchControls {
         <button class="t-btn" data-t="heal">Heilen</button>
         <button class="t-btn" data-t="flashlight">Lampe</button>
         <button class="t-btn" data-t="phone">Handy</button>
+        <button class="t-btn" data-t="turn">Wenden</button>
       </div>
       <button class="t-btn t-fire" data-t="fire">Schießen</button>
       <button class="t-btn t-reload" data-t="reload">Laden</button>

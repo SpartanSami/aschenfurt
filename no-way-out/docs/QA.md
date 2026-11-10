@@ -18,7 +18,7 @@ Getestet wurde automatisiert in einem Headless-Chromium mit Software-Rendering (
 | Kapitel 5 + **Ende „Tragödie“ (İlyas bleibt)** | ✅ |
 | Kapitel 5 + **Ende „Tragödie“ (Sami bleibt)** | ✅ |
 | Kapitel 5 + **Ende „Geheimnis“** | ✅ |
-| **Gesamte Kampagne am Stück** (alle acht Abschnitte, Zustand wird übernommen) | ✅ 1 → 1·2 → 2 → 2·2 → 3 → 4 → 4·2 → 5: Aufnahmen 1–5 gesammelt, Serum gefunden und weitergegeben, Begleiter übernommen, Geheimnis-Ende erreicht. Keine Skript- oder Laufzeitfehler (Produktions-Build). |
+| **Gesamte Kampagne am Stück** (alle acht Abschnitte, Zustand wird übernommen) | ✅ 1 → 1·2 → 2 → 2·2 → 3 → 4 → 4·2 → 5: Aufnahmen 1–5 gesammelt, Serum gefunden und weitergegeben, Begleiter übernommen, Geheimnis-Ende erreicht. Keine Skript- oder Laufzeitfehler (Produktions-Build). Nach der Überarbeitung (Raumdetails, Kriecher, Karte, Statistik) erneut vollständig bestanden. |
 | Kapitel 1, Teil 2 **ohne** Unverwundbarkeit | ✅ **vollständig mit 100 % Gesundheit**: geduckt hinter der Theke, Flucht vor dem Wartezimmer, Brandschutztür, im Keller in der Wäscherei und im Büro den Wachmann abgewartet, Karte genommen, sofort zum Aufzug gerannt. |
 | Kapitel 2·2 und 4·2 **ohne** Unverwundbarkeit | ⚠️ Der Bot stirbt in den Schleichpassagen (Leitungsgang, Modegeschäft), weil er feste Wege abläuft und weder Dampfstöße abwartet noch Wanderern ausweicht. Die Läufe deckten aber echte Platzierungsfehler auf, die behoben sind (siehe unten). |
 | Touch-Steuerung (iPad-Emulation, echte Touch-Gesten) | ✅ Stick bewegt, Wischen dreht die Sicht, Handy öffnen/schließen über das Kontext-Steuerkreuz, Pause und Weiterspielen, Knopfnamen in Hinweisen („Benutzen“) |
@@ -37,7 +37,26 @@ Getestet wurde automatisiert in einem Headless-Chromium mit Software-Rendering (
 | Entscheidungen per Tastatur (W/S + E) | ✅ |
 | Kontaktperson über Kamera-Einblendung (Kap. 1), ARGUS-Monitor und Lautsprecher (Kap. 2), Sprachnachricht (Kap. 3) | ✅ |
 
+## Überarbeitung (Grafik, Details, Animationen, Karten)
+
+| Prüfung | Ergebnis |
+|---|---|
+| Lichtkegel mit Schwebstaub | ✅ Bildschirmfotos im Krankenhausflur: Staub leuchtet nur im Strahl, endet an der Wand. Der Lichtschaft ist bewusst schwach und vor allem schräg von der Seite sichtbar. |
+| Farbgebung im Schluss-Shader | ✅ Bildschirmfotos aller Testansichten, keine Shader-Fehler |
+| Raumdetails in allen acht Abschnitten | ✅ alle Abschnitte bauen fehlerfrei auf (Gesamtdurchlauf), z. B. Kapitel 1: 391 Details, 1·2: 231, 4: 295. Draw-Calls Krankenhausflur (Mittel): 493 |
+| Karten-App | ✅ deckt Räume und Sichtlinie auf, zeigt Türen in drei Farben, Gegenstände, Raumnamen und Blickrichtung. Wird im Checkpoint gespeichert (Bitfeld). Zoom mit A/D bzw. ◀ ▶ |
+| Kriecher (neuer Zombietyp) | ✅ Platzierung auf begehbaren Zellen in 1·2, 2·2 und 4. In 1·2 schläft er bis zur Flucht mit der Karte und wacht erst beim Betreten des Westteils auf (geprüft: ohne Karte bleibt er liegen, mit Karte verfolgt er). Packen funktioniert, der Kopf ist trefferfähig. |
+| Treffer- und Todesanimation, Blutlache, Einschusslöcher | ✅ Bildschirmfotos: Körper kippt nach hinten weg vom Schützen, Blutlache wächst. Waffentest unverändert bestanden (4 Körpertreffer, Kopfschuss, Nachladen, Wand blockiert, Elif geschützt, Trockenschuss, Speichern) |
+| Schnelle Wende (V) | ✅ dreht genau 180° in 0,32 s |
+| Statistik und Rang | ✅ Spielzeit läuft nur im Spiel, ein Tod zählt und wird sofort gespeichert, Auswertung mit Rang erscheint im Endbildschirm (Bildschirmfoto) |
+| Dynamische Auflösung | ✅ Logik mit simulierter Uhr geprüft: bei 25 fps nach gut 6 s auf 60 %, bei 60 fps schrittweise zurück. ⚠️ Im Testbrowser selbst nicht live messbar, weil der Headless-Browser ruckweise rendert (lange Pausen, dazwischen 60 fps). |
+| Animations-LOD | ✅ Gesamtdurchlauf ohne Auffälligkeiten; ferne Zombies werden mit aufsummierter Zeit animiert |
+
 ## Behobene Fehler (Auswahl)
+- Der erste Kriecher lag direkt vor der Tür zur Pathologie. Der Autopilot blieb hängen, ein Mensch wäre dort eingekeilt worden. Er liegt jetzt im Westteil des Kellerflurs und wacht erst auf der Flucht auf; an der Südwand kommt man vorbei.
+- Ein schlafender Kriecher wurde beim Laden in die Stehhaltung gesetzt. Behoben.
+- Beim Kapitelwechsel konnte eine abgebrochene Wartezeit (z. B. ein Satz, auf dessen Ende kein Skript wartete) als „unbehandelter Fehler“ in der Konsole landen. Wartezeiten sind jetzt immer abgefangen, wartende Skripte bekommen den Abbruch weiterhin.
+- Die dynamische Auflösung maß zuerst die gedeckelte Spielzeit statt der echten Zeit und reagierte dadurch nicht zuverlässig. Sie misst jetzt echte Zeit und beginnt nach Pausen neu.
 - Requisiten, die ihre Höhe selbst setzen (Rohre, Schilder, Fernseher, OP-Lampen), wurden doppelt angehoben und hingen teils in der Decke oder im Boden. Ihre Höhe gilt jetzt relativ zum örtlichen Boden.
 - Schild- und Bildschirmtexte wurden über breite Flächen gekachelt („ELEKTRO MAX ELEKTRO MAX …“) bzw. abgeschnitten. Beschriftete Flächen werden jetzt eingepasst.
 - Wurde die Pause nicht über Esc ausgelöst, konnte der Mauszeiger gefangen bleiben, und Klicks landeten im 3D-Bild statt auf den Menüknöpfen. Die Pause gibt den Zeiger jetzt immer frei.
@@ -75,7 +94,7 @@ Getestet wurde automatisiert in einem Headless-Chromium mit Software-Rendering (
 Die Schaufensterpuppen der Linden-Passage werden zu wenigen Meshes zusammengefasst (vorher bis zu ~1180 Draw-Calls). Das ist für aktuelle Desktop-GPUs unkritisch. Auf schwachen Laptops hilft die Grafikstufe „Niedrig“.
 
 ## Spielzeit
-Der Autopilot braucht für die gesamte Kampagne **rund 31 Minuten reine Spielzeit** (1: 4,0 · 1·2: 3,9 · 2: 4,3 · 2·2: 4,8 · 3: 3,7 · 4: 3,6 · 4·2: 3,1 · 5: 3,9 Minuten; in 1·2 und 2·2 wartet er Patrouillen ab). Er rennt sonst unsichtbar die kürzesten Wege ab, stirbt nie und liest Dokumente nicht. Das ist eine Untergrenze. Für menschliche Spieler ergibt sich daraus die Schätzung von etwa 1,5 bis 2 Stunden. Gemessen wurde das nicht.
+Der Autopilot braucht für die gesamte Kampagne **rund 32 Minuten reine Spielzeit** (letzter Lauf nach der Überarbeitung, Produktions-Build: 1: 4,0 · 1·2: 3,3 · 2: 4,3 · 2·2: 4,9 · 3: 4,6 · 4: 3,9 · 4·2: 2,9 · 5: 3,9 Minuten; in 1·2 und 2·2 wartet er Patrouillen ab). Er rennt sonst unsichtbar die kürzesten Wege ab, stirbt nie und liest Dokumente nicht. Das ist eine Untergrenze. Für menschliche Spieler ergibt sich daraus die Schätzung von etwa 1,5 bis 2 Stunden. Gemessen wurde das nicht.
 
 ## Grenzen der Tests
 - Der Autopilot fährt feste Routen ab. Er **schleicht und weicht nicht wie ein Mensch aus**, deshalb liefen die vollständigen Routen mit Unverwundbarkeit. Ob Verfolgungen fair sind, wurde zusätzlich ohne Unverwundbarkeit (Kapitel 1) und über die Zeitabstände der Skripte geprüft. Ein Feinschliff der Balance durch echte Spieltests wird empfohlen.

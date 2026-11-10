@@ -42,4 +42,13 @@ export const ZOMBIE_TYPES = {
     reach: 1.2, windup: 0.55, grab: 0.55, damage: 28,
     wake: 2.0, getup: 1.4, alertDelay: 0.3, search: 14, callRadius: 11, bash: 1.4,
   },
+  // Kriecher: ohne Beine, zieht sich mit den Armen über den Boden. Sehr langsam, aber flach und in dunklen
+  // Ecken leicht zu übersehen – greift nach den Knöcheln. Hält weniger aus.
+  crawler: {
+    name: 'Kriecher', outfit: 'gown', crawl: true, legless: true, hpMul: 0.75,
+    walk: 0.28, chase: 0.8, turn: 1.4, turnChase: 3.2,
+    sight: 9, fov: 150, hearing: 1.15, detect: 0.9,
+    reach: 1.0, windup: 0.45, grab: 0.7, damage: 22,
+    wake: 3.0, getup: 0.1, alertDelay: 0.6, search: 9, callRadius: 6, bash: 0.6,
+  },
 };

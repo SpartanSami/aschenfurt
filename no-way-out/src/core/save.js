@@ -33,7 +33,10 @@ export class SaveManager {
     this.mem = s; write(KEY, s);
   }
   clear() { try { localStorage.removeItem(KEY); } catch (e) { /* */ } this.mem = null; }
-  newRun() { const s = { version: 1, snapshot: null, chapterStarts: {}, updated: Date.now() }; this.mem = s; write(KEY, s); }
+  newRun() { const s = { version: 1, snapshot: null, chapterStarts: {}, updated: Date.now(), stats: null }; this.mem = s; write(KEY, s); }
+  // Statistik des Durchgangs (unabhängig vom Checkpoint, damit Tode nicht zurückgesetzt werden)
+  saveStats(st) { const s = this.get() || { version: 1, chapterStarts: {} }; s.stats = st; this.mem = s; write(KEY, s); }
+  stats() { return this.get()?.stats || null; }
   chapterStart(id) { const s = this.get(); return s?.chapterStarts?.[id] || null; }
   meta() { return read(META) || this.metaMem || { unlocked: ['ch1'], endings: [], best: {} }; }
   setMeta(m) { this.metaMem = m; write(META, m); }

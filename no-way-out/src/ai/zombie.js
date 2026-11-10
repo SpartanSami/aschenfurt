@@ -26,7 +26,7 @@ export class Zombie {
     const type = ZOMBIE_TYPES[def.type || 'shambler'] || ZOMBIE_TYPES.shambler;
     this.type = type;
     this.rng = new RNG((def.x * 131 + def.z * 71) | 0);
-    this.model = new Humanoid({ outfit: def.outfit || type.outfit || 'gown', skin: def.skin || this.rng.pick(['zombie', 'zombie2', 'zombie3']), pose: def.pose || 'stand', hair: def.hair ?? this.rng.pick([0x1a1410, 0x3a2a1a, 0x5a5048, 0x111111]), hairStyle: def.hairStyle || this.rng.pick(['short', 'short', 'long', 'none']), scale: def.scale || (0.94 + this.rng.next() * 0.12), tornSleeve: this.rng.chance(0.3), limp: def.limp });
+    this.model = new Humanoid({ outfit: def.outfit || type.outfit || 'gown', skin: def.skin || this.rng.pick(['zombie', 'zombie2', 'zombie3']), pose: type.crawl ? 'crawl' : (def.pose || 'stand'), legless: def.legless ?? type.legless, hair: def.hair ?? this.rng.pick([0x1a1410, 0x3a2a1a, 0x5a5048, 0x111111]), hairStyle: def.hairStyle || this.rng.pick(['short', 'short', 'long', 'none']), scale: def.scale || (0.94 + this.rng.next() * 0.12), tornSleeve: this.rng.chance(0.3), limp: def.limp });
     this.root = this.model.root;
     this.pos = new THREE.Vector3(def.x, game.level.grid.heightAt(def.x, def.z), def.z);
     this.home = { x: def.x, z: def.z, yaw: def.yaw ?? 0 };
@@ -34,8 +34,8 @@ export class Zombie {
     this.radius = 0.3;
     this.alive = true;
     this.hearing = type.hearing;
-    this.state = def.state || (def.pose && def.pose !== 'stand' ? ZS.DORMANT : def.patrol ? ZS.PATROL : ZS.IDLE);
-    if (this.state === ZS.DORMANT && (!def.pose || def.pose === 'stand')) this.model.setPose('stand', true);
+    this.state = def.state || (def.pose && def.pose !== 'stand' && !type.crawl ? ZS.DORMANT : def.patrol ? ZS.PATROL : ZS.IDLE);
+    if (this.state === ZS.DORMANT && !type.crawl && (!def.pose || def.pose === 'stand')) this.model.setPose('stand', true);
     this.stateT = 0;
     this.suspicion = 0;
     this.lastKnown = null; this.lastSeenT = -99; this.seen = false;
@@ -220,7 +220,7 @@ export class Zombie {
     const g = this.game.level.grid;
     const inVault = g.has(Math.floor(this.pos.x), Math.floor(this.pos.z), F.VAULT);
     // Beim Hineinstolpern in ein Hindernis kann ein verfolgender Zombie stürzen
-    if (inVault && !this.climbing && this.state === ZS.CHASE && this.rng.chance(0.22)) { this.climbing = true; this.setState(ZS.FALL); return; }
+    if (inVault && !this.climbing && !this.type.crawl && this.state === ZS.CHASE && this.rng.chance(0.22)) { this.climbing = true; this.setState(ZS.FALL); return; }
     this.climbing = inVault;
     const wade = this.game.level.waterDepth(this.pos.x, this.pos.z, this.pos.y) > 0.25 ? 0.75 : 1;
     const sp = speed * align * (inVault ? 0.35 : 1) * wade;
@@ -336,7 +336,12 @@ export class Zombie {
       lookYaw = clamp(angleDiff(this.yaw, want), -1.1, 1.1);
     }
     m.lookYaw = lookYaw;
-    m.update(dt, { alertGroan: (m._groanFlash = Math.max(0, (m._groanFlash || 0) - dt)) > 0.2 });
+    // Animations-LOD: weit entfernte Zombies (über 24 m) werden nur jedes dritte Bild animiert
+    const groan = (m._groanFlash = Math.max(0, (m._groanFlash || 0) - dt)) > 0.2;
+    const cam = this.game.camera.position, far = (this.pos.x - cam.x) ** 2 + (this.pos.z - cam.z) ** 2 > 24 * 24;
+    this._animAcc = (this._animAcc || 0) + dt;
+    this._animTick = ((this._animTick || 0) + 1) % 3;
+    if (!far || this._animTick === 0) { m.update(this._animAcc, { alertGroan: groan }); this._animAcc = 0; }
     this.root.position.copy(this.pos);
     this.root.rotation.y = this.yaw;
     // Schlurfgeräusche
@@ -556,6 +561,9 @@ export class Zombie {
     const game = this.game, p = game.player.pos;
     this.hp -= dmg;
     this.lastKnown = { x: p.x, z: p.z }; this.lastSeenT = this.time; this.suspicion = 1;
+    // Zucken zur Seite, von der der Treffer kommt
+    const fx = -Math.sin(this.yaw), fz = -Math.cos(this.yaw);
+    this.model.hit(head, (fx * (p.z - this.pos.z) - fz * (p.x - this.pos.x)) > 0 ? 1 : -1);
     if (this.hp <= 0) { this.die(head); return true; }
     game.audio.zombie('attack', tmpV.set(this.pos.x, this.pos.y + 1.5, this.pos.z), 0.9);
     if (this.state === ZS.DORMANT) { this.setState(ZS.GETUP); this.afterGetup = ZS.CHASE; }
@@ -567,21 +575,38 @@ export class Zombie {
     return false;
   }
   die(head) {
-    const game = this.game;
+    const game = this.game, m = this.model;
     this.dead = true; this.alive = false; this.deadT = 0;
     this.cmd = null; this.speed = 0;
-    this.model.setPose('lying'); this.model.poseBlend = 0; this.model.mode = 'idle'; this.model.speed = 0;
-    this.model.jawOpen = head ? 0 : 0.4;
+    m.dead = true; m.mode = 'idle'; m.speed = 0; m.flinch = 0;
+    m.jawOpen = head ? 0 : 0.4;
+    // Fallrichtung: weg vom Schützen, aber nur dorthin, wo Platz ist (nicht in eine Wand)
+    const p = game.player.pos, grid = game.level.grid;
+    const s = Math.sin(this.yaw), c = Math.cos(this.yaw);
+    const dirs = { 0: [s, c], 1: [-s, -c], 2: [-c, s], 3: [c, -s] };   // rückwärts, vorwärts, links, rechts (Welt)
+    const free = (st) => { const d = dirs[st]; for (const t of [0.6, 1.1, 1.6]) { const x = this.pos.x + d[0] * t, z = this.pos.z + d[1] * t, i = Math.floor(x), j = Math.floor(z); if (!grid.inb(i, j) || (grid.get(i, j) & (F.SOLID | F.DOORSHUT | F.GLASS)) || Math.abs(grid.heightAt(x, z) - this.pos.y) > 0.4) return false; } return true; };
+    const away = [p.x - this.pos.x, p.z - this.pos.z];
+    const order = [0, 1, 2, 3].sort((a, b) => (dirs[a][0] * away[0] + dirs[a][1] * away[1]) - (dirs[b][0] * away[0] + dirs[b][1] * away[1]));
+    let style = order.find(free);
+    if (style === undefined) style = order[0];
+    if (this.type.crawl) { this.poolDir = [-s * 0.3, -c * 0.3]; }
+    else {
+      m.deathStyle = style; m.setPose('dead'); m.poseBlend = 0;
+      this.poolDir = [dirs[style][0] * 0.95, dirs[style][1] * 0.95];
+    }
     game.state.removed.add(this.id);
     game.audio.zombie('chase', tmpV.set(this.pos.x, this.pos.y + 1.4, this.pos.z), 0.7);
-    setTimeout(() => { if (this.dead) game.audio.play('land', { pos: tmpV.set(this.pos.x, this.pos.y + 0.2, this.pos.z), vol: 0.7 }); }, 450);
+    setTimeout(() => { if (this.dead) game.audio.play('land', { pos: tmpV.set(this.pos.x, this.pos.y + 0.2, this.pos.z), vol: 0.7 }); }, this.type.crawl ? 150 : 650);
+    // Blutlache breitet sich unter dem Körper aus
+    try { this.pool = game.level.addDecal({ kind: 'blood_pool', x: this.pos.x + this.poolDir[0], z: this.pos.z + this.poolDir[1], size: 1.5, rot: this.rng.range(0, 6.28) }); if (this.pool) this.pool.scale.setScalar(0.05); } catch (e) { this.pool = null; }
   }
   // Leiche: zusammensacken, danach liegen bleiben
   _corpse(dt) {
-    if (this.deadT > 1.2) return;
     this.deadT += dt;
+    if (this.pool && this.deadT < 6) { const k = Math.min(1, this.deadT / 5); this.pool.scale.setScalar(0.05 + 0.95 * (1 - (1 - k) * (1 - k))); }
+    if (this.deadT > 2.2) return;
     const m = this.model;
-    m.poseBlend = Math.min(1, this.deadT / 0.55);
+    if (m.pose === 'dead') m.poseBlend = Math.min(1, this.deadT / 1.0);
     m.speed = 0; m.mode = 'idle';
     m.update(dt, {});
     this.root.position.copy(this.pos);

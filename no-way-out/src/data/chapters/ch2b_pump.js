@@ -115,6 +115,8 @@ export default {
     L.zombie(28.0, 25.5, { id: 'zl_2', type: 'sleeper', pose: 'kneel', yaw: 0.15, outfit: 'labcoat', wake: 2.8 });
     L.zombie(35.0, 27.4, { id: 'zl_3', type: 'sleeper', pose: 'sitting', yaw: PI - 0.3, outfit: 'scrubs', wake: 3 });
     L.zombie(23.6, 21.6, { id: 'zw_1', type: 'sleeper', pose: 'lying', yaw: 1.0, outfit: 'civilian2', wake: 3 });
+    // Kriecher in der Werkstatt-Ecke: bewacht die Vorräte
+    L.zombie(19.4, 23.2, { id: 'zw_crawl', type: 'crawler', yaw: -PI / 2, outfit: 'hazmat' });
     L.zombie(48.6, 19.4, { id: 'zd_1', type: 'shambler', yaw: 0.3, outfit: 'hazmat' });
     L.zombie(49.8, 22.6, { id: 'zd_2', type: 'shambler', yaw: 2.2, outfit: 'civilian' });
     L.zombie(46.6, 23.4, { id: 'zd_3', type: 'shambler', yaw: -2.6, outfit: 'labcoat' });

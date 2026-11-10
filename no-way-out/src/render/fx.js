@@ -17,19 +17,13 @@ export class FX {
     this.camMode = false;
     this._dust();
   }
-  attach(scene) { scene.add(this.root); if (this.dust) scene.add(this.dust); if (this.rain) scene.add(this.rain); }
+  attach(scene) { scene.add(this.root); if (this.rain) scene.add(this.rain); }
 
+  // Weiche Punkt-Textur für Staubwolken (Schüsse, Einschläge). Der Schwebstaub im Lichtkegel liegt in render/beam.js.
   _dust() {
-    const n = 500;
-    const pos = new Float32Array(n * 3);
-    for (let i = 0; i < n; i++) { pos[i * 3] = (Math.random() - 0.5) * 12; pos[i * 3 + 1] = Math.random() * 3; pos[i * 3 + 2] = (Math.random() - 0.5) * 12; }
-    const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
     const c = document.createElement('canvas'); c.width = c.height = 32;
     const x = c.getContext('2d'); const gr = x.createRadialGradient(16, 16, 0, 16, 16, 16); gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(1, 'rgba(255,255,255,0)'); x.fillStyle = gr; x.fillRect(0, 0, 32, 32);
     this.dustTex = new THREE.CanvasTexture(c);
-    const m = new THREE.PointsMaterial({ size: 0.018, map: this.dustTex, transparent: true, opacity: 0.35, depthWrite: false, color: 0xcfc8b8, blending: THREE.AdditiveBlending });
-    this.dust = new THREE.Points(g, m);
-    this.dust.frustumCulled = false;
   }
 
   setRain(on) {
@@ -135,19 +129,6 @@ export class FX {
       a.needsUpdate = true;
       pf.pts.material.opacity = 0.35 * Math.min(1, pf.life / pf.max * 2);
       if (pf.life <= 0) { this.root.remove(pf.pts); pf.pts.geometry.dispose(); this.puffs.splice(i, 1); }
-    }
-    // Staub um die Kamera
-    if (this.dust) {
-      const cam = game.camera;
-      this.dust.position.set(Math.floor(cam.position.x / 12) * 12, game.player.pos.y, Math.floor(cam.position.z / 12) * 12);
-      const pos = this.dust.geometry.attributes.position;
-      for (let i = 0; i < pos.count; i++) {
-        let y = pos.getY(i) + Math.sin(game.time * 0.3 + i) * 0.0008 - 0.0004;
-        if (y < 0) y += 3;
-        pos.setY(i, y);
-      }
-      pos.needsUpdate = true;
-      this.dust.material.opacity = game.player.flashlight ? 0.45 : 0.12;
     }
     if (this.rain) {
       const cam = game.camera;

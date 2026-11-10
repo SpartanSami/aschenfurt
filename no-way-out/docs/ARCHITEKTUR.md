@@ -22,13 +22,16 @@ no-way-out/
 ├─ src/
 │  ├─ main.js, game.js        Bootstrapping, Spielzustände, Hauptschleife, Checkpoints, Angriffe
 │  ├─ core/                   config (Schwierigkeit, Einstellungen), input, save, events, rng
-│  ├─ render/                 renderer (Post-FX), materials (+Shader-Patch), textures (prozedural),
-│  │                          lighting (Licht-Pool, Flackern, Stromkreise), fx (Partikel, Bildschirm)
+│  ├─ render/                 renderer (Post-FX, Farbgebung, dynamische Auflösung), materials (+Shader-Patch),
+│  │                          textures (prozedural), lighting (Licht-Pool, Flackern, Stromkreise),
+│  │                          fx (Partikel, Bildschirm), beam (Lichtkegel mit Schwebstaub)
 │  ├─ world/                  grid (Raster, Sichtlinien, A*), leveldef (Level-DSL), level (Aufbau),
-│  │                          batcher (statisches Batching), door, physics, props/props2, items
+│  │                          batcher (statisches Batching), door, physics, props/props2, items,
+│  │                          clutter (automatische Raumdetails als Instanz-Objekte)
 │  ├─ player/                 player (Bewegung, Ausdauer, Verstecken, Heilen …), hands (Viewmodel)
 │  ├─ ai/                     zombie (Zustandsmaschine), humanoid (Körper + Animation), noise, npc
-│  ├─ systems/                audio (Synthese, Musik, Stimmen), phone, photos, story, inventory
+│  ├─ systems/                audio (Synthese, Musik, Stimmen), phone, photos, story, inventory,
+│  │                          automap (Karten-App), stats (Auswertung und Rang)
 │  ├─ ui/                     hud, menu, docs (Dokumentenansicht)
 │  └─ data/
 │     ├─ chapters/            Level-Aufbau + Skripte: ch1, ch1b, ch2, ch2b, ch3, ch4, ch4b, ch5
@@ -53,9 +56,19 @@ no-way-out/
 - Ein **Shader-Patch** an `MeshStandardMaterial` prüft für jedes Punktlicht entlang des Rasters, ob eine Wand oder geschlossene Tür dazwischen liegt. So entstehen harte Licht-Schatten an Türöffnungen, und kein Licht dringt durch Wände.
 - Eine **Ambient-Rastertextur** speichert indirektes Licht je Raum. Sie wird bei Stromwechseln und Türbewegungen neu berechnet.
 - Die **Taschenlampe** ist ein SpotLight mit Schattenwurf und leichter Nachlaufbewegung.
+- **Sichtbarer Lichtkegel** (`render/beam.js`): Rund 3 200 Staubpunkte (Tablet 1 500) liegen in einem 8-m-Würfel, der mit der Kamera mitwandert. Der Vertex-Shader berechnet je Punkt, ob er im Kegel liegt (Winkel zur Strahlachse, Abstand, Strahllänge) und wie hell er ist. Die Strahllänge bestimmt ein Gitter-Strahltest pro Bild, damit Staub und Lichtschaft an der ersten Wand enden. Der Lichtschaft ist ein offener Kegel mit additiver Mischung, der an streifenden Kanten ausgeblendet wird.
+
+### Bild
+- Der Schluss-Shader übernimmt Farbgebung (kühle Schatten, warme Lichter, sanfte S-Kurve), leichte Farbsäume zum Bildrand, Verletzungs- und Treffereffekte, Vignette, Körnung und den Kameramodus.
+- **Dynamische Auflösung:** `renderer.adapt()` misst alle 2 s die Bildrate im laufenden Spiel. Unter 45 fps sinkt die interne Auflösung schrittweise bis 60 %, nach 6 s über 57 fps steigt sie wieder in 5-%-Schritten. Abschaltbar unter Einstellungen → Grafik.
+
+### Raumdetails (`world/clutter.js`)
+Nach dem Levelaufbau läuft ein Verteiler über alle begehbaren Zellen. Er legt Schmutz- und Ölflecken, Pfützen (glatt, spiegeln Lichter), Papier, Zeitungen, Pappe, Flugblätter, Putzbrocken, Laub (draußen), Wasserlaufspuren an Wänden und heruntergeklappte Deckenplatten mit dunklem Loch darüber. Die Häufigkeit hängt vom Abschnitt ab (z. B. mehr Rost und Pfützen im Pumpwerk, Ölflecken in der Garage, kein Papier im Pumpwerk). Gegenstände und Schalter bekommen einen freien Rand, Türen, Rampen, Glas und Wasser bleiben frei. Jede Sorte ist ein `InstancedMesh`, das ergibt rund 10 zusätzliche Draw-Calls je Level. Alles ist reine Dekoration ohne Kollision.
 
 ### Gegner-KI (`ai/zombie.js`)
-Zustände: `idle, patrol, dormant, getup, investigate, alert, chase, search, return, attack, grab, stagger, bash, checkhide, script`.
+Zustände: `idle, patrol, dormant, getup, investigate, alert, chase, search, return, attack, grab, stagger, bash, checkhide, script, fall`.
+- **Typen** (`data/zombietypes.js`): Schlurfer, Schläfer, Lauerer, Wanderer, Verfolger und **Kriecher**. Der Kriecher nutzt dieselbe KI, aber die Körperhaltung `crawl` (flach, Brust über dem Standpunkt, Beine ausgeblendet) mit eigenem Armzyklus. Er steht nie auf und stürzt nicht.
+- **Treffer und Tod:** `humanoid.hit()` lässt den Körper zur Seite des Einschlags zucken. `die()` wählt eine von vier Fallrichtungen: bevorzugt weg vom Schützen, aber nur, wenn 1,6 m frei sind (keine Wand, keine Kante). Die Haltung `dead` lässt erst die Knie einknicken und kippt den Körper dann um die Füße. Darunter wächst eine Blutlache (Laufzeit-Decal).
 - **Sicht:** Sichtfeld, Reichweite abhängig von Licht und Bewegung des Spielers (`player.visibility()`), Deckung bei geducktem Ziel, Taschenlampe ins Gesicht. Die Entdeckung baut sich als „Verdacht“ auf: Ab 0,35 schaut der Zombie nach, ab 1 schlägt er Alarm.
 - **Gehör:** Geräusche mit Radius (Schritte je Gangart, Türen, Würfe, Klettern, Japsen, Telefon, Autoalarm). Die Lautheit hängt vom Weg durch die Gänge ab, Wände lassen nur einen gedämpften Rest durch.
 - **Gruppen:** Verfolger knurren regelmäßig, dieses Geräusch zieht andere Zombies an.
@@ -73,7 +86,7 @@ Bewegung mit Beschleunigung, Head-Bob, Hinken, Schwanken bei Verletzung, Ausdaue
 - Wartezeiten laufen über die Spielzeit. Beim Laden eines Checkpoints werden laufende Abläufe abgebrochen (Generationszähler).
 
 ### Speichern
-Ein Snapshot je Checkpoint enthält Flags, erledigte Skripte, aufgenommene Gegenstände, Türzustände, Stromkreise, entfernte Gegner, Inventar, Gesundheit, Telefoninhalt und Begleiter. Beim Tod wird das Kapitel neu aufgebaut und der Snapshot angewendet. Zusätzlich gibt es je Kapitel einen Start-Snapshot für die Kapitelauswahl und Meta-Daten (freigeschaltete Kapitel, gesehene Enden).
+Ein Snapshot je Checkpoint enthält Flags, erledigte Skripte, aufgenommene Gegenstände, Türzustände, Stromkreise, entfernte Gegner, Inventar, Gesundheit, Telefoninhalt, Begleiter und die aufgedeckte Karte (Bitfeld als Base64). Die **Statistik** des Durchgangs (Zeit, Tode, Schüsse, Treffer, Kopftreffer, Kills, Heilmittel) liegt getrennt daneben und wird bei Checkpoints und beim Tod gesichert, damit ein Tod sie nicht zurücksetzt. Beim Tod wird das Kapitel neu aufgebaut und der Snapshot angewendet. Zusätzlich gibt es je Kapitel einen Start-Snapshot für die Kapitelauswahl und Meta-Daten (freigeschaltete Kapitel, gesehene Enden).
 
 ### Audio
 Alle Effekte werden per DSP in JavaScript synthetisiert: Schritte je Untergrund, Türen, Glas, Zombie-Stimmen per Formantsynthese, Atem, Herzschlag, Alarme, Ambiente-Loops. Die Wiedergabe erfolgt räumlich (HRTF) mit Tiefpass, wenn eine Wand zwischen Quelle und Hörer liegt.
@@ -81,4 +94,4 @@ Alle Effekte werden per DSP in JavaScript synthetisiert: Schritte je Untergrund,
 Die **dynamische Musik** hat drei Schichten (Drone, Spannungs-Cluster, Jagd-Ostinato mit Trommeln), dazu Stinger bei Entdeckung, Herzschlag im Versteck und ein langsames Abklingen nach der Flucht.
 
 ### Leistung
-Statisches Batching nach Material und Chunk, ein fester Licht-Pool, Schatten nur für die Taschenlampe, gecachte Texturen und drei Qualitätsstufen (Pixelratio, Schattenauflösung, Lichtanzahl, Grid-Schatten, MSAA, Bloom).
+Statisches Batching nach Material und Chunk, ein fester Licht-Pool, Schatten nur für die Taschenlampe, gecachte Texturen und drei Qualitätsstufen (Pixelratio, Schattenauflösung, Lichtanzahl, Grid-Schatten, MSAA, Bloom, Dichte der Raumdetails). Dazu kommen die dynamische Auflösung und ein Animations-LOD: Zombies weiter als 24 m von der Kamera werden nur in jedem dritten Bild animiert (mit aufsummierter Zeit, damit nichts ruckelt). Laufzeit-Decals (Einschusslöcher, Blut) sind auf 60 begrenzt, die ältesten verschwinden.

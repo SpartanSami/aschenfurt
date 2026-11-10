@@ -81,6 +81,7 @@ export const DEFAULT_SETTINGS = {
   voiceVol: 1.0,
   quality: 'medium',      // low | medium | high
   renderScale: 1.0,       // interne Auflösung
+  autoRes: true,          // Auflösung bei niedriger Bildrate automatisch senken
   bloom: true,
   grain: true,
   brightness: 1.0,
@@ -107,6 +108,7 @@ export const DEFAULT_BINDINGS = {
   fire: ['Mouse0'],
   aim: ['Mouse2'],
   reload: ['KeyR'],
+  turn: ['KeyV'],
   pause: ['KeyP', 'Escape'],
 };
 
@@ -114,7 +116,7 @@ export const ACTION_NAMES = {
   forward: 'Vorwärts', back: 'Rückwärts', left: 'Links', right: 'Rechts',
   sprint: 'Rennen', crouch: 'Schleichen / Ducken', interact: 'Interagieren',
   vault: 'Klettern / Atem anhalten', phone: 'Smartphone', flashlight: 'Taschenlampe',
-  heal: 'Heilen', throw: 'Werfen', fire: 'Schießen', aim: 'Zielen', reload: 'Nachladen', pause: 'Pause',
+  heal: 'Heilen', throw: 'Werfen', fire: 'Schießen', aim: 'Zielen', reload: 'Nachladen', turn: 'Schnelle Wende (180°)', pause: 'Pause',
 };
 
 const SKEY = 'nwo.settings.v1';
@@ -134,7 +136,7 @@ export function saveSettings(s) {
 }
 
 export const QUALITY = {
-  low: { pixelRatio: 0.75, shadow: 512, lights: 6, gridShadow: false, msaa: 0, bloom: false, texSize: 256 },
+  low: { pixelRatio: 0.75, shadow: 512, lights: 6, gridShadow: false, msaa: 0, bloom: false, texSize: 256, clutter: 0.6 },
   medium: { pixelRatio: 1.0, shadow: 1024, lights: 8, gridShadow: true, msaa: 0, bloom: true, texSize: 512 },
   high: { pixelRatio: 1.0, shadow: 2048, lights: 12, gridShadow: true, msaa: 4, bloom: true, texSize: 512 },
 };

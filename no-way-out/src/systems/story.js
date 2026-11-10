@@ -45,17 +45,23 @@ export class Story {
     this.lineQueue = Promise.resolve();
   }
 
+  // Wartezeiten werden beim Kapitelwechsel abgebrochen (Cancelled). Wer wartet, bekommt den Abbruch weiterhin;
+  // nicht abgewartete Wartezeiten (z. B. ein Satz ohne await) erzeugen so keine „unbehandelte“ Fehlermeldung.
   wait(sec) {
     const gen = this.gen;
-    return new Promise((resolve, reject) => {
+    const p = new Promise((resolve, reject) => {
       this.waits.push({ t: this.time + sec, resolve, reject, gen, cond: null });
     });
+    p.catch(() => {});
+    return p;
   }
   waitUntil(fn, timeout = Infinity) {
     const gen = this.gen;
-    return new Promise((resolve, reject) => {
+    const p = new Promise((resolve, reject) => {
       this.waits.push({ t: this.time + timeout, resolve, reject, gen, cond: fn });
     });
+    p.catch(() => {});
+    return p;
   }
 
   update(dt) {

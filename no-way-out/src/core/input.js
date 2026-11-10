@@ -4,7 +4,7 @@ import { DEFAULT_BINDINGS } from './config.js';
 // Knopfnamen der Touch-Steuerung (für Hinweise im HUD)
 const TOUCH_LABEL = {
   interact: 'Benutzen', vault: 'Klettern', crouch: 'Ducken', throw: 'Werfen', heal: 'Heilen',
-  flashlight: 'Lampe', phone: 'Handy', pause: 'Pause', sprint: 'Stick ganz nach außen', fire: 'Schießen', aim: 'Zielen (automatisch)', reload: 'Nachladen',
+  flashlight: 'Lampe', phone: 'Handy', pause: 'Pause', sprint: 'Stick ganz nach außen', fire: 'Schießen', aim: 'Zielen (automatisch)', reload: 'Nachladen', turn: 'Wenden',
   forward: '▲', back: '▼', left: '◀', right: '▶',
 };
 

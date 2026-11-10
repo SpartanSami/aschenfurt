@@ -14,6 +14,7 @@ const APPS = [
   { id: 'photos', name: 'Fotos', icon: '▣', color: '#5a8ae0' },
   { id: 'calls', name: 'Anrufe', icon: '✆', color: '#3ac0a0' },
   { id: 'status', name: 'Zustand', icon: '♥', color: '#c05a8a' },
+  { id: 'map', name: 'Karte', icon: '⌖', color: '#7fb0c8' },
 ];
 
 export class Phone {
@@ -161,6 +162,13 @@ export class Phone {
       if (up) { this.sel = Math.max(0, this.sel - 1); this.dirty = true; }
       if (down) { this.sel = Math.min(Math.max(0, n - 1), this.sel + 1); this.dirty = true; }
       if (ok && n > 0) this._select();
+    } else if (this.app === 'map') {
+      const am = this.game.automap;
+      if (left) { am.zoom = Math.max(4, am.zoom - 2); this.dirty = true; }
+      if (right) { am.zoom = Math.min(13, am.zoom + 2); this.dirty = true; }
+      // Karte läuft mit, solange sie offen ist
+      this._mapT = (this._mapT || 0) - dt;
+      if (this._mapT <= 0) { this._mapT = 0.15; this.dirty = true; }
     } else if (this.app === 'thread' || this.app === 'status') {
       if (up) { this.scroll = Math.max(0, this.scroll - 60); this.dirty = true; }
       if (down) { this.scroll += 60; this.dirty = true; }
@@ -207,9 +215,10 @@ export class Phone {
     else if (this.app === 'photo') this._photo(c);
     else if (this.app === 'notes') this._notes(c);
     else if (this.app === 'status') this._statusApp(c);
+    else if (this.app === 'map') this._mapApp(c);
     if (this.open && this.app !== 'call') {
       c.fillStyle = 'rgba(255,255,255,0.35)'; c.font = '13px sans-serif'; c.textAlign = 'center';
-      c.fillText(this.app === 'home' ? 'WASD wählen · E öffnen · Q schließen' : 'W/S · E wählen · C/Rücktaste zurück', W / 2, H - 22);
+      c.fillText(this.app === 'home' ? 'WASD wählen · E öffnen · Q schließen' : this.app === 'map' ? 'A/D zoomen · C/Rücktaste zurück' : 'W/S · E wählen · C/Rücktaste zurück', W / 2, H - 22);
       c.fillStyle = 'rgba(255,255,255,0.5)'; c.fillRect(W / 2 - 55, H - 12, 110, 4);
     }
   }
@@ -255,6 +264,18 @@ export class Phone {
       if (a.id === 'flashlight' && this.game.player.flashlight) { c.fillStyle = '#f2c94c'; c.font = 'bold 11px sans-serif'; c.fillText('AN', x + 65, y + 104); }
       if (badge) { c.fillStyle = '#e53935'; c.beginPath(); c.arc(x + 96, y + 4, 12, 0, Math.PI * 2); c.fill(); c.fillStyle = '#fff'; c.font = 'bold 13px sans-serif'; c.fillText(String(badge), x + 96, y + 9); }
     });
+  }
+  _mapApp(c) {
+    const am = this.game.automap;
+    this._header(c, 'Karte');
+    c.textAlign = 'right'; c.fillStyle = '#8a96a2'; c.font = '13px sans-serif';
+    c.fillText(this._clip(c, am.roomName(), 190), W - 22, 76);
+    c.save(); this._rr(c, 12, 96, W - 24, 590, 14); c.clip();
+    am.draw(c, 12, 96, W - 24, 590);
+    c.restore();
+    c.textAlign = 'left'; c.fillStyle = '#6a7682'; c.font = '12px sans-serif';
+    c.fillText('Erkundet: ' + Math.round(am.explored() * 100) + ' %', 22, 704);
+    c.fillStyle = '#3f9a68'; c.fillText('■ offen', 146, 704); c.fillStyle = '#c49a2a'; c.fillText('■ zu', 202, 704); c.fillStyle = '#c04848'; c.fillText('■ verschlossen', 240, 704);
   }
   _header(c, title) {
     c.textAlign = 'left'; c.fillStyle = '#e8ecf0'; c.font = 'bold 26px sans-serif'; c.fillText(title, 22, 78);

@@ -17,7 +17,7 @@ Sami erwacht ohne Erinnerung in einem Krankenhaus. In seiner Akte steht kein Nam
 **iPad und Tablets:** Das Spiel erkennt Touch-Geräte und blendet eine eigene Steuerung ein:
 - **Linke Bildschirmhälfte:** Stick zum Bewegen. Ganz nach außen geschoben wird gerannt.
 - **Rechte Hälfte:** Wischen zum Umsehen.
-- **Knöpfe rechts unten:** Benutzen, Klettern, Ducken, Werfen, Heilen, Lampe und Handy.
+- **Knöpfe rechts unten:** Benutzen, Klettern, Ducken, Werfen, Heilen, Lampe, Handy und Wenden (180°).
 - **Je nach Lage:** Beim Handy, an den Überwachungskameras und beim Losreißen erscheinen passende Knöpfe.
 
 Tablets nutzen automatisch kleinere Texturen und eine begrenzte Auflösung, damit Safari nicht an seine Speichergrenze stößt. Der Ton läuft auch, wenn das iPad auf „stumm“ steht.
@@ -42,6 +42,8 @@ Der Fortschritt wird automatisch an Checkpoints im Browser gespeichert (localSto
 | Heilen | H |
 | Werfen (Ablenkung) | G |
 | Zielen · Schießen · Nachladen | rechte Maustaste · linke Maustaste · R |
+| Schnelle Wende (180°) | V |
+| Karte | Q → App „Karte“ (A/D zoomen) |
 | Losreißen, wenn gepackt | A und D abwechselnd |
 | Pause | Esc oder P |
 | Entscheidungen | Maus, Zahlentasten 1–3 oder W/S + E |
@@ -54,22 +56,30 @@ Der Fortschritt wird automatisch an Checkpoints im Browser gespeichert (localSto
 - **Zombie-KI mit sieben Kernzuständen** (Ruhe, Patrouille, Untersuchen, Alarm, Verfolgung, Suche, Rückkehr) sowie Angriff, Packen, Taumeln, Tür einschlagen, Versteck prüfen, Schlafen und Aufstehen. Die Wahrnehmung hängt von Sichtfeld, Entfernung, Licht, Bewegung, Haltung und der Taschenlampe ab. Geräusche breiten sich entlang der Gänge aus, Wände und Türen dämpfen sie.
 - **Verstecke ohne Garantie:** Spinde, unter Betten, hinter Fahrzeugen und Containern. Wer beim Verstecken gesehen wird oder zu laut atmet, wird herausgezogen.
 - **Verletzungssystem** mit den Zuständen Gesund, Verletzt und Schwer verletzt. Es bremst, kürzt die Ausdauer und trübt die Sicht. Heilmittel sind knapp, Wunden heilen nicht von selbst.
-- **Smartphone in der Hand** mit Taschenlampe, Nachrichten, Sprachmemos, Notizen (Ziel, Dokumente, Erkenntnisse), Fotos, Anrufliste und Zustand. Der Akku ist unbegrenzt.
+- **Smartphone in der Hand** mit Taschenlampe, Nachrichten, Sprachmemos, Notizen (Ziel, Dokumente, Erkenntnisse), Fotos, Anrufliste, Zustand und **Karte**. Der Akku ist unbegrenzt.
+- **Karten-App:** Sie zeichnet automatisch auf, was Sami wirklich gesehen hat: den Raum, in dem er steht, und alles in Sichtlinie, auch durch offene Türen. Sie zeigt Wände, Türen (grün offen, gelb zu, rot verschlossen), Glas, Wasser, gesehene Gegenstände, Raumnamen und Samis Blickrichtung. Der aufgedeckte Bereich wird mit dem Checkpoint gespeichert.
 - **Die unbekannte Kontaktperson** meldet sich über Textnachrichten, Anrufe, Sprachnachrichten, Lautsprecherdurchsagen, Überwachungskameras und Monitore des ARGUS-Systems sowie über alte Aufnahmen.
 - **Klassische, langsame Zombies:** Sie schlurfen langsamer, als Sami geht, wie in frühen Survival-Horror-Spielen. Gefährlich werden sie in Gruppen, in engen Gängen, wenn sie dich packen, und wenn du geduckt schleichst, denn dann bist du langsamer als sie.
 - **Zombies sind keine Statisten:** Sie stolpern bei Verfolgungen über Hindernisse und stürzen, schlagen Türen ein, prüfen Verstecke und rufen sich gegenseitig herbei.
+- **Kriecher:** Beinlose Zombies ziehen sich mit den Armen über den Boden. Sie sind sehr langsam, liegen aber flach im Dunkeln, sind leicht zu übersehen und greifen nach den Knöcheln (Kellerflur, Werkstatt im Pumpwerk, U-Bahnsteig).
+- **Treffer und Tod sichtbar:** Getroffene Zombies zucken zur Seite des Einschlags, ein Kopftreffer reißt den Kopf zurück. Beim Sterben knicken die Knie ein, dann kippt der Körper um, und zwar weg vom Schützen, aber nie in eine Wand. Darunter breitet sich eine Blutlache aus. Fehlschüsse hinterlassen Einschusslöcher, Treffer Blutspritzer an der Wand dahinter.
+- **Auswertung am Ende:** Spielzeit, Tode, erledigte Zombies, Schüsse, Treffer und Trefferquote, Kopftreffer, benutzte Heilmittel, Dokumente und Aufnahmen, dazu ein Rang von S bis D.
 - **Fünf Kapitel in acht Abschnitten:** Krankenhaus (Station 3, dann Notaufnahme und Pathologie) → Forschungseinrichtung PROJECT EVE (Institut, dann Versorgungsebene mit Pumpwerk) → Parkhaus → U-Bahn (Tunnel, dann Linden-Passage) → Stadt. Jeder Abschnitt hat eigene Mechaniken, zum Beispiel Notstrom, ein Wartezimmer hinter Glas, Kühlfächer, Dekon-Schleuse, Sterilisation mit zeitgesteuerten Toren, Autoalarme, einen Zug voller „Fahrgäste“, Dampfventile, die Infizierte anlocken, ein geflutetes Becken, in dem jeder Schritt laut ist, Schaufensterpuppen, zwischen denen nicht nur Puppen stehen, einen Supermarkt voller Infizierter, Regen, der Schritte verschluckt, und einen Totmannschalter.
 - **Figuren:** Mine und İlyas müssen gefunden werden. Beide haben Geheimnisse.
 - **Entscheidungen und drei Enden:** **Hoffnung**, **Tragödie** und **Geheimnis**. Die Hinweise dazu sind über das ganze Spiel verteilt.
 - **Drei Schwierigkeitsgrade:** Leicht, Mittel (Standard) und Schwer. Sie ändern Heilmittel, Reaktionsfenster, Gegnertempo, Wahrnehmung und Schaden. Die Geschichte bleibt gleich. Der Grad lässt sich jederzeit im Haupt- und Pausemenü ändern.
 - **Häufige automatische Checkpoints**, Kapitelauswahl und Fortsetzen.
-- **Einstellungen:** Mausempfindlichkeit, Y-Achse, Sichtfeld, Kopfbewegung, Grafikqualität, Renderauflösung, Vollbild, Helligkeit, Bloom, Filmkörnung, Lautstärken (Gesamt, Musik, Effekte, Stimmen), Untertitel und Untertitelgröße sowie die Tastenbelegung.
+- **Einstellungen:** Mausempfindlichkeit, Y-Achse, Sichtfeld, Kopfbewegung, Grafikqualität, Renderauflösung, automatische Auflösung, Vollbild, Helligkeit, Bloom, Filmkörnung, Lautstärken (Gesamt, Musik, Effekte, Stimmen), Untertitel und Untertitelgröße sowie die Tastenbelegung.
 
 ## 🔧 Technik in Kürze
 
 - **Engine:** three.js (WebGL 2) mit eigener Spiel-Architektur in modularem JavaScript. Mit esbuild wird daraus eine Datei gebündelt. Unreal Engine 5 ließ sich in der Cloud-Entwicklungsumgebung nicht betreiben. Die Browser-Lösung ist außerdem ohne Installation sofort spielbar.
 - **Alles prozedural:** Texturen (PBR mit Normal- und Rauheitsmaps), Möbel, Fahrzeuge, Figuren, Animationen, Soundeffekte und die dynamische Musik entstehen zur Laufzeit. Es gibt keine externen Grafik- oder Sounddateien.
 - **Licht:** Ein Pool echter Punktlichter wird den relevantesten Leuchten zugewiesen. Ein Shader-Patch prüft jede Lampe über das Weltraster gegen Wände, sodass kein Licht durch Mauern dringt. Dazu kommt weiches Umgebungslicht pro Raum, und die Taschenlampe wirft Schatten.
+- **Sichtbarer Lichtkegel:** Im Strahl der Taschenlampe leuchtet Schwebstaub auf, dazu ein schwacher Lichtschaft. Beides endet an der ersten Wand in Strahlrichtung. Die Berechnung läuft vollständig auf der Grafikkarte.
+- **Bildlook:** kühle, leicht grünliche Schatten, warme Lichter, sanfte Kontrastkurve, leichte Farbsäume zum Bildrand, Filmkörnung und Vignette.
+- **Raumdetails:** In allen Abschnitten verteilt das Spiel automatisch Schmutz- und Ölflecken, Papier, Zeitungen, Pappe, Flugblätter, Putzbrocken, Pfützen, Laub, Wasserlaufspuren an Wänden und heruntergeklappte Deckenplatten. Die Verteilung passt zum Ort (Krankenhaus, Pumpwerk, Garage, U-Bahn, Stadt), ist bei jedem Start gleich und lässt Gegenstände und Schalter frei. Jede Sorte ist ein einziges Instanz-Objekt, das kostet kaum Leistung.
+- **Leistung:** Die Auflösung passt sich automatisch an, wenn die Bildrate dauerhaft unter etwa 45 fps fällt (bis 60 %), und steigt wieder, wenn es flüssig läuft. Zombies weiter als 24 m werden nur in jedem dritten Bild animiert.
 - **Sprachaufnahmen:** Alles, was Sami über Geräte hört (Anrufe, Diktiergerät, Lautsprecher, Fernsehnachrichten), ist vertont: 46 Aufnahmen, erzeugt mit ElevenLabs und nachbearbeitet mit ffmpeg. Gespräche mit Mine und İlyas laufen über Untertitel.
 
 Mehr dazu in [`docs/ARCHITEKTUR.md`](docs/ARCHITEKTUR.md), Testergebnisse in [`docs/QA.md`](docs/QA.md). Die Story-Bibel mit allen Auflösungen steht in [`docs/STORY.md`](docs/STORY.md) und enthält **Spoiler**.
@@ -91,8 +101,8 @@ Debug-Modus: `index.html?debug` öffnet das Spiel mit F3 (Statistik), F4 (unverw
 
 ## ⚠️ Ehrliche Einordnung
 
-- Die Grafik ist **atmosphärisch, aber nicht fotorealistisch**. Alle Modelle bestehen aus prozeduralen Grundkörpern, die Animationen sind prozedural statt per Motion-Capture. Die Systeme sind so gebaut, dass sich echte 3D-Modelle (glTF) und Sounddateien später einsetzen lassen.
-- Die Spielzeit liegt je nach Spielweise bei etwa **1,5 bis 2 Stunden**. Gemessen ist nur die Untergrenze: Der Autopilot, der unsichtbar die kürzesten Wege rennt, braucht rund 31 Minuten reine Spielzeit.
+- Die Grafik ist **atmosphärisch, aber nicht fotorealistisch**. Alle Modelle bestehen aus prozeduralen Grundkörpern, die Animationen (auch Kriechen, Treffer und Sterben) sind prozedural statt per Motion-Capture. Die Systeme sind so gebaut, dass sich echte 3D-Modelle (glTF) und Sounddateien später einsetzen lassen.
+- Die Spielzeit liegt je nach Spielweise bei etwa **1,5 bis 2 Stunden**. Gemessen ist nur die Untergrenze: Der Autopilot, der unsichtbar die kürzesten Wege rennt, braucht rund 32 Minuten reine Spielzeit.
 - Die vertonten Stimmen stammen von englischsprachigen ElevenLabs-Stimmen, die über das mehrsprachige Modell Deutsch sprechen. Ein leichter Akzent ist möglich.
 - Begleiter werden von Zombies bewusst ignoriert, damit keine frustrierenden Eskortpassagen entstehen. Gefahr für sie entsteht nur durch die Inszenierung.
 - Die Touch-Steuerung und die Anpassungen für iPad/Safari (Ton, Speicher) wurden in einer iPad-Emulation im Chromium-Browser getestet, nicht auf einem echten iPad. Am besten spielt es sich weiterhin mit Maus und Tastatur oder Gamepad. Die Gamepad-Belegung ist fest, nur die Tastatur ist frei belegbar.

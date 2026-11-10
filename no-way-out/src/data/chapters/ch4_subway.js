@@ -135,6 +135,8 @@ export default {
     L.zombie(66.5, 22.4, { id: 'z4p', type: 'sleeper', pose: 'sitting', yaw: 0, outfit: 'civilian2', wake: 3.5 });
     L.zombie(84, 27.0, { id: 'z4r', type: 'sleeper', pose: 'lying', yaw: 0.5, outfit: 'civilian' });
     L.zombie(88.9, 23.6, { id: 'z4n', type: 'stalker', yaw: PI, outfit: 'scrubs', stalker: true });
+    // Kriecher am Bahnsteig, zwischen den Sitzenden kaum zu erkennen
+    L.zombie(37.5, 21.6, { id: 'z4crawl', type: 'crawler', yaw: PI / 2, outfit: 'civilian' });
 
     // ================= Auslöser =================
     L.trigger('conc', 8, 3, 8, 10);

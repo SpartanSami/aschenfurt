@@ -81,6 +81,17 @@ export class Player {
     const look = this.mode !== 'dead' && this.mode !== 'locked';
     if (look && !this.game.phone.isOpen()) this._look(input);
     else if (look && this.game.phone.isOpen()) this._look(input, 0.35);
+    // Schnelle 180°-Wende (zum Fliehen): 0,32 s, weich ein- und auslaufend
+    if (input.pressed('turn') && (this.mode === 'normal' || this.mode === 'heal') && !this.quickTurn && !this.game.phone.isOpen() && !this.forcedLook) {
+      this.quickTurn = { t: 0, from: this.yaw, dir: (this.lastLookDX || 0) > 0 ? -1 : 1 };
+    }
+    if (this.quickTurn) {
+      const q = this.quickTurn, prev = q.t;
+      q.t = Math.min(1, q.t + dt / 0.32);
+      const e = (x) => x * x * (3 - 2 * x);
+      this.yaw += (e(q.t) - e(prev)) * Math.PI * q.dir;
+      if (q.t >= 1 || this.mode === 'dead' || this.mode === 'grabbed') this.quickTurn = null;
+    }
     switch (this.mode) {
       case 'normal':
         if (this.game.phone.isOpen()) { this._move(dt, input, 0); if (input.pressed('flashlight')) this.toggleFlashlight(); this.target = null; }
@@ -115,6 +126,7 @@ export class Player {
     const s = this.game.settings;
     const { dx, dy } = input.lookDelta();
     const sens = 0.0022 * s.sensitivity * scale;
+    if (dx) this.lastLookDX = dx;
     this.yaw -= dx * sens;
     this.pitch -= dy * sens * (s.invertY ? -1 : 1);
     this.pitch = clamp(this.pitch, -1.45, 1.45);
@@ -467,6 +479,7 @@ export class Player {
       if (this.game.inventory.take(h.type)) {
         this.hp = Math.min(100, this.hp + info.heal);
         if (info.painkiller) this.painkiller = info.painkiller;
+        if (this.game.stats) this.game.stats.heals++;
         this.game.hud.toast(info.name + ' benutzt — ' + HEALTH_STATES[this.healthState]);
         bus.emit('healed', this.hp);
       }

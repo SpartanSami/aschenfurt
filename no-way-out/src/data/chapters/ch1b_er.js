@@ -228,6 +228,8 @@ export default {
     L.zombie(48.6, 25.6, { id: 'z_shock', type: 'sleeper', pose: 'lying', yaw: -PI / 2, outfit: 'gown', wake: 2.8 });
     L.zombie(40.0, 34.4, { id: 'z_k_w', type: 'wanderer', outfit: 'security', patrol: [[33, 34.5], [52, 34.5]] });
     L.zombie(49.0, 41.4, { id: 'z_laundry', type: 'shambler', yaw: PI / 2, outfit: 'scrubs' });
+    // Kriecher im dunklen Westteil des Kellerflurs: liegt still an der Nordwand, bis Sami mit der Karte zurückrennt
+    L.zombie(17.2, 33.4, { id: 'z_crawl1', type: 'crawler', yaw: -PI / 2, outfit: 'gown', state: 'dormant', wake: 99 });
     L.zombie(21.2, 42.6, { id: 'z_p1', type: 'sleeper', pose: 'lying', yaw: 0.4, outfit: 'gown', wake: 3.2 });
     L.zombie(29.6, 38.6, { id: 'z_p2', type: 'sleeper', pose: 'lying', yaw: -1.4, outfit: 'gown', wake: 3.2 });
 
@@ -240,6 +242,7 @@ export default {
     L.trigger('keller', 54, 30, 3, 3);
     L.trigger('patho_in', 19, 37, 14, 3);
     L.trigger('lift_car', 11, 33, 3, 3);
+    L.trigger('crawl_wake', 19, 33, 5, 3);
     L.checkpoint('start', 5.5, 25.5, -PI / 2);
     L.checkpoint('corr', 10.5, 24.8, -PI / 2);
     L.checkpoint('er', 23.0, 24.0, -PI / 2);
@@ -448,6 +451,14 @@ export default {
         await c.wait(2.5 * t);
         const b = c.spawn({ x: 23.0, z: 45.1, type: 'hunter', outfit: 'gown', pose: 'lying', yaw: PI });
         b.forceChase();
+      },
+    },
+    {
+      // Auf der Flucht: Der „Tote“ an der Nordwand des Kellerflurs zieht sich auf Sami zu (Ausweichen an der Südwand)
+      id: 'c1b_crawl', when: 'enter:crawl_wake', if: (c) => c.get('card_taken'), do: async (c) => {
+        await c.wait(0.2);
+        c.wake('z_crawl1', 'chase');
+        c.say('sami', 'Der da bewegt sich noch …', { d: 1.8 });
       },
     },
     {
