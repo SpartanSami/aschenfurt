@@ -34,8 +34,13 @@ if (fs.existsSync(vdir)) {
     voice = `<script>window.NWO_VOICE=${JSON.stringify(map)};</script>`;
   }
 }
+// Wichtig: Ersetzung per Funktion. Bei einem Ersetzungs-Text würden Zeichenfolgen wie „$&“ im
+// minifizierten Code als Platzhalter gelesen und HTML mitten in den Code einfügen.
 const single = html
-  .replace('<link rel="stylesheet" href="style.css">', `<style>${css}</style>`)
-  .replace('<script src="dist/game.js"></script>', `${voice}<script>${js.replace(/<\/script>/g, '<\\/script>')}</script>`);
+  .replace('<link rel="stylesheet" href="style.css">', () => `<style>${css}</style>`)
+  .replace('<script src="dist/game.js"></script>', () => `${voice}<script>${js.replace(/<\/script>/gi, () => '<\\/script>')}</script>`);
+// Prüfen, dass der Code unverändert in der Einzeldatei steckt
+if (!single.includes(js.replace(/<\/script>/gi, () => '<\\/script>'))) throw new Error('Einzeldatei: eingebetteter Code weicht vom Bundle ab');
+if ((single.match(/<\/script>/gi) || []).length !== (voice ? 2 : 1)) throw new Error('Einzeldatei: unerwartete </script>-Anzahl');
 fs.writeFileSync(path.join(root, 'NoWayOut.html'), single);
 console.log('Einzeldatei:', (fs.statSync(path.join(root, 'NoWayOut.html')).size / 1024 / 1024).toFixed(2), 'MB');
