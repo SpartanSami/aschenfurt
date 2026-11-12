@@ -1,0 +1,83 @@
+<div id="himmel" aria-hidden="true"></div>
+
+<header id="kopf" hidden>
+  <div class="kopf-innen">
+    <div class="kopf-zeile">
+      <div id="hud-ort" class="hud-ort"></div>
+      <div class="hud-uhr" aria-label="Uhrzeit"><span id="hud-uhr">22:10</span></div>
+    </div>
+    <div id="hud-linie" class="nachtlinie" aria-hidden="true">
+      <div id="hud-nacht" class="nacht-fuell"></div>
+      <span class="nacht-ende">06:00</span>
+    </div>
+    <div class="kopf-zeile unten">
+      <div id="hud-zustand" class="hud-zustand"></div>
+      <div id="hud-gruppe" class="hud-gruppe"></div>
+      <button type="button" id="btn-menu" class="knopf-klein">Menü</button>
+    </div>
+  </div>
+</header>
+
+<main id="buehne">
+  <section id="titel">
+    <p class="t-ober">Kaltenbrück · Nacht 19 · 22:10 Uhr</p>
+    <h1 class="t-haupt" aria-label="Totenstille">
+      <span aria-hidden="true">Toten</span>
+      <span aria-hidden="true"><i>S</i><i>t</i><i>i</i><i>l</i><i>l</i><i>e</i></span>
+    </h1>
+    <p class="t-unter">Die letzte Nacht von Kaltenbrück</p>
+    <p class="t-lead">Seit neunzehn Tagen murmelt die Stadt. Die Toten wiederholen den letzten Satz, den sie als Menschen gesagt haben. Gefährlich wird es erst, wenn sie verstummen. Heute Nacht meldet sich die Brücke im Radio: Wer bis sechs Uhr dort ist und gesund, darf hinüber. Danach wird gesprengt.</p>
+
+    <form id="bogen" class="bogen" novalidate>
+      <div class="bogen-kopf"><span>Erfassungsbogen</span><span>Übergang Ost</span></div>
+      <div class="feld">
+        <label for="f-name">Name</label>
+        <input id="f-name" name="name" type="text" maxlength="30" autocomplete="given-name" placeholder="Wie heißt du?">
+      </div>
+      <div class="feld">
+        <label for="f-job">Beruf, vorher</label>
+        <input id="f-job" name="job" type="text" maxlength="40" autocomplete="off" placeholder="Was warst du, bevor alles anfing?">
+      </div>
+      <div class="feld">
+        <span class="lab">Bissverletzung</span>
+        <div class="kreuze"><span class="kreuz">ja</span><span class="kreuz an">nein</span></div>
+      </div>
+      <p id="f-fehler" class="fehler" role="alert"></p>
+      <button type="submit" class="knopf">Die Nacht beginnen</button>
+    </form>
+
+    <div class="t-neben">
+      <button type="button" id="btn-weiter-spiel" class="knopf zweit" hidden></button>
+      <button type="button" id="btn-ton-titel" class="knopf zweit">Ton einschalten</button>
+    </div>
+    <p class="t-regeln">Vier Möglichkeiten, jedes Mal. Jede hat Folgen: manche sofort, manche erst Stunden später, manche erfährst du nie. Dein alter Beruf verändert, was du kannst. Die Uhr läuft mit. Horrorgeschichte mit Gewalt, Verlust und Tod. Der Ton lohnt sich mit Kopfhörern.</p>
+
+    <div class="t-enden">
+      <h2 id="enden-kopf">Enden</h2>
+      <ul id="enden-liste" class="endenliste"></ul>
+    </div>
+  </section>
+
+  <section id="spiel" hidden>
+    <div id="text" class="text"></div>
+    <div id="folge" class="text folge" hidden></div>
+    <div id="wahl" class="wahl"></div>
+  </section>
+
+  <section id="schluss" hidden></section>
+</main>
+
+<div id="menu" class="blatt" hidden>
+  <div class="blatt-innen" role="dialog" aria-modal="true" aria-labelledby="menu-kopf">
+    <h2 id="menu-kopf">Menü</h2>
+    <button type="button" id="m-ton" class="knopf zweit">Ton einschalten</button>
+    <div class="blatt-reihe">
+      <button type="button" id="m-kleiner" class="knopf zweit" aria-label="Schrift kleiner">A −</button>
+      <button type="button" id="m-groesser" class="knopf zweit" aria-label="Schrift größer">A +</button>
+    </div>
+    <button type="button" id="m-kapitel" class="knopf zweit">Kapitel neu beginnen</button>
+    <button type="button" id="m-titel" class="knopf zweit">Zur Titelseite</button>
+    <p class="blatt-hinweis">Dein Stand wird nach jeder Entscheidung auf diesem Gerät gespeichert.</p>
+    <button type="button" id="m-zu" class="knopf">Zurück ins Spiel</button>
+  </div>
+</div>

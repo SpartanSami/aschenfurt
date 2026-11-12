@@ -51,3 +51,22 @@ Reines HTML/CSS/JavaScript ohne Abhängigkeiten – kein Build, kein Server, kei
 - Falsche Fährten klären sich auf, Verrat hat Motive, und das Ende folgt nachvollziehbar aus deinen Entscheidungen.
 
 *„Diese Geschichte ist so passiert, weil du so entschieden hast.“*
+
+---
+
+# 🌘 TOTENSTILLE – Die letzte Nacht von Kaltenbrück
+
+Ein zweites, eigenständiges Spiel in diesem Repo: textbasierter Zombie-Horror in einer einzigen Nacht.
+
+**Spielen:** `Totenstille.html` doppelklicken (oder aufs Handy schicken und im Browser öffnen). Eine Datei, läuft offline, kein Server nötig.
+
+- Du gibst deinen **Namen** und deinen **alten Beruf** ein. Der Beruf verändert, was du kannst (eigene Lösungswege, eigene Texte).
+- Immer **vier Möglichkeiten**. Jede hat Folgen: sofort, Stunden später oder versteckt.
+- Die **Uhr läuft mit**: Um 06:00 Uhr wird die Brücke gesprengt. Jeder Umweg kostet Zeit.
+- Vier Begleiter, die leben oder sterben, je nachdem, was du tust. **Acht Enden.**
+- Speichert automatisch nach jeder Entscheidung, Kapitel lassen sich wiederholen, Ton (im Browser erzeugt) ist zuschaltbar.
+
+**Für Bastler:** Die Quellen liegen in `totenstille/src/` (Story in `story1–4.js`, Regeln in `kern.js`, Oberfläche in `ui.js`).
+`python3 totenstille/build.py` baut daraus wieder `Totenstille.html`.
+`node totenstille/test/sim.js` spielt die Geschichte 20.000-mal zufällig durch und meldet Sackgassen oder Fehler.
+Achtung: Die Quelltexte verraten die Wendungen der Geschichte.

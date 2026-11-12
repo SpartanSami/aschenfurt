@@ -1,0 +1,297 @@
+/* Layout: eine Lesespalte, darüber eine feste Leiste mit Uhr und Nachtlinie.
+   Der Himmel hinter dem Text wird mit jeder Stunde heller, bis um 06:00 die Brücke fällt. */
+:root {
+  --nacht: #0b0f18;      /* Grund: blauschwarze Stadtnacht */
+  --nacht-2: #131a28;    /* Flächen */
+  --linie: #2a3449;      /* Haarlinien */
+  --papier: #dcd6c8;     /* Lesetext, Knochenweiß */
+  --grau: #8d96a8;       /* Nebentext */
+  --natrium: #eaa63e;    /* Akzent: Natriumdampflampe */
+  --echo: #9fb8a9;       /* Stimme der Echos */
+  --blut: #c9482f;       /* Gefahr, sparsam */
+  --bogen: #e6dfcd;      /* Erfassungsbogen: Papier */
+  --tinte: #1c2231;      /* Erfassungsbogen: Tinte */
+  --h-oben: #0b0f18;     /* Himmel, wird per Uhr gesetzt */
+  --h-unten: #0d131f;
+  --glut: 0;
+  --gr: 1;               /* Schriftgröße, im Menü verstellbar */
+  --f-anzeige: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", "Helvetica Neue", sans-serif;
+  --f-text: "Literata", Georgia, "Times New Roman", serif;
+  --f-daten: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--nacht);
+  color: var(--papier);
+  font-family: var(--f-text);
+  font-size: calc(17px * var(--gr));
+  line-height: 1.62;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto; z-index: 10;
+  height: env(safe-area-inset-top, 0px); background: var(--nacht);
+}
+
+#himmel {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: linear-gradient(to top, var(--h-unten) 0%, var(--h-oben) 58%);
+  transition: background 2s linear;
+}
+#himmel::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 36%;
+  background: radial-gradient(120% 100% at 50% 100%, rgba(226, 142, 96, var(--glut)) 0%, rgba(226, 142, 96, 0) 70%);
+}
+
+/* ---------- Kopfleiste ---------- */
+#kopf {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: rgba(11, 15, 24, 0.9);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--linie);
+}
+.kopf-innen {
+  max-width: 44rem; margin: 0 auto;
+  padding-block: 0.55rem 0.5rem;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 0.4rem;
+}
+.kopf-zeile { display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem; min-width: 0; }
+.kopf-zeile.unten { align-items: center; flex-wrap: wrap; row-gap: 0.35rem; }
+.hud-ort {
+  font-family: var(--f-anzeige); font-weight: 600; font-size: 0.92rem;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--grau);
+  min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.hud-ort b { color: var(--papier); font-weight: 600; }
+.hud-uhr {
+  font-family: var(--f-daten); font-weight: 500; font-size: 1.15rem; color: var(--natrium);
+  font-variant-numeric: tabular-nums; letter-spacing: 0.04em; white-space: nowrap;
+}
+.nachtlinie { position: relative; height: 2px; background: var(--linie); margin-right: 3.1rem; }
+.nacht-fuell { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--natrium); transition: width 1.2s ease; }
+.nacht-fuell::after {
+  content: ""; position: absolute; right: -3px; top: -3px; width: 8px; height: 8px;
+  border-radius: 50%; background: var(--natrium);
+}
+.nacht-ende {
+  position: absolute; right: -3.1rem; top: -0.5rem; font-family: var(--f-daten);
+  font-size: 0.66rem; color: var(--grau); letter-spacing: 0.04em;
+}
+.nachtlinie.knapp .nacht-fuell, .nachtlinie.knapp .nacht-fuell::after { background: var(--blut); }
+.nachtlinie.knapp .nacht-ende { color: var(--blut); }
+
+.hud-zustand { display: flex; align-items: center; gap: 3px; }
+.hud-zustand .etikett, .hud-gruppe .etikett {
+  font-family: var(--f-anzeige); font-size: 0.72rem; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--grau); margin-right: 0.35rem;
+}
+.pip { width: 13px; height: 7px; background: var(--papier); }
+.pip.leer { background: transparent; outline: 1px solid var(--linie); outline-offset: -1px; }
+.hud-zustand.schwach .pip:not(.leer) { background: var(--blut); }
+.hud-zustand.treffer { animation: ruck 0.45s ease; }
+.hud-gruppe { display: flex; align-items: center; flex-wrap: wrap; gap: 0.15rem 0.6rem; flex: 1; min-width: 0; }
+.chip { font-family: var(--f-anzeige); font-size: 0.88rem; letter-spacing: 0.06em; color: var(--papier); }
+.chip.weg { color: var(--grau); text-decoration: line-through; text-decoration-color: var(--blut); opacity: 0.75; }
+.knopf-klein {
+  font-family: var(--f-anzeige); font-size: 0.82rem; font-weight: 600; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--papier); background: transparent;
+  border: 1px solid var(--linie); border-radius: 2px; padding: 0.28rem 0.6rem; cursor: pointer;
+}
+.knopf-klein:hover, .knopf-klein:focus-visible { border-color: var(--natrium); color: var(--natrium); }
+
+/* ---------- Bühne ---------- */
+#buehne {
+  position: relative; z-index: 1; max-width: 44rem; margin: 0 auto;
+  padding-block: 1.6rem 4.5rem;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.text { display: grid; gap: 1em; max-width: 34em; }
+.text p { margin: 0; overflow-wrap: break-word; }
+.text em { color: var(--grau); }
+.text strong { font-weight: 600; color: var(--papier); }
+
+.echo {
+  font-style: italic; color: var(--echo); letter-spacing: 0.035em;
+  padding-left: 1.4em; animation: flackern 5.5s ease-in-out infinite;
+}
+.echo + .echo { margin-top: -0.55em; animation-delay: -1.7s; }
+.echo + .echo + .echo { animation-delay: -3.4s; }
+.funk { font-family: var(--f-daten); font-size: 0.86em; line-height: 1.6; color: var(--natrium); }
+.schlag {
+  font-family: var(--f-anzeige); font-weight: 600; font-size: 1.6em; line-height: 1.15;
+  letter-spacing: 0.13em; text-transform: uppercase; color: var(--papier); padding-block: 0.15em;
+}
+.gabe { border: 1px solid var(--linie); padding: 0.8rem 1rem; display: grid; gap: 0.15rem; background: rgba(19, 26, 40, 0.7); }
+.gabe small {
+  font-family: var(--f-anzeige); font-size: 0.74rem; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--grau);
+}
+.gabe b { font-family: var(--f-anzeige); font-weight: 600; font-size: 1.2em; letter-spacing: 0.08em; text-transform: uppercase; color: var(--natrium); }
+.gabe span { font-size: 0.94em; }
+
+.ein { animation: einblenden 0.6s ease both; }
+
+.folge { margin-top: 1.5rem; }
+.gewaehlt {
+  font-family: var(--f-anzeige); font-weight: 500; font-size: 1.14em; line-height: 1.35;
+  letter-spacing: 0.02em; color: var(--natrium); scroll-margin-top: 7.5rem;
+  border-top: 1px solid var(--linie); padding-top: 1.1rem;
+}
+.notizen {
+  list-style: none; margin: 0; padding: 0; display: grid; gap: 0.2em;
+  font-family: var(--f-daten); font-size: 0.76em; color: var(--grau);
+}
+.notizen li::before { content: "→ "; color: var(--natrium); }
+
+.wahl { display: grid; gap: 0.6rem; margin-top: 1.7rem; max-width: 34em; }
+.opt {
+  display: grid; grid-template-columns: auto 1fr; column-gap: 0.85rem; align-items: start;
+  width: 100%; text-align: left; padding: 0.8rem 0.95rem;
+  background: rgba(19, 26, 40, 0.78); color: var(--papier);
+  border: 1px solid var(--linie); border-radius: 2px;
+  font: inherit; line-height: 1.45; cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.opt .buchst { font-family: var(--f-anzeige); font-weight: 700; font-size: 1.08em; color: var(--natrium); min-width: 1.1em; }
+.opt .inhalt { min-width: 0; overflow-wrap: break-word; }
+.opt .marke {
+  display: table; font-family: var(--f-anzeige); font-weight: 600; font-size: 0.7em;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--nacht);
+  background: var(--natrium); padding: 0.02em 0.5em; margin-bottom: 0.3em;
+}
+.opt:hover, .opt:focus-visible { border-color: var(--natrium); background: var(--nacht-2); }
+.opt:focus-visible, .knopf:focus-visible, .knopf-klein:focus-visible, .feld input:focus-visible, .band input:focus-visible {
+  outline: 2px solid var(--natrium); outline-offset: 2px;
+}
+
+.knopf {
+  justify-self: start; font-family: var(--f-anzeige); font-weight: 600; font-size: 1.05rem;
+  letter-spacing: 0.16em; text-transform: uppercase; padding: 0.72rem 1.4rem;
+  background: var(--natrium); color: var(--nacht); border: 1px solid var(--natrium);
+  border-radius: 2px; cursor: pointer;
+}
+.knopf:hover { filter: brightness(1.08); }
+.knopf.zweit { background: transparent; color: var(--papier); border-color: var(--linie); }
+.knopf.zweit:hover { border-color: var(--natrium); color: var(--natrium); filter: none; }
+.knopfreihe { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.7rem; }
+
+.band { display: grid; gap: 0.5rem; margin-top: 1.6rem; max-width: 34em; }
+.band label { font-family: var(--f-anzeige); font-size: 0.8rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--grau); }
+.band input {
+  width: 100%; font-family: var(--f-daten); font-size: 0.95em; color: var(--natrium);
+  background: rgba(19, 26, 40, 0.8); border: 1px solid var(--linie); border-radius: 2px; padding: 0.75rem 0.85rem;
+}
+.band .rec { font-family: var(--f-daten); font-size: 0.74em; color: var(--blut); letter-spacing: 0.08em; }
+.band .rec::before { content: "● "; animation: flackern 1.2s steps(2) infinite; }
+
+/* ---------- Titelseite ---------- */
+#titel { display: grid; gap: 1.5rem; }
+.t-ober { font-family: var(--f-daten); font-size: 0.74rem; letter-spacing: 0.12em; color: var(--grau); text-transform: uppercase; margin: 0; }
+.t-haupt {
+  font-family: var(--f-anzeige); font-weight: 700; margin: 0; line-height: 0.86;
+  font-size: clamp(4.2rem, 21vw, 9.5rem); letter-spacing: 0.03em; text-transform: uppercase;
+  text-wrap: balance;
+}
+.t-haupt span { display: block; }
+.t-haupt i { font-style: normal; }
+.t-haupt i:nth-child(1) { opacity: 1; }
+.t-haupt i:nth-child(2) { opacity: 0.84; }
+.t-haupt i:nth-child(3) { opacity: 0.66; }
+.t-haupt i:nth-child(4) { opacity: 0.48; }
+.t-haupt i:nth-child(5) { opacity: 0.32; }
+.t-haupt i:nth-child(6) { opacity: 0.18; }
+.t-unter { font-family: var(--f-anzeige); font-weight: 500; font-size: 1.25rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--natrium); margin: 0; }
+.t-lead { max-width: 33em; margin: 0; }
+.t-regeln { max-width: 33em; margin: 0; color: var(--grau); font-size: 0.92em; }
+
+.bogen {
+  background: var(--bogen); color: var(--tinte); max-width: 27rem; width: 100%;
+  padding: 1.1rem 1.15rem 1.25rem; border-radius: 1px; transform: rotate(-0.5deg);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.5); display: grid; gap: 0.9rem;
+  font-family: var(--f-daten); font-size: 0.82rem; position: relative;
+}
+.bogen-kopf { display: flex; justify-content: space-between; gap: 0.75rem; border-bottom: 2px solid var(--tinte); padding-bottom: 0.45rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.74rem; }
+.feld { display: grid; gap: 0.2rem; }
+.feld label, .feld .lab { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.75; }
+.feld input, .feld .wert {
+  font-family: var(--f-text); font-style: italic; font-size: 1.2rem; color: var(--tinte);
+  background: transparent; border: 0; border-bottom: 1px solid var(--tinte); border-radius: 0;
+  padding: 0.15rem 0 0.25rem; width: 100%; min-width: 0; overflow-wrap: anywhere;
+}
+.feld input::placeholder { color: var(--tinte); opacity: 0.38; }
+.kreuze { display: flex; gap: 1.2rem; align-items: center; font-size: 0.86rem; }
+.kreuz { display: inline-flex; align-items: center; gap: 0.4rem; }
+.kreuz::before {
+  content: ""; width: 0.95rem; height: 0.95rem; border: 1.5px solid var(--tinte); display: inline-block;
+}
+.kreuz.an::before { background: linear-gradient(45deg, transparent 44%, var(--tinte) 44%, var(--tinte) 56%, transparent 56%), linear-gradient(-45deg, transparent 44%, var(--tinte) 44%, var(--tinte) 56%, transparent 56%); }
+.kreuz.rot { color: var(--blut); font-weight: 500; }
+.kreuz.rot::before { border-color: var(--blut); background: linear-gradient(45deg, transparent 42%, var(--blut) 42%, var(--blut) 58%, transparent 58%), linear-gradient(-45deg, transparent 42%, var(--blut) 42%, var(--blut) 58%, transparent 58%); }
+.kreuz.gestrichen { text-decoration: line-through; text-decoration-color: var(--blut); opacity: 0.6; }
+.bogen .fehler { color: var(--blut); font-size: 0.78rem; margin: 0; min-height: 1.1em; }
+.bogen .knopf { background: var(--tinte); color: var(--bogen); border-color: var(--tinte); }
+.stempel {
+  position: absolute; right: 0.9rem; bottom: 0.8rem; transform: rotate(-9deg);
+  font-family: var(--f-anzeige); font-weight: 700; font-size: 1.5rem; letter-spacing: 0.14em;
+  color: var(--blut); border: 3px solid var(--blut); padding: 0.05rem 0.55rem; opacity: 0.85;
+}
+.t-neben { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; }
+.t-enden { border-top: 1px solid var(--linie); padding-top: 1rem; display: grid; gap: 0.5rem; max-width: 33em; }
+.t-enden h2, .ende-teil h3 {
+  font-family: var(--f-anzeige); font-weight: 600; font-size: 0.82rem; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--grau); margin: 0;
+}
+.endenliste { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(12.5rem, 1fr)); gap: 0.2rem 1.2rem; font-size: 0.92em; }
+.endenliste li { color: var(--grau); }
+.endenliste li.da { color: var(--papier); }
+.endenliste li.da::before { content: "✕ "; color: var(--natrium); }
+.endenliste li:not(.da)::before { content: "· "; }
+
+/* ---------- Schluss ---------- */
+#schluss { display: grid; gap: 1.6rem; }
+.ende-ober { font-family: var(--f-daten); font-size: 0.74rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--natrium); margin: 0; }
+.ende-titel {
+  font-family: var(--f-anzeige); font-weight: 700; font-size: clamp(2.4rem, 10vw, 4.6rem); line-height: 0.95;
+  letter-spacing: 0.04em; text-transform: uppercase; margin: 0.2rem 0 0; text-wrap: balance; overflow-wrap: break-word;
+}
+.ende-teil { border-top: 1px solid var(--linie); padding-top: 1.1rem; display: grid; gap: 0.8rem; max-width: 34em; }
+.ende-teil .text { gap: 0.7em; font-size: 0.95em; }
+.zahlen { display: grid; grid-template-columns: minmax(0, 11rem) minmax(0, 1fr); gap: 0.35rem 1rem; margin: 0; font-size: 0.92em; }
+.zahlen dt { font-family: var(--f-anzeige); letter-spacing: 0.1em; text-transform: uppercase; color: var(--grau); font-size: 0.86em; padding-top: 0.12em; }
+.zahlen dd { margin: 0; overflow-wrap: break-word; }
+
+/* ---------- Menü ---------- */
+.blatt { position: fixed; inset: 0; z-index: 20; display: grid; place-items: end center; background: rgba(5, 7, 12, 0.72); }
+.blatt-innen {
+  width: min(100%, 26rem); background: var(--nacht-2); border: 1px solid var(--linie); border-bottom: 0;
+  padding: 1.1rem max(16px, env(safe-area-inset-right, 0px)) calc(1.3rem + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+  display: grid; gap: 0.6rem;
+}
+.blatt-innen h2 { font-family: var(--f-anzeige); font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; font-size: 0.9rem; color: var(--grau); margin: 0 0 0.2rem; }
+.blatt-innen .knopf { justify-self: stretch; text-align: left; font-size: 0.95rem; }
+.blatt-reihe { display: flex; gap: 0.6rem; }
+.blatt-reihe .knopf { flex: 1; text-align: center; }
+.blatt-hinweis { font-size: 0.84em; color: var(--grau); margin: 0; }
+
+@media (min-width: 640px) {
+  .blatt { place-items: center; }
+  .blatt-innen { border-bottom: 1px solid var(--linie); }
+}
+
+@keyframes einblenden { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes flackern { 0%, 100% { opacity: 1; } 46% { opacity: 0.72; } 52% { opacity: 0.94; } 58% { opacity: 0.68; } }
+@keyframes ruck { 0%, 100% { transform: none; } 20% { transform: translateX(-4px); } 50% { transform: translateX(4px); } 80% { transform: translateX(-2px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .ein, .echo, .hud-zustand.treffer, .band .rec::before { animation: none; }
+  #himmel, .nacht-fuell { transition: none; }
+}
