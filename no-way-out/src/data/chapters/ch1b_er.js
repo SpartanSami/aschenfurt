@@ -214,6 +214,11 @@ export default {
     L.item('keycard', 31.0, 44.4, { id: 'card_nexara', keyId: 'card_nexara', name: 'NEXARA-Zugangskarte (Kurier)', h: 0.08 });
     L.item('doc', 30.4, 45.4, { id: 'doc_kurier', doc: 'c1b_kurier', h: 0.03 });
     L.item('ammo', 31.9, 45.4, { id: 'ammo1b_b', h: 0.03, rounds: 15 });
+    // Zusätzliche Fundstücke am Wegesrand (liegen am Boden an der Wand und leuchten auf)
+    L.item('ammo', 22.23, 26.5, { id: 'ammo_x0', h: 0.03, rounds: 10 });
+    L.item('bandage', 46.5, 33.23, { id: 'band_x1', h: 0.03 });
+    L.item('ammo', 39.5, 37.23, { id: 'ammo_x2', h: 0.03, rounds: 10 });
+    L.item('bandage', 17.5, 35.77, { id: 'band_x3', h: 0.03, notHard: true });
 
     L.interact('fire_btn', 53.35, 21.9, { prompt: 'Brandschutztür schließen', y: 1.35, radius: 1.3, mesh: 'panel', rot: PI, enabled: (g) => !g.state.flags.fire_closed });
 

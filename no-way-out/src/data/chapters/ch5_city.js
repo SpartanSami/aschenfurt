@@ -148,6 +148,11 @@ export default {
     L.item('can', 56, 39, { id: 'can5', h: 0.02 });
     L.item('doc', 23.4, 12.0, { id: 'doc_befehl', doc: 'c5_befehl', h: 0.9 });
     L.item('bandage', 33.5, 15.0, { id: 'b5cp', h: 0.85, notHard: true });
+    // Zusätzliche Fundstücke am Wegesrand (liegen am Boden an der Wand und leuchten auf)
+    L.item('ammo', 22.77, 72.5, { id: 'ammo_x0', h: 0.03, rounds: 10 });
+    L.item('bandage', 37.5, 64.23, { id: 'band_x1', h: 0.03 });
+    L.item('ammo', 58.77, 60.5, { id: 'ammo_x2', h: 0.03, rounds: 10 });
+    L.item('bandage', 27.5, 10.23, { id: 'band_x3', h: 0.03, notHard: true });
     L.interact('grate', 46.2, 11.0, { prompt: 'Gitter des Entwässerungskanals öffnen', y: 0.4, mesh: 'panel', enabled: (g) => !!g.state.flags.secret_route });
 
     // ================= Gegner =================

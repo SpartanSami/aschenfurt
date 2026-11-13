@@ -120,6 +120,11 @@ export default {
     L.item('doc', 61.2, 3.4, { id: 'doc_funk', doc: 'c3_funk', h: 0.78 });
     L.item('doc', 56.5, 8.4, { id: 'doc_aushang3', doc: 'c3_aushang', h: 0.02, rot: 0 });
     L.item('bandage', 59.3, 5.4, { id: 'b_booth', h: 1.2, notHard: true });
+    // Zusätzliche Fundstücke am Wegesrand (liegen am Boden an der Wand und leuchten auf)
+    L.item('ammo', 8.23, 38.5, { id: 'ammo_x0', h: 0.03, rounds: 10 });
+    L.item('bandage', 77.5, 46.77, { id: 'band_x1', h: 0.03 });
+    L.item('ammo', 65.5, 8.77, { id: 'ammo_x2', h: 0.03, rounds: 10 });
+    L.item('bandage', 81.77, 50.5, { id: 'band_x3', h: 0.03, notHard: true });
     L.interact('booth_console', 60.5, 3.9, { prompt: 'Strom auf das Rolltor geben', y: 4.0, enabled: (g) => !!g.state.flags.ilyas_joined && !g.state.flags.power3 });
 
     // ================= Gegner =================

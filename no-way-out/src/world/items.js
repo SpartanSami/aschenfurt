@@ -21,6 +21,46 @@ export const ITEM_INFO = {
   ammo: { name: 'Munition 9 mm', kind: 'ammo', verb: 'Nehmen' },
 };
 
+// Aufleuchten von Fundstücken: ein weicher, pulsierender Lichtpunkt über dem Gegenstand, der auch im Dunkeln
+// sichtbar ist (wird nicht von Lampen beleuchtet). Munition gelb, Heilmittel grün, Schlüssel/wichtige Dinge blau,
+// Aufnahmen rot; Dokumente und Wurfgegenstände nur schwach.
+const GLINT = {
+  ammo: [0xffd35a, 1], weapon: [0xffd35a, 1], heal: [0x8dffb4, 1], key: [0x8fd0ff, 1], story: [0x8fd0ff, 1],
+  fragment: [0xff8f7f, 1], doc: [0xfff1cf, 0.45], throw: [0xd6ffe2, 0.35],
+};
+let glintTex = null;
+function glintTexture() {
+  if (glintTex) return glintTex;
+  const c = document.createElement('canvas'); c.width = c.height = 64;
+  const x = c.getContext('2d');
+  const g = x.createRadialGradient(32, 32, 0, 32, 32, 32);
+  g.addColorStop(0, 'rgba(255,255,255,1)'); g.addColorStop(0.18, 'rgba(255,255,255,0.75)'); g.addColorStop(0.5, 'rgba(255,255,255,0.16)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+  x.fillStyle = g; x.fillRect(0, 0, 64, 64);
+  // feines Kreuz wie ein Lichtreflex
+  x.globalCompositeOperation = 'lighter';
+  for (const [w, h] of [[60, 3], [3, 60]]) { const l = x.createLinearGradient(32 - w / 2, 32 - h / 2, 32 + w / 2, 32 + h / 2); l.addColorStop(0, 'rgba(255,255,255,0)'); l.addColorStop(0.5, 'rgba(255,255,255,0.9)'); l.addColorStop(1, 'rgba(255,255,255,0)'); x.fillStyle = l; x.fillRect(32 - w / 2, 32 - h / 2, w, h); }
+  glintTex = new THREE.CanvasTexture(c);
+  return glintTex;
+}
+export function makeGlint(kind) {
+  const [color, strength] = GLINT[kind] || GLINT.story;
+  const mat = new THREE.SpriteMaterial({ map: glintTexture(), color, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0.8 });
+  const s = new THREE.Sprite(mat);
+  s.userData = { strength, phase: Math.random() * 6.28 };
+  s.scale.setScalar(0.2);
+  s.renderOrder = 6;
+  return s;
+}
+// Pulsieren: ruhiges An- und Abschwellen, dazu alle paar Sekunden ein kurzes helles Aufblitzen
+export function pulseGlint(s, time) {
+  const u = s.userData, t = time * 2.2 + u.phase;
+  const wave = 0.5 + 0.5 * Math.sin(t);
+  const flash = Math.pow(Math.max(0, Math.sin(t * 0.85 + u.phase)), 10);   // etwa alle 3 Sekunden ein Blinken
+  const k = u.strength;
+  s.material.opacity = Math.min(1, (0.45 + 0.35 * wave + 0.6 * flash) * (0.35 + 0.65 * k));
+  s.scale.setScalar((0.2 + 0.08 * wave + 0.26 * flash) * (0.55 + 0.45 * k));
+}
+
 export function makeItemMesh(type) {
   const g = new THREE.Group();
   const add = (geo, mat, x = 0, y = 0, z = 0, rx = 0, ry = 0, rz = 0) => { const m = new THREE.Mesh(geo, typeof mat === 'string' ? getMat(mat) : mat); m.position.set(x, y, z); m.rotation.set(rx, ry, rz); m.castShadow = true; g.add(m); return m; };

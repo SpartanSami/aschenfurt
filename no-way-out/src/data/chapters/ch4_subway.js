@@ -121,6 +121,11 @@ export default {
     L.item('bandage', 89.2, 23.4, { id: 'b4_niche', h: 0.02 });
     L.item('doc', 104.5, 13.9, { id: 'doc_plan', doc: 'c4_plan', h: 0.86 });
     L.item('bandage', 101.2, 16.5, { id: 'b4_stell', h: 1.2, extra: true });
+    // Zusätzliche Fundstücke am Wegesrand (liegen am Boden an der Wand und leuchten auf)
+    L.item('ammo', 23.5, 12.77, { id: 'ammo_x0', h: 0.03, rounds: 10 });
+    L.item('bandage', 56.5, 28.77, { id: 'band_x1', h: 0.03 });
+    L.item('ammo', 79.5, 19.23, { id: 'ammo_x2', h: 0.03, rounds: 10 });
+    L.item('bandage', 101.5, 20.23, { id: 'band_x3', h: 0.03, notHard: true });
 
     // ================= Gegner =================
     L.zombie(12.8, 9.2, { id: 'z4k', type: 'sleeper', pose: 'kneel', yaw: -2.3, outfit: 'civilian', wake: 3 });

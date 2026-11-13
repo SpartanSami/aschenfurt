@@ -107,6 +107,11 @@ export default {
     L.item('bandage', 62.6, 25.2, { id: 'b2b_warte', h: 0.78, extra: true });
     L.item('doc', 62.6, 26.0, { id: 'doc_schicht', doc: 'c2b_schicht', h: 0.78 });
     L.item('ammo', 62.6, 24.9, { id: 'ammo2b_b', h: 0.78, rounds: 12 });
+    // Zusätzliche Fundstücke am Wegesrand (liegen am Boden an der Wand und leuchten auf)
+    L.item('ammo', 23.5, 25.23, { id: 'ammo_x0', h: 0.03, rounds: 10 });
+    L.item('bandage', 34.5, 25.23, { id: 'band_x1', h: 0.03 });
+    L.item('ammo', 41.23, 22.5, { id: 'ammo_x2', h: 0.03, rounds: 10 });
+    L.item('bandage', 61.5, 27.77, { id: 'band_x3', h: 0.03, notHard: true });
 
     L.interact('power_lever', 59.2, 21.2, { prompt: 'Notstrom einschalten (gedrückt halten)', y: 1.2, radius: 1.3, mesh: 'panel', rot: 0, hold: 1.5, enabled: (g) => !g.state.flags.pump_power });
 

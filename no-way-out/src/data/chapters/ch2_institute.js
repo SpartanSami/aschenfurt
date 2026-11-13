@@ -208,6 +208,11 @@ export default {
     L.item('doc', 46.2, 43.4, { id: 'doc_s17', doc: 'c2_s17', h: 1.2 });
     L.item('bandage', 60.8, 50.2, { id: 'b_q', h: 0.02, notHard: true });
     L.item('bottle', 52, 44.5, { id: 'bottle_cg', h: 0.02 });
+    // Zusätzliche Fundstücke am Wegesrand (liegen am Boden an der Wand und leuchten auf)
+    L.item('ammo', 41.5, 32.77, { id: 'ammo_x0', h: 0.03, rounds: 10 });
+    L.item('bandage', 74.23, 35.5, { id: 'band_x1', h: 0.03 });
+    L.item('ammo', 61.77, 46.5, { id: 'ammo_x2', h: 0.03, rounds: 10 });
+    L.item('bandage', 44.5, 66.77, { id: 'band_x3', h: 0.03, notHard: true });
     L.interact('argus_term', 64.5, 45.2, { prompt: 'ARGUS-Terminal lesen', y: 1.1, repeat: true });
     L.interact('wall017', 75.5, 37.4, { prompt: 'Kratzspuren ansehen', y: 1.5 });
 

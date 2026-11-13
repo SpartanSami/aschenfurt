@@ -76,6 +76,7 @@ await page.evaluate(() => {
       p.yaw = Math.atan2(-(wp.x - p.pos.x), -(wp.z - p.pos.z)); p.pitch = 0;
       // Türen öffnen
       for (const door of gm.level.doors) {
+        if (o.noDoors) break;                       // z. B. direkt nach dem bewussten Schließen einer Tür
         if (!door.isShut() || door.locked) continue;
         if (Math.hypot(door.center.x - p.pos.x, door.center.z - p.pos.z) < 1.4) door.open(p.pos);
       }
@@ -122,7 +123,7 @@ await page.evaluate(() => {
     A.aim(d.center);
     const t = gm.player._findTarget();
     // Bei Doppeltüren zählt jeder Flügel (ein Mensch öffnet den, den er gerade ansieht)
-    if (!t || t.kind !== 'door' || (t.door !== d && t.door !== d.partner)) { A.log('FEHLER Tür nicht anwählbar wie ein Spieler:', id, '– im Blick:', t ? (t.id || t.kind) : 'nichts'); A.unreachable = (A.unreachable || 0) + 1; return false; }
+    if (!t || t.kind !== 'door' || (t.door !== d && t.door !== d.partner)) { A.log('FEHLER Tür nicht anwählbar wie ein Spieler:', id, '– im Blick:', t ? (t.id || t.kind) : 'nichts', '| Spieler', gm.player.pos.x.toFixed(2), gm.player.pos.z.toFixed(2), gm.player.pos.y.toFixed(2), 'Tür', d.center.x.toFixed(2), d.center.z.toFixed(2), d.center.y.toFixed(2), 'offen', d.target, 'kaputt', !!d.broken, 'verriegelt', !!d.locked); A.unreachable = (A.unreachable || 0) + 1; return false; }
     gm.player._doInteract(t); return !d.locked;
   };
   A.state = () => { const gm = g(); return { ch: gm.chapter?.id, mode: gm.mode, pmode: gm.player.mode, hp: Math.round(gm.player.hp), x: +gm.player.pos.x.toFixed(1), z: +gm.player.pos.z.toFixed(1), obj: gm.phone.data.objective, flags: Object.keys(gm.state.flags).filter((k) => !k.startsWith('read:') && !k.startsWith('used:')).join(',') }; };

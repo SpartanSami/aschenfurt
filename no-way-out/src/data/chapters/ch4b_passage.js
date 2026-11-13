@@ -165,6 +165,11 @@ export default {
     L.item('bottle', 66.4, 20.4, { id: 'b4b_m6', h: 0.05 });
     L.item('ammo', 19.4, 29.3, { id: 'ammo4b_a', h: 1.08, rounds: 12 });
     L.item('ammo', 75.5, 12.6, { id: 'ammo4b_b', h: 0.82, rounds: 15 });
+    // Zusätzliche Fundstücke am Wegesrand (liegen am Boden an der Wand und leuchten auf)
+    L.item('ammo', 32.5, 16.77, { id: 'ammo_x0', h: 0.03, rounds: 10 });
+    L.item('bandage', 49.77, 13.5, { id: 'band_x1', h: 0.03 });
+    L.item('ammo', 53.23, 17.5, { id: 'ammo_x2', h: 0.03, rounds: 10 });
+    L.item('bandage', 68.77, 12.5, { id: 'band_x3', h: 0.03, notHard: true });
 
     L.interact('tv_news', 45, 24.4, { prompt: 'Nachrichten ansehen', y: 1.6, radius: 2.2, repeat: true, mesh: null });
     L.interact('gate_btn', 74.5, 7.1, { prompt: 'Rolltor öffnen (gedrückt halten)', y: 1.35, radius: 1.3, mesh: 'panel', rot: 0, hold: 1.5, enabled: (g) => !g.state.flags.gate_started });

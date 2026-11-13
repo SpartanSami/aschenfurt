@@ -14,11 +14,18 @@ Sami erwacht ohne Erinnerung in einem Krankenhaus. In seiner Akte steht kein Nam
 | **Projektordner** | `index.html` öffnen (lädt `dist/game.js`). Über einen lokalen Webserver (`npx http-server .`) werden die Sprachaufnahmen aus `assets/audio/` geladen. |
 | **Online** | Den Ordner zum Beispiel über GitHub Pages veröffentlichen und `…/no-way-out/` aufrufen. |
 
-**iPad und Tablets:** Das Spiel erkennt Touch-Geräte und blendet eine eigene Steuerung ein:
-- **Linke Bildschirmhälfte:** Stick zum Bewegen. Ganz nach außen geschoben wird gerannt.
-- **Rechte Hälfte:** Wischen zum Umsehen.
-- **Knöpfe rechts unten:** Benutzen, Klettern, Ducken, Werfen, Heilen, Lampe, Handy und Wenden (180°).
-- **Je nach Lage:** Beim Handy, an den Überwachungskameras und beim Losreißen erscheinen passende Knöpfe.
+**Smartphone, iPad und Tablets:** Das Spiel erkennt Touch-Geräte und blendet eine eigene Steuerung ein:
+- **Linke Bildschirmhälfte:** Stick zum Bewegen. Ganz nach außen geschoben wird gerannt. Darüber liegt **Zielen** (tippen = an/aus, halten = solange gehalten).
+- **Rechte Hälfte:** Wischen zum Umsehen, Doppeltipp für die schnelle 180°-Wende.
+- **Rechts unten genau vier Knöpfe:** Benutzen, Lampe, Handy und Ducken.
+- **Alles Weitere erscheint nur bei Bedarf:**
+  - Beim Zielen wird der große Knopf zu **Schießen**, vor einem Hindernis zu **Klettern**.
+  - Mit einer Flasche in der Hand wird „Zielen“ zu **Werfen**.
+  - Im Versteck wird „Ducken“ zu **Atem** (Atem anhalten).
+  - **Laden** erscheint links, wenn das Magazin nicht voll ist.
+  - **✚ Heilen** erscheint oben neben der Lebensanzeige, wenn es etwas zu heilen gibt.
+- **Das Spiel-Handy** öffnet sich als große, direkt antippbare Ansicht mit normal großer Schrift (Nachrichten, Notizen, Karte, Zustand). Sie passt sich Hoch- und Querformat an. Anruf und neue Nachricht lassen sich oben direkt antippen.
+- **Anzeigen** (Leben, Ausdauer, Munition, Ziel) liegen am oberen Rand, damit unten nichts verdeckt wird.
 
 Tablets nutzen automatisch kleinere Texturen und eine begrenzte Auflösung, damit Safari nicht an seine Speichergrenze stößt. Der Ton läuft auch, wenn das iPad auf „stumm“ steht.
 
@@ -52,9 +59,11 @@ Der Fortschritt wird automatisch an Checkpoints im Browser gespeichert (localSto
 
 ## 🧟 Was das Spiel ausmacht
 
-- **Eine Glock, wenig Munition.** Sami war Polizist. Seine Glock 17 liegt beim Erwachen neben dem Telefon, mit einem halb vollen Magazin. Unterwegs findet er Patronen, genug für die meisten Zombies, aber nicht für alle. Ein Kopftreffer tötet sofort, am Körper braucht es vier Treffer (Mittel). Jeder Schuss ist laut und lockt alles in der Nähe an. Schleichen, Verstecken, Ablenken mit Würfen und Türen bleiben deshalb wichtig.
+- **Eine Glock, wenig Munition.** Sami war Polizist. Seine Glock 17 liegt beim Erwachen neben dem Telefon, mit einem halb vollen Magazin. Unterwegs findet er Patronen: in jedem Abschnitt vier Schachteln (Mittel: zusammen rund 370 Schuss im ganzen Spiel, vorher rund 210). Ein Kopftreffer tötet sofort, am Körper braucht es vier Treffer (Mittel). Jeder Schuss ist laut und lockt alles in der Nähe an. Schleichen, Verstecken, Ablenken mit Würfen und Türen bleiben deshalb wichtig.
 - **Zombie-KI mit sieben Kernzuständen** (Ruhe, Patrouille, Untersuchen, Alarm, Verfolgung, Suche, Rückkehr) sowie Angriff, Packen, Taumeln, Tür einschlagen, Versteck prüfen, Schlafen und Aufstehen. Die Wahrnehmung hängt von Sichtfeld, Entfernung, Licht, Bewegung, Haltung und der Taschenlampe ab. Geräusche breiten sich entlang der Gänge aus, Wände und Türen dämpfen sie.
 - **Verstecke ohne Garantie:** Spinde, unter Betten, hinter Fahrzeugen und Containern. Wer beim Verstecken gesehen wird oder zu laut atmet, wird herausgezogen.
+- **Dezente Daueranzeige:** zwei schmale Balken für Gesundheit und Ausdauer, die Zahl der Heilmittel, der Munitionszähler und das aktuelle Ziel. Alles ist blass und wird nur bei Änderungen kurz hell.
+- **Fundstücke leuchten auf:** Munition gelb, Heilmittel grün, Schlüssel und wichtige Dinge blau, Aufnahmen rot. Der Lichtpunkt pulsiert und blinkt etwa alle drei Sekunden, auch im Dunkeln.
 - **Verletzungssystem** mit den Zuständen Gesund, Verletzt und Schwer verletzt. Es bremst, kürzt die Ausdauer und trübt die Sicht. Heilmittel sind knapp, Wunden heilen nicht von selbst.
 - **Smartphone in der Hand** mit Taschenlampe, Nachrichten, Sprachmemos, Notizen (Ziel, Dokumente, Erkenntnisse), Fotos, Anrufliste, Zustand und **Karte**. Der Akku ist unbegrenzt.
 - **Karten-App:** Sie zeichnet automatisch auf, was Sami wirklich gesehen hat: den Raum, in dem er steht, und alles in Sichtlinie, auch durch offene Türen. Sie zeigt Wände, Türen (grün offen, gelb zu, rot verschlossen), Glas, Wasser, gesehene Gegenstände, Raumnamen und Samis Blickrichtung. Der aufgedeckte Bereich wird mit dem Checkpoint gespeichert.
@@ -105,6 +114,6 @@ Debug-Modus: `index.html?debug` öffnet das Spiel mit F3 (Statistik), F4 (unverw
 - Die Spielzeit liegt je nach Spielweise bei etwa **1,5 bis 2 Stunden**. Gemessen ist nur die Untergrenze: Der Autopilot, der unsichtbar die kürzesten Wege rennt, braucht rund 32 Minuten reine Spielzeit.
 - Die vertonten Stimmen stammen von englischsprachigen ElevenLabs-Stimmen, die über das mehrsprachige Modell Deutsch sprechen. Ein leichter Akzent ist möglich.
 - Begleiter werden von Zombies bewusst ignoriert, damit keine frustrierenden Eskortpassagen entstehen. Gefahr für sie entsteht nur durch die Inszenierung.
-- Die Touch-Steuerung und die Anpassungen für iPad/Safari (Ton, Speicher) wurden in einer iPad-Emulation im Chromium-Browser getestet, nicht auf einem echten iPad. Am besten spielt es sich weiterhin mit Maus und Tastatur oder Gamepad. Die Gamepad-Belegung ist fest, nur die Tastatur ist frei belegbar.
+- Die Touch-Steuerung, die große Handy-Ansicht und die Anpassungen für iPad/Safari (Ton, Speicher) wurden in einer Smartphone- und iPad-Emulation im Chromium-Browser getestet (hoch und quer, mit echten Tipp-Gesten), nicht auf echten Geräten. Am besten spielt es sich weiterhin mit Maus und Tastatur oder Gamepad. Die Gamepad-Belegung ist fest, nur die Tastatur ist frei belegbar.
 
 Alle Personen, Firmen und Orte sind frei erfunden.

@@ -9,7 +9,7 @@ import { buildClutter } from './clutter.js';
 import { getMat, colorMat, emissiveMat, decalMat, signMat, UV_SCALE, V_FULL, GRID_UNIFORMS } from '../render/materials.js';
 import { LightSystem } from '../render/lighting.js';
 import { Door } from './door.js';
-import { makeItemMesh, ITEM_INFO } from './items.js';
+import { makeItemMesh, makeGlint, pulseGlint, ITEM_INFO } from './items.js';
 
 const LIGHT_KINDS = {
   panel: { color: 0xeef3ff, intensity: 9, range: 7.5, mesh: 'panel' },
@@ -471,7 +471,11 @@ export class Level {
     mesh.rotation.y = it.rot ?? (it.x * 2.3);
     this.root.add(mesh);
     const info = ITEM_INFO[it.type] || { name: it.type };
-    const obj = { ...it, pid, mesh, kind: 'item', pos: new THREE.Vector3(it.x, fy, it.z), radius: 0.6, info, alive: true };
+    // Lichtreflex, damit Fundstücke nicht übersehen werden
+    const glint = makeGlint(info.kind);
+    glint.position.set(0, info.kind === 'doc' ? 0.05 : 0.13, 0);
+    mesh.add(glint);
+    const obj = { ...it, pid, mesh, glint, kind: 'item', pos: new THREE.Vector3(it.x, fy, it.z), radius: 0.6, info, alive: true };
     this.items.push(obj);
     this.interacts.push({
       id: it.id, kind: 'item', pos: obj.pos, radius: 1.0, item: obj,
@@ -590,6 +594,8 @@ export class Level {
     if (this.gridDirty) this.updateGridTex();
     this.ambTimer -= dt;
     if (this.ambDirty && this.ambTimer <= 0) { this.updateAmbient(); this.ambTimer = 0.3; }
+    // Fundstücke pulsieren
+    for (const it of this.items) if (it.alive && it.glint) pulseGlint(it.glint, this.time);
     // dynamische Objekte (schwingende OP-Lampe etc.)
     for (const o of this.dynamic) {
       if (o.userData.kind === 'swing') { o.rotation.z = Math.sin(this.time * 1.3) * 0.22; o.rotation.x = Math.sin(this.time * 0.9 + 1) * 0.1; }

@@ -253,8 +253,24 @@ export class Menu {
   }
   showHelp() {
     const g = this.game, L = (a) => g.input.label(a);
-    const el = h(`<div class="panel help"><h2>Steuerung</h2><div class="grid">
-      ${g.input.touchMode ? `<span>Bewegen</span><b>linke Bildschirmhälfte: Stick</b><span>Umsehen</span><b>rechte Bildschirmhälfte: wischen</b>` : `<span>Bewegen</span><b>${L('forward')} ${L('left')} ${L('back')} ${L('right')}</b>`}
+    const tail = `<p class="small">Zombies hören Schritte, Türen und Würfe, sehen Bewegung und Licht. Im Dunkeln und geduckt bist du schwer zu sehen. Verstecke helfen – aber nicht immer. Fundstücke leuchten auf: Munition gelb, Heilmittel grün.</p><div class="row"><button data-a="back">Zurück</button></div></div>`;
+    const el = h(g.input.touchMode ? `<div class="panel help"><h2>Steuerung</h2><div class="grid">
+      <span>Bewegen · Rennen</span><b>linke Hälfte: Stick · ganz nach außen schieben</b>
+      <span>Umsehen</span><b>rechte Hälfte: wischen</b>
+      <span>Schnelle Wende (180°)</span><b>Doppeltipp auf die rechte Hälfte</b>
+      <span>Interagieren · Tür · Verstecken</span><b>Benutzen (großer Knopf)</b>
+      <span>Klettern</span><b>großer Knopf wird vor Hindernissen zu „Klettern“</b>
+      <span>Ducken · im Versteck: Atem anhalten</span><b>Ducken · wird im Versteck zu „Atem“ (halten)</b>
+      <span>Taschenlampe · Smartphone</span><b>Lampe · Handy</b>
+      <span>Zielen</span><b>links „Zielen“: tippen = an/aus, halten = solange gehalten</b>
+      <span>Schießen</span><b>beim Zielen wird der große Knopf zu „Schießen“</b>
+      <span>Nachladen</span><b>„Laden“ erscheint links, wenn das Magazin nicht voll ist</b>
+      <span>Werfen (Ablenkung)</span><b>mit Flasche in der Hand wird „Zielen“ zu „Werfen“</b>
+      <span>Heilen</span><b>„✚ Heilen“ erscheint oben neben der Lebensanzeige</b>
+      <span>Karte, Nachrichten, Notizen</span><b>Handy öffnen und antippen</b>
+      <span>Losreißen, wenn gepackt</span><b>◀ und ▶ abwechselnd</b>
+    </div>` + tail : `<div class="panel help"><h2>Steuerung</h2><div class="grid">
+      <span>Bewegen</span><b>${L('forward')} ${L('left')} ${L('back')} ${L('right')}</b>
       <span>Rennen (begrenzte Ausdauer)</span><b>${L('sprint')}</b>
       <span>Schleichen / Ducken</span><b>${L('crouch')}</b>
       <span>Interagieren / Tür / Verstecken</span><b>${L('interact')}</b>
@@ -267,7 +283,7 @@ export class Menu {
       <span>Schnelle Wende (180°)</span><b>${L('turn')}</b>
       <span>Karte (Smartphone-App)</span><b>${L('phone')} → Karte</b>
       <span>Losreißen, wenn gepackt</span><b>${L('left')} / ${L('right')} abwechselnd</b>
-    </div><p class="small">Zombies hören Schritte, Türen und Würfe, sehen Bewegung und Licht. Im Dunkeln und geduckt bist du schwer zu sehen. Verstecke helfen – aber nicht immer.</p><div class="row"><button data-a="back">Zurück</button></div></div>`);
+    </div>` + tail);
     el.addEventListener('click', (e) => { if (e.target.closest('button')?.dataset.a === 'back') this.showPause(); });
     this._set(el, 'overlay');
   }

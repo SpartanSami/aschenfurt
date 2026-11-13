@@ -32,7 +32,8 @@ no-way-out/
 │  ├─ ai/                     zombie (Zustandsmaschine), humanoid (Körper + Animation), noise, npc
 │  ├─ systems/                audio (Synthese, Musik, Stimmen), phone, photos, story, inventory,
 │  │                          automap (Karten-App), stats (Auswertung und Rang)
-│  ├─ ui/                     hud, menu, docs (Dokumentenansicht)
+│  ├─ ui/                     hud (Anzeigen), menu, docs (Dokumentenansicht), touch (Touch-Steuerung),
+│  │                          phoneui (große Handy-Ansicht für Touch-Geräte)
 │  └─ data/
 │     ├─ chapters/            Level-Aufbau + Skripte: ch1, ch1b, ch2, ch2b, ch3, ch4, ch4b, ch5
 │     │                       (die b-Dateien sind Teilabschnitte eines Kapitels, index.js legt die Reihenfolge fest)
@@ -84,6 +85,16 @@ Bewegung mit Beschleunigung, Head-Bob, Hinken, Schwanken bei Verletzung, Ausdaue
 - Der Kontext `c` bietet unter anderem: `wait`, `lines`, `say`, `msg`, `call`, `pa`, `choice`, `objective`, `fact`, `photo`, `door/unlock/lock/open/close`, `power/lightMode`, `spawn/chase/wake`, `addNpc/npc`, `checkpoint`, `endChapter`, `ending`.
 - **Kapitel und Teilabschnitte:** `CHAPTER_ORDER` enthält die fünf Kapitel (für die Nummerierung), `CHAPTER_SEQ` die vollständige Abfolge mit den Teilabschnitten `ch1b`, `ch2b` und `ch4b` (Kapitelauswahl, Debug-Sprung). Teilabschnitte tragen `part: true` und zeigen beim Wechsel nur eine kurze Ortsangabe.
 - Wartezeiten laufen über die Spielzeit. Beim Laden eines Checkpoints werden laufende Abläufe abgebrochen (Generationszähler).
+
+### Bedienung auf Touch-Geräten (`ui/touch.js`, `ui/phoneui.js`)
+- Die Touch-Steuerung schreibt nur in `input.touch` (gehaltene Knöpfe, einmalige Tipper, Stick, Blickbewegung). Die Spielsysteme fragen wie bei Tastatur und Gamepad `input.down()` und `input.pressed()` ab.
+- Knöpfe mit wechselnder Aufgabe: Der große Knopf löst je nach Lage `interact`, `fire` (beim Zielen) oder `vault` (vor einem Hindernis, `player.canVault()`) aus. „Zielen“ wird mit Wurfgegenstand zu `throw`, „Ducken“ im Versteck zu `vault` (Atem anhalten).
+- Zielen: kurzer Tipp rastet ein, erneuter Tipp löst; längeres Halten gilt nur, solange der Finger liegt. Rennen, Heilen oder ein Wurfgegenstand lösen die Rastung.
+- Die große Handy-Ansicht ist reines HTML über dem Spielbild. Sie liest denselben Zustand wie das 3D-Telefon (`systems/phone.js`) und wird bei jeder Änderung neu aufgebaut; die Karte zeichnet `automap.draw()` in eine eigene Zeichenfläche. Wird Sami getroffen oder gepackt, schließt sie sich, bei Gefahr blinkt ihr Rand rot.
+- Zielsuche (`player._findTarget`): Reichweite über Augenabstand oder waagerechten Abstand (für Dinge am Boden), Blickwinkel auf Touch-Geräten großzügiger, Sichtprüfung `grid.losReach()` (nur Wände, geschlossene Türen, Glas).
+
+### Fundstücke
+Jeder aufnehmbare Gegenstand trägt einen kleinen, additiv gemischten Lichtpunkt (`items.makeGlint`), der pulsiert und alle paar Sekunden aufblitzt. Er wird nicht von Lampen beleuchtet und ist deshalb auch im Dunkeln zu sehen; die Farbe zeigt die Art (Munition gelb, Heilmittel grün, Schlüssel/Story blau, Aufnahmen rot, Dokumente und Wurfgegenstände schwach).
 
 ### Speichern
 Ein Snapshot je Checkpoint enthält Flags, erledigte Skripte, aufgenommene Gegenstände, Türzustände, Stromkreise, entfernte Gegner, Inventar, Gesundheit, Telefoninhalt, Begleiter und die aufgedeckte Karte (Bitfeld als Base64). Die **Statistik** des Durchgangs (Zeit, Tode, Schüsse, Treffer, Kopftreffer, Kills, Heilmittel) liegt getrennt daneben und wird bei Checkpoints und beim Tod gesichert, damit ein Tod sie nicht zurücksetzt. Beim Tod wird das Kapitel neu aufgebaut und der Snapshot angewendet. Zusätzlich gibt es je Kapitel einen Start-Snapshot für die Kapitelauswahl und Meta-Daten (freigeschaltete Kapitel, gesehene Enden).

@@ -264,6 +264,11 @@ export default {
     L.item('doc', 37.0, 54.2, { id: 'doc_nea', doc: 'c1_notstrom', h: 1.4 });
     L.item('can', 40.5, 52.3, { id: 'can1', h: 0.9 });
     L.item('bandage', 36.8, 57.3, { id: 'b_tech', h: 0.9, notHard: true });
+    // Zusätzliche Fundstücke am Wegesrand (liegen am Boden an der Wand und leuchten auf)
+    L.item('ammo', 29.5, 16.77, { id: 'ammo_x0', h: 0.03, rounds: 10 });
+    L.item('bandage', 33.5, 31.77, { id: 'band_x1', h: 0.03 });
+    L.item('ammo', 30.5, 52.77, { id: 'ammo_x2', h: 0.03, rounds: 10 });
+    L.item('bandage', 47.5, 50.23, { id: 'band_x3', h: 0.03, notHard: true });
 
     L.interact('tv', 51.2, 13.1, { prompt: 'Nachrichten lesen', y: 2.0, radius: 1.8, repeat: true, mesh: null });
     L.interact('sec_monitors', 43.0, 45.2, { prompt: 'Überwachungskameras ansehen', y: 1.1, repeat: true });

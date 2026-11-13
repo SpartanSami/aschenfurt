@@ -28,7 +28,7 @@ Getestet wurde automatisiert in einem Headless-Chromium mit Software-Rendering (
 | Tod → Todesbildschirm → „Weiter vom Checkpoint“ | ✅ |
 | Fortsetzen nach Neuladen der Seite (localStorage) | ✅ |
 | Kapitelauswahl / Freischaltung / gesehene Enden | ✅ |
-| Schwierigkeitsgrade: Heilmittel im gesamten Spiel (acht Abschnitte) | ✅ Leicht 39 · Mittel 30 · Schwer 14 |
+| Schwierigkeitsgrade: Heilmittel im gesamten Spiel (acht Abschnitte) | ✅ siehe Zahlen am Ende dieser Tabelle (nach der Erhöhung) |
 | Zombie-KI: Geräusch → Untersuchen → Verdacht → Alarm → Verfolgung → Angriff → Packen → Losreißen | ✅ |
 | Tür einschlagen, Suche, Rückkehr, Versteck prüfen | ✅ |
 | Heilen, Telefon-Apps, Dokumente, Sprachaufnahmen laden | ✅ |
@@ -52,7 +52,31 @@ Getestet wurde automatisiert in einem Headless-Chromium mit Software-Rendering (
 | Dynamische Auflösung | ✅ Logik mit simulierter Uhr geprüft: bei 25 fps nach gut 6 s auf 60 %, bei 60 fps schrittweise zurück. ⚠️ Im Testbrowser selbst nicht live messbar, weil der Headless-Browser ruckweise rendert (lange Pausen, dazwischen 60 fps). |
 | Animations-LOD | ✅ Gesamtdurchlauf ohne Auffälligkeiten; ferne Zombies werden mit aufsummierter Zeit animiert |
 
+## Runde „Lesbarkeit, Steuerung, Fehler im Keller“
+
+| Prüfung | Ergebnis |
+|---|---|
+| Bildschirmanzeige (HUD) überhaupt sichtbar | ✅ nach Fehlerbehebung. Bildschirmfotos auf Desktop, Smartphone quer und hoch: Ziel, Untertitel, Hinweise, Nachricht, Anruf, Losreißen, Entscheidung, Kapiteltitel, Leben/Ausdauer, Munition |
+| Lastenaufzug im Keller (Kap. 1·2) mit Karte öffnen – **über die echte Zielsuche des Spielers** | ✅ |
+| Kurier: Karte kommt mit, egal ob zuerst Auftrag, Munition oder Karte genommen wird | ✅ (Skript), Karte wird außerdem beim Darüberlaufen aufgenommen |
+| Kapitelanfang nach frühem Tod / über die Kapitelwahl (alle acht Abschnitte einzeln gestartet) | ✅ Einstieg läuft vollständig, Aufzug in Kapitel 2 öffnet |
+| Alle Interaktionen der Routen über die echte Zielsuche (Blick, Reichweite, Sichtlinie) | ✅ nach Anpassung der Routen (der Testpilot muss jetzt wie ein Mensch nah genug herangehen) |
+| Schilder und Bildschirmtexte | ✅ Schrift wird eingepasst, lange Texte umbrechen (Bildschirmfotos Notaufnahme, Haupteingang, Keller) |
+| Touch quer und hoch (Pixel-7-Emulation, echte Tipp-Gesten) | ✅ sichtbar sind nur Zielen, Ducken, Lampe, Handy, Benutzen (+ Heilen/Laden bei Bedarf). Zielen an → großer Knopf „Schießen“ → Schuss (17 → 16) · Zielen aus → „Benutzen“ · Laden · Heilen · Ducken · Doppeltipp = 180° · alle Knöpfe vollständig im Bild |
+| Große Handy-Ansicht | ✅ öffnet, 8 Apps, Nachrichtenverlauf mit 16-px-Schrift, Karte mit Zoom-Knöpfen, Zustand, Schließen; Dokumente mit ✕ und „Schließen“ |
+| Zusätzliche Fundstücke (je Abschnitt 2 × Munition, 2 × Verband) | ✅ automatisch geprüft: freie Bodenzelle am Wegesrand, nicht in oder hinter Möbeln (ein Platz hinter einem Mülleimer wurde verschoben) |
+| Aufleuchten der Fundstücke | ✅ Bildschirmfotos mit und ohne Taschenlampe |
+| Heilmittel im gesamten Spiel nach der Erhöhung | ✅ Leicht 55 · Mittel 46 · Schwer 22 (vorher 39 · 30 · 14) |
+| Munition im gesamten Spiel nach der Erhöhung (Mittel) | ✅ 32 Schachteln, zusammen rund 370 Schuss mit der Startmunition (vorher rund 210); Leicht ×1,5, Schwer ×0,6 |
+| Abschlusstests mit dem Produktions-Build | ✅ Kapitel 1 bis 4 am Stück, 4·2 und 5 einzeln (Geheimnis-Ende), QA-Skript, Waffentest, Einzeldatei und Artefakt-Seite auf emuliertem Android-Handy |
+
 ## Behobene Fehler (Auswahl)
+- **Die gesamte Bildschirmanzeige war seit der ersten Version unsichtbar.** Ziel, Untertitel, Bedienhinweise, Nachrichten- und Anrufhinweis, „Losreißen!“, Entscheidungen und Kapiteltitel wurden berechnet, aber nie gezeigt: Die Grundregel im Stylesheet lautete „display: none“, und das Einblenden setzte nur einen leeren Wert. Aufgefallen ist es nie, weil alle Tests die Logik prüften (z. B. „Text des Hinweises stimmt“) und kein Test nachsah, ob der Text wirklich auf dem Bildschirm steht. Jetzt gibt es dafür Bildschirmfotos aller Anzeigen.
+- **Der Lastenaufzug im Keller (Kapitel 1·2) ließ sich von Spielern nicht benutzen.** Aufzugtüren waren von der Zielsuche ausgenommen, der Testpilot öffnete die Tür aber direkt. Verriegelte Aufzüge und Rolltore lassen sich jetzt ansehen (der Grund wird angezeigt) und mit der passenden Karte öffnen. Der Testpilot benutzt für alle Interaktionen dieselbe Zielsuche wie ein Spieler.
+- **Kapitelanfang als Sackgasse:** In Kapitel 2, 3, 4 und 5 enthielt der Start-Speicherstand schon den Merker „Einstieg gelaufen“. Wer vor dem nächsten Checkpoint starb oder das Kapitel über die Kapitelwahl öffnete, bekam keinen Einstieg mehr; in Kapitel 2 blieb die Aufzugtür zu. Der Start-Speicherstand wird jetzt vor dem Einstieg angelegt, ältere Speicherstände werden bereinigt.
+- Gegenstände auf hohen Möbeln (z. B. Diktiergerät 4) ließen sich nur genau von vorn anwählen. Möbel versperren den Griff nicht mehr, nur Wände, geschlossene Türen und Glas. Dinge am Boden sind aus etwas größerer Entfernung erreichbar, auf Touch-Geräten ist der Blickwinkel großzügiger.
+- Der Kriecher in der Werkstatt (Kapitel 2·2) kroch auf Dampfgeräusche zu und verstopfte die Tür. Er liegt jetzt reglos in der hinteren Ecke und erwacht erst, wenn das Wartungsbuch gelesen ist.
+- Schilder: Die Schrift war fest eingestellt und ragte bei langen Texten über den Rand. An den schmalen Kanten der Schilder erschien die Beschriftung außerdem als gestauchter Streifen.
 - **Spielbarer Link und `NoWayOut.html` starteten nicht** („Das Spiel konnte nicht gestartet werden“, Android-Handy). Ursache war das Build-Werkzeug: Beim Einbetten des Codes in die Einzeldatei wurde die Zeichenfolge „$&“ im minifizierten three.js-Code als Platzhalter gelesen und durch ein HTML-Stück ersetzt. Das beendete das Skript mitten im Code. Ob die Zeichenfolge entsteht, hängt von der Benennung beim Minifizieren ab. Deshalb lief es vorher zufällig, nach der Überarbeitung nicht mehr. Getestet war nur die Projektversion (`index.html`), nicht die Einzeldatei. Behoben: Der Code wird unverändert eingebettet, und der Build bricht ab, wenn die Einzeldatei vom Bundle abweicht. Geprüft: Einzeldatei und Artefakt-Seite starten auf einem emulierten Android-Handy (Pixel 7) ein neues Spiel ohne Fehler. Die alte Datei zeigt im selben Test genau die Fehlermeldung vom Handy.
 - Der erste Kriecher lag direkt vor der Tür zur Pathologie. Der Autopilot blieb hängen, ein Mensch wäre dort eingekeilt worden. Er liegt jetzt im Westteil des Kellerflurs und wacht erst auf der Flucht auf; an der Südwand kommt man vorbei.
 - Ein schlafender Kriecher wurde beim Laden in die Stehhaltung gesetzt. Behoben.
