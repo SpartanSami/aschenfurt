@@ -271,20 +271,27 @@ export class Player {
     const eye = new THREE.Vector3(this.pos.x, this.pos.y + this.eyeHeight, this.pos.z);
     const dir = new THREE.Vector3(); this.camera.getWorldDirection(dir);
     let best = null, bestScore = -Infinity;
+    // Auf Touch-Geräten ist genaues Anvisieren schwerer: etwas großzügigerer Blickwinkel
+    const minDot = game.input.touchMode ? 0.6 : 0.72;
     const consider = (obj, pos, radius) => {
       const to = new THREE.Vector3().subVectors(pos, eye);
       const d = to.length();
-      if (d > (radius ?? 1.1) + 0.9) return;
+      // Reichweite: entweder nah an den Augen oder – für Dinge am Boden – waagerecht nah genug
+      const dh = Math.hypot(to.x, to.z), r = radius ?? 1.1;
+      if (d > r + 0.9 && !(dh <= r + 0.5 && Math.abs(to.y) <= 1.9)) return;
       to.normalize();
       const dot = to.dot(dir);
-      if (dot < (d < 0.8 ? 0.3 : 0.72)) return;
-      if (!level.grid.los(eye.x, eye.z, pos.x, pos.z, false, obj.ignoreCells)) return;
+      if (dot < (d < 0.8 ? 0.3 : minDot)) return;
+      // Möbel versperren den Griff nicht (z. B. ein Gerät auf einem hohen Schrank schräg von der Seite)
+      if (!level.grid.losReach(eye.x, eye.z, pos.x, pos.z, obj.ignoreCells)) return;
       const score = dot * 2 - d * 0.6;
       if (score > bestScore) { bestScore = score; best = obj; }
     };
     for (const ia of level.interacts) { if (!ia.enabled || ia.enabled()) consider(ia, ia.pos, ia.radius); }
     for (const d of level.doors) {
-      if (d.def.noInteract || d.kind === 'shutter' || d.kind === 'elevator') continue;
+      // Aufzüge und Rolltore steuert das Spiel. Solange sie verriegelt sind, kann Sami sie aber ansehen
+      // (Grund wird angezeigt) und mit der passenden Karte öffnen.
+      if (d.def.noInteract || ((d.kind === 'shutter' || d.kind === 'elevator') && !d.locked)) continue;
       const p = d.center.clone();
       const ignore = new Set([d.y * level.grid.w + d.x]);
       const o = { kind: 'door', door: d, hold: 0, ignoreCells: ignore, prompt: () => this._doorPrompt(d) };
@@ -299,7 +306,10 @@ export class Player {
   }
   _doorPrompt(d) {
     if (d.broken) return null;
-    if (d.locked) return d.def.lockedText || 'Verschlossen';
+    if (d.locked) {
+      if (d.def.key && this.game.inventory.has(d.def.key)) return 'Mit ' + this.game.inventory.name(d.def.key) + ' öffnen';
+      return d.def.lockedText || 'Verschlossen';
+    }
     if (d.sliding && d.def.kind !== 'normal') return d.target > 0.5 ? 'Tür schließen' : 'Tür öffnen';
     return d.target > 0.5 ? 'Tür schließen' : (this.sprinting ? 'Tür aufstoßen' : 'Tür öffnen');
   }
@@ -331,6 +341,17 @@ export class Player {
   }
 
   // ---------------- Klettern ----------------
+  // Steht Sami vor etwas, über das er klettern kann? (für den Kontext-Knopf der Touch-Steuerung)
+  canVault() {
+    if (this.mode !== 'normal' || this.carry === 'heavy' || !this.game.level) return false;
+    return !!findVault(this.game.level, this.pos, -Math.sin(this.yaw), -Math.cos(this.yaw), 1.15);
+  }
+  // Kann Sami gerade etwas zum Heilen benutzen?
+  canHeal() {
+    if (this.heal || this.hp >= 100 || (this.mode !== 'normal' && this.mode !== 'heal')) return false;
+    const inv = this.game.inventory;
+    return !!(inv.count('bandage') || inv.count('medkit') || inv.count('pills') || (inv.has('serum') && this.game.state.flags.serum_kept && this.hp <= 45));
+  }
   tryVault() {
     if (this.mode !== 'normal' || this.carry === 'heavy') return false;
     const fx = -Math.sin(this.yaw), fz = -Math.cos(this.yaw);
@@ -500,6 +521,8 @@ export class Player {
     this.trauma = Math.min(1, this.trauma + 0.7);
     this.lastHitTime = this.time;
     this.interruptHeal();
+    // Wer getroffen wird, lässt das Telefon sinken (auf Touch-Geräten verdeckt es sonst die Sicht)
+    if (a > 0 && this.game.phone.open) this.game.phone.close();
     this.game.fx.damageFlash(Math.min(1, a / 40));
     this.game.audio.play(kind === 'bite' ? 'bite' : 'hit', { vol: 1 });
     this.game.audio.play('pain', { vol: 0.9 });

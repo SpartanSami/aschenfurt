@@ -9,6 +9,7 @@ import { bus } from './core/events.js';
 import { Renderer } from './render/renderer.js';
 import { setTextureQuality } from './render/textures.js';
 import { TouchControls } from './ui/touch.js';
+import { PhoneUI } from './ui/phoneui.js';
 import { FX } from './render/fx.js';
 import { FlashBeam } from './render/beam.js';
 import { AudioEngine } from './systems/audio.js';
@@ -88,7 +89,11 @@ export class Game {
     this.menu = new Menu(this, this.ui);
     // Touch-Steuerung auf Tablets (oder zum Testen mit ?touch in der Adresse)
     let forceTouch = false; try { forceTouch = /[?&]touch\b/.test(location.search); } catch (e) { /* */ }
-    if (IS_TOUCH || forceTouch) { this.input.touchMode = true; this.touchUI = new TouchControls(this); document.body.classList.add('is-touch'); }
+    if (IS_TOUCH || forceTouch) {
+      this.input.touchMode = true; this.touchUI = new TouchControls(this); document.body.classList.add('is-touch');
+      // große, antippbare Handy-Ansicht (liegt über dem HUD, unter Dokumenten und Menüs)
+      this.phoneUI = new PhoneUI(this, this.ui, this.docs.el);
+    }
     this.zombies = []; this.npcs = [];
     this.level = null; this.chapter = null;
     this.mode = 'menu'; this.modal = null;
@@ -262,11 +267,16 @@ export class Game {
     this.menu.loading(false);
     this.mode = 'play';
     this.hud.setVisible(true);
+    this.hud.objective(this.phone.data.objective || '');
     const ctx = this.story.ctx;
     if (chapter.onLoad) chapter.onLoad(ctx, { restored: !!snap, checkpoint: cp, snap });
+    // Kapitelanfang (frisch, nach einem frühen Tod oder über die Kapitelwahl): Der Einstieg läuft immer vollständig
+    // ab. Deshalb wird der Start-Speicherstand VOR dem Einstiegsskript angelegt, und ein älterer Speicherstand,
+    // der dessen Merker schon enthält, wird bereinigt – sonst öffnet sich z. B. der Aufzug in Kapitel 2 nie.
+    if (cp === 'start' && chapter.startFlag) delete this.state.flags[chapter.startFlag];
+    if (!snap && cp === 'start') this.checkpoint('start');
     this.story.fire('start');
     if (snap) this.story.fire('restore:' + cp);
-    if (!snap && cp === 'start') this.checkpoint('start');
     this.input.requestLock();
   }
 
@@ -495,7 +505,8 @@ export class Game {
       this.weapon.give(it.mag ?? 10, it.reserve ?? 7);
       this.state.flags['has:glock'] = true;
       this.hud.pickup('Glock 17 · ' + this.weapon.mag + ' + ' + this.weapon.reserve + ' Schuss');
-      this.hud.toast(`<kbd>${this.input.label('aim')}</kbd> Zielen · <kbd>${this.input.label('fire')}</kbd> Schießen · <kbd>${this.input.label('reload')}</kbd> Nachladen — Schüsse sind laut`, 6);
+      if (this.input.touchMode) this.hud.toast('Links <kbd>Zielen</kbd> antippen – dann wird der große Knopf zu <kbd>Schießen</kbd>. Schüsse sind laut.', 8);
+      else this.hud.toast(`<kbd>${this.input.label('aim')}</kbd> Zielen · <kbd>${this.input.label('fire')}</kbd> Schießen · <kbd>${this.input.label('reload')}</kbd> Nachladen — Schüsse sind laut`, 6);
       this.hud.showAmmo();
     } else if (kind === 'ammo') {
       const n = Math.max(2, Math.round((it.rounds || 12) * (this.difficulty.ammoMul || 1)));
@@ -718,6 +729,7 @@ export class Game {
 
   update(dt) {
     if (this.touchUI) this.touchUI.update();
+    if (this.phoneUI) this.phoneUI.update(dt);
     const inp = this.input;
     if (this.debug) this._debugKeys();
     this.input.dragLook = this.mode === 'play';

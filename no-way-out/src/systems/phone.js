@@ -6,7 +6,7 @@ import { DOCS } from '../data/story/documents.js';
 import { drawPhoto } from './photos.js';
 
 const W = 360, H = 740;
-const APPS = [
+export const APPS = [
   { id: 'flashlight', name: 'Taschenlampe', icon: '◉', color: '#f2c94c' },
   { id: 'messages', name: 'Nachrichten', icon: '✉', color: '#4caf7a' },
   { id: 'voice', name: 'Sprachmemos', icon: '◖', color: '#e05a5a' },
@@ -200,6 +200,7 @@ export class Phone {
   // ---------- Zeichnen ----------
   draw() {
     this.dirty = false; this.dirtyTex = true;
+    if (this.onDraw) { try { this.onDraw(); } catch (e) { console.error(e); } }
     const c = this.ctx;
     c.fillStyle = '#07090c'; c.fillRect(0, 0, W, H);
     this._wallpaper(c);

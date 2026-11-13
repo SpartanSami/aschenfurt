@@ -9,8 +9,13 @@ export const PROPS = {};
 // ---------- Geometrie-Helfer ----------
 export function boxGeo(w, h, d, uvs = 1) {
   const g = new THREE.BoxGeometry(w, h, d);
-  if (!uvs) return g; // Schilder/Bildschirme: Textur genau einmal pro Fläche
   const uv = g.attributes.uv;
+  if (!uvs) {
+    // Schilder/Bildschirme: Textur genau einmal auf Vorder- und Rückseite. Die schmalen Kanten bekommen
+    // einen Punkt aus der Ecke (Hintergrundfarbe), sonst erscheint dort die Schrift als gestauchter Streifen.
+    for (let i = 0; i < 16; i++) uv.setXY(i, 0.01, 0.01);
+    return g;
+  }
   const spans = [[d, h], [d, h], [w, d], [w, d], [w, h], [w, h]];
   for (let f = 0; f < 6; f++) for (let k = 0; k < 4; k++) {
     const i = f * 4 + k;

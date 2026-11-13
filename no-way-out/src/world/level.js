@@ -3,7 +3,7 @@
 import * as THREE from 'three';
 import { F } from './grid.js';
 import { Batcher } from './batcher.js';
-import { PROPS, PropCtx } from './props.js';
+import { PROPS, PropCtx, boxGeo } from './props.js';
 import './props2.js';
 import { buildClutter } from './clutter.js';
 import { getMat, colorMat, emissiveMat, decalMat, signMat, UV_SCALE, V_FULL, GRID_UNIFORMS } from '../render/materials.js';
@@ -451,7 +451,7 @@ export class Level {
   _addSign(batch, s) {
     const w = s.w || 1.2, h = s.h || 0.3;
     const mat = signMat(s.text, { bg: s.bg || '#e9ecef', fg: s.fg || '#16324f', glow: !!s.glow, intensity: s.intensity, w: 512, h: Math.max(32, Math.round(512 * h / w)), fontPx: s.font || Math.round(512 * h / w * 0.55) });
-    const geo = new THREE.BoxGeometry(w, h, 0.02);
+    const geo = boxGeo(w, h, 0.02, 0);
     const m = new THREE.Mesh(geo, mat);
     const rot = { n: 0, s: Math.PI, e: -Math.PI / 2, w: Math.PI / 2 }[s.face || 'n'] ?? (s.rot || 0);
     m.position.set(s.x, s.y ?? 2.3, s.z); m.rotation.y = rot;

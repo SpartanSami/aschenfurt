@@ -25,6 +25,7 @@ export class Weapon {
   give(mag, reserve) { this.has = true; this.mag = Math.min(MAG, mag); this.reserve += reserve; }
   addAmmo(n) { this.reserve += n; }
   get reloading() { return this.reloadT > 0; }
+  get magSize() { return MAG; }
   get drawn() { return this.has && (this.aiming || this.readyT > 0 || this.reloadT > 0); }
 
   // Darf Sami gerade schießen?
@@ -58,8 +59,7 @@ export class Weapon {
         }
       }
     }
-    const touchAim = input.touchMode;
-    this.aiming = usable && !p.sprinting && this.reloadT <= 0 && (input.down('aim') || (touchAim && this.readyT > 0.4));
+    this.aiming = usable && !p.sprinting && this.reloadT <= 0 && input.down('aim');
     this.aimT += ((this.aiming ? 1 : 0) - this.aimT) * Math.min(1, dt * 10);
     if (!usable) return;
     if (input.pressed('reload')) this.startReload();

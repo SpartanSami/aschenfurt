@@ -5,7 +5,7 @@
 const PI = Math.PI;
 
 export default {
-  id: 'ch2', name: 'Die Forschungseinrichtung', tagline: 'Halden-Institut · Ebene U3 · PROJECT EVE',
+  id: 'ch2', startFlag: 'c2_arrived', name: 'Die Forschungseinrichtung', tagline: 'Halden-Institut · Ebene U3 · PROJECT EVE',
   w: 92, h: 72,
   opts: { floor: 'l_floor', wall: 'l_wall', ceil: 'l_ceil', height: 3.2 },
   env: { fog: 0x0a0d10, fogDensity: 0.045, hemi: 0.03, exposure: 1.0, tint: 0xeef2f8, reverb: [1.8, 2.2], reverbMix: 0.38, sleeve: 0x8fb0c4 },

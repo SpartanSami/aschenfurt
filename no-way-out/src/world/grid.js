@@ -90,6 +90,25 @@ export class Grid {
     }
     return true;
   }
+  // Greifen/Benutzen: Nur Wände, geschlossene Türen und Glas trennen – Möbel nicht (man greift darüber hinweg).
+  losReach(ax, az, bx, bz, ignoreCells = null) {
+    let x = Math.floor(ax), y = Math.floor(az);
+    const ex = Math.floor(bx), ey = Math.floor(bz);
+    const dx = bx - ax, dz = bz - az;
+    const stepX = dx > 0 ? 1 : -1, stepY = dz > 0 ? 1 : -1;
+    const tDX = dx !== 0 ? Math.abs(1 / dx) : Infinity;
+    const tDY = dz !== 0 ? Math.abs(1 / dz) : Infinity;
+    let tMX = dx !== 0 ? (dx > 0 ? (x + 1 - ax) : (ax - x)) * tDX : Infinity;
+    let tMY = dz !== 0 ? (dz > 0 ? (y + 1 - az) : (az - y)) * tDY : Infinity;
+    let guard = 0;
+    while (!(x === ex && y === ey) && guard++ < 60) {
+      if (tMX < tMY) { tMX += tDX; x += stepX; } else { tMY += tDY; y += stepY; }
+      if (x === ex && y === ey) break;
+      if (ignoreCells && ignoreCells.has(y * this.w + x)) continue;
+      if (this.get(x, y) & (F.SOLID | F.DOORSHUT | F.GLASS)) return false;
+    }
+    return true;
+  }
   losLight(ax, az, bx, bz) {
     let x = Math.floor(ax), y = Math.floor(az);
     const ex = Math.floor(bx), ey = Math.floor(bz);

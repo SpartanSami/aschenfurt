@@ -153,6 +153,13 @@ class Painter {
   }
 }
 
+// Schrift so weit verkleinern, dass der Text in die Breite passt; setzt ctx.font und liefert die Größe
+function fitFont(ctx, text, maxW, px, fontOf) {
+  ctx.font = fontOf(px);
+  const wd = ctx.measureText(text).width;
+  if (wd > maxW) { px = Math.max(5, Math.floor(px * maxW / wd)); ctx.font = fontOf(px); }
+  return px;
+}
 const rgb = (r, g, b) => ({ r, g, b });
 function mix(a, b, t) { return { r: a.r + (b.r - a.r) * t, g: a.g + (b.g - a.g) * t, b: a.b + (b.b - a.b) * t }; }
 function hexToRgb(hex) { const v = parseInt(hex.slice(1), 16); return rgb((v >> 16) & 255, (v >> 8) & 255, v & 255); }
@@ -557,15 +564,22 @@ const GEN = {
       E.beginPath();
       for (let x = 0; x < s; x += 2) { const t = (x % (s / 3)) / (s / 3); const y = s * 0.5 - (t > 0.45 && t < 0.5 ? s * 0.3 : t > 0.5 && t < 0.55 ? -s * 0.15 : Math.sin(x * 0.05) * 3); E.lineTo(x, y); }
       E.stroke();
-      E.fillStyle = o.color || '#2cff7a'; E.font = `bold ${s / 8}px monospace`; E.fillText(o.text || '---', s * 0.06, s * 0.2);
+      E.fillStyle = o.color || '#2cff7a'; fitFont(E, o.text || '---', s * 0.88, s / 8, (px) => `bold ${px}px monospace`); E.fillText(o.text || '---', s * 0.06, s * 0.2);
     } else if (o.kind === 'alarm') {
       E.fillStyle = '#5a0000'; E.fillRect(0, 0, s, s);
-      E.fillStyle = '#ff4040'; E.font = `bold ${s / 9}px sans-serif`; E.textAlign = 'center';
-      E.fillText(o.text || 'ALARM', s / 2, s * 0.45); E.font = `${s / 16}px sans-serif`; E.fillText(o.sub || 'QUARANTÄNE AKTIV', s / 2, s * 0.62);
+      E.fillStyle = '#ff4040'; E.textAlign = 'center';
+      fitFont(E, o.text || 'ALARM', s * 0.9, s / 9, (px) => `bold ${px}px sans-serif`);
+      E.fillText(o.text || 'ALARM', s / 2, s * 0.45);
+      fitFont(E, o.sub || 'QUARANTÄNE AKTIV', s * 0.9, s / 16, (px) => `${px}px sans-serif`);
+      E.fillText(o.sub || 'QUARANTÄNE AKTIV', s / 2, s * 0.62);
     } else if (o.kind === 'text') {
-      E.fillStyle = o.color || '#9fd3ff'; E.font = `${s / 14}px monospace`;
+      E.fillStyle = o.color || '#9fd3ff';
       const lines = (o.text || '').split('\n');
-      lines.forEach((l, i) => E.fillText(l, s * 0.05, s * (0.14 + i * 0.1)));
+      // eine gemeinsame Schriftgröße, bei der die längste Zeile und alle Zeilen in die Fläche passen
+      const longest = lines.reduce((a, l) => (l.length > a.length ? l : a), '');
+      const px = Math.min(fitFont(E, longest, s * 0.9, s / 14, (q) => `${q}px monospace`), s * 0.8 / (lines.length * 1.4));
+      E.font = `${px}px monospace`;
+      lines.forEach((l, i) => E.fillText(l, s * 0.05, s * 0.14 + i * px * 1.4));
     } else {
       E.fillStyle = '#0a1622'; E.fillRect(0, 0, s, s);
       for (let i = 0; i < 10; i++) { E.fillStyle = `rgba(80,160,220,${0.2 + p.rng.next() * 0.4})`; E.fillRect(s * 0.06, s * (0.08 + i * 0.09), s * p.rng.range(0.2, 0.85), s * 0.04); }
@@ -578,13 +592,42 @@ const GEN = {
     const bg = o.bg || '#0b7a3a';
     p.C.fillStyle = bg; p.C.fillRect(0, 0, w, h);
     E.fillStyle = o.glow ? bg : '#000'; E.fillRect(0, 0, w, h);
+    // Schrift einpassen: Kein Wort darf über den Schildrand ragen. Gewählt wird die Zeilenaufteilung
+    // (wie vorgegeben, oder lange Zeilen an Leerzeichen umbrochen), die die größte Schrift erlaubt.
+    const fontOf = (px) => `bold ${px}px "Arial Narrow", Arial, sans-serif`;
+    const want = o.fontPx || Math.floor(h * 0.5);
+    const maxW = w * 0.9, maxH = h * 0.88, LH = 1.12;
+    const M = p.C;
+    const fit = (lines) => {
+      M.font = fontOf(100);
+      const widest = Math.max(1, ...lines.map((l) => M.measureText(l).width));
+      return Math.min(want, 100 * maxW / widest, maxH / (LH * lines.length));
+    };
+    const split = (line, parts) => {
+      // ausgewogen an Leerzeichen in „parts“ Zeilen teilen
+      const words = line.split(' '); if (words.length < parts) return null;
+      const target = line.length / parts, out = []; let cur = '';
+      for (const wd of words) {
+        if (cur && out.length < parts - 1 && (cur + ' ' + wd).length > target + 2) { out.push(cur); cur = wd; } else cur = cur ? cur + ' ' + wd : wd;
+      }
+      out.push(cur); return out;
+    };
+    const given = String(o.text).split('\n');
+    let lines = given, px = fit(given);
+    for (const parts of [2, 3]) {
+      const alt = []; let ok = true;
+      for (const l of given) { const sp = l.length > 8 ? split(l, parts) : [l]; if (!sp) { ok = false; break; } alt.push(...sp); }
+      if (!ok) continue;
+      const apx = fit(alt);
+      if (apx > px * 1.25) { lines = alt; px = apx; }
+    }
+    px = Math.max(5, Math.floor(px));
     for (const ctx of [p.C, E]) {
       if (ctx === E && !o.glow) { ctx.globalAlpha = 0.0; }
       ctx.fillStyle = o.fg || '#ffffff';
-      ctx.font = `bold ${o.fontPx || Math.floor(h * 0.5)}px "Arial Narrow", Arial, sans-serif`;
+      ctx.font = fontOf(px);
       ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      const lines = String(o.text).split('\n');
-      lines.forEach((l, i) => ctx.fillText(l, w / 2, h / 2 + (i - (lines.length - 1) / 2) * (o.fontPx || h * 0.5) * 1.1));
+      lines.forEach((l, i) => ctx.fillText(l, w / 2, h / 2 + (i - (lines.length - 1) / 2) * px * LH));
       ctx.globalAlpha = 1;
     }
   },

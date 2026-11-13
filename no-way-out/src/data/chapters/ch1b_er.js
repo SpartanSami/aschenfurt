@@ -7,7 +7,7 @@ const PI = Math.PI;
 const K = -3.2; // Bodenhöhe Keller
 
 export default {
-  id: 'ch1b', name: 'Das Krankenhaus', part: true, partName: 'Erdgeschoss · Notaufnahme',
+  id: 'ch1b', startFlag: 'c1b_started', name: 'Das Krankenhaus', part: true, partName: 'Erdgeschoss · Notaufnahme',
   tagline: 'Klinikum St. Elisabeth · Notaufnahme & Pathologie',
   w: 62, h: 50,
   opts: { floor: 'h_floor', wall: 'h_wall', ceil: 'h_ceil', height: 3 },
@@ -426,6 +426,15 @@ export default {
         c.fact('Pathologie-Eingangsbuch: Für „Proband 009 – Y., Elif“ wurde ein Totenschein ausgestellt. Ein Leichnam ist nie eingegangen.');
         await c.wait(3.2);
         c.say('sami', 'Dann ist sie vielleicht gar nicht …', { d: 2.4 });
+      },
+    },
+    {
+      // Wer zuerst den Auftrag oder die Munition des Kuriers nimmt, bekommt die Karte gleich mit –
+      // sie liegt klein und dunkel am Boden und soll niemanden festhalten.
+      id: 'c1b_search', when: ['pickup:doc_kurier', 'pickup:ammo1b_b'], do: async (c) => {
+        const g = c.g;
+        const card = g.level.items.find((i) => i.id === 'card_nexara' && i.alive);
+        if (card && !c.get('card_taken')) g.pickUp(card);
       },
     },
     {

@@ -3,8 +3,8 @@ import { DEFAULT_BINDINGS } from './config.js';
 
 // Knopfnamen der Touch-Steuerung (für Hinweise im HUD)
 const TOUCH_LABEL = {
-  interact: 'Benutzen', vault: 'Klettern', crouch: 'Ducken', throw: 'Werfen', heal: 'Heilen',
-  flashlight: 'Lampe', phone: 'Handy', pause: 'Pause', sprint: 'Stick ganz nach außen', fire: 'Schießen', aim: 'Zielen (automatisch)', reload: 'Nachladen', turn: 'Wenden',
+  interact: 'Benutzen', vault: 'Klettern', breath: 'Atem', crouch: 'Ducken', throw: 'Werfen', heal: '✚ Heilen',
+  flashlight: 'Lampe', phone: 'Handy', pause: 'II', sprint: 'Stick ganz nach außen', fire: 'Schießen', aim: 'Zielen', reload: 'Laden', turn: 'Doppeltipp rechts',
   forward: '▲', back: '▼', left: '◀', right: '▶',
 };
 
@@ -189,6 +189,7 @@ export class Input {
   }
   label(action) {
     if (this.touchMode) return TOUCH_LABEL[action] || action;
+    if (action === 'breath') action = 'vault';   // Atem anhalten liegt auf der Klettertaste
     const b = this.bindings()[action]; return Input.keyLabel(b && b[0]);
   }
 }

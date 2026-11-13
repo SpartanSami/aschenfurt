@@ -6,7 +6,7 @@ const PI = Math.PI;
 const VALVES = [[12, 25.05], [22, 25.05], [31, 25.05]];
 
 export default {
-  id: 'ch2b', name: 'Die Forschungseinrichtung', part: true, partName: 'Versorgungsebene · Pumpwerk',
+  id: 'ch2b', startFlag: 'c2b_started', name: 'Die Forschungseinrichtung', part: true, partName: 'Versorgungsebene · Pumpwerk',
   tagline: 'Halden-Institut · Ebene U4 · Pumpwerk',
   w: 66, h: 34,
   opts: { floor: 'concrete_floor', wall: 'concrete_wall', ceil: 'concrete', height: 3 },
@@ -115,8 +115,9 @@ export default {
     L.zombie(28.0, 25.5, { id: 'zl_2', type: 'sleeper', pose: 'kneel', yaw: 0.15, outfit: 'labcoat', wake: 2.8 });
     L.zombie(35.0, 27.4, { id: 'zl_3', type: 'sleeper', pose: 'sitting', yaw: PI - 0.3, outfit: 'scrubs', wake: 3 });
     L.zombie(23.6, 21.6, { id: 'zw_1', type: 'sleeper', pose: 'lying', yaw: 1.0, outfit: 'civilian2', wake: 3 });
-    // Kriecher in der Werkstatt-Ecke: bewacht die Vorräte
-    L.zombie(19.4, 23.2, { id: 'zw_crawl', type: 'crawler', yaw: -PI / 2, outfit: 'hazmat' });
+    // Kriecher in der hinteren Werkstatt-Ecke: liegt reglos da, bis Sami das Wartungsbuch gelesen hat.
+    // Er liegt bewusst abseits der Tür, damit er sie nicht verstopft, bevor Sami überhaupt hineinkommt.
+    L.zombie(25.2, 23.3, { id: 'zw_crawl', type: 'crawler', yaw: PI / 2, outfit: 'hazmat', state: 'dormant', wake: 99 });
     L.zombie(48.6, 19.4, { id: 'zd_1', type: 'shambler', yaw: 0.3, outfit: 'hazmat' });
     L.zombie(49.8, 22.6, { id: 'zd_2', type: 'shambler', yaw: 2.2, outfit: 'civilian' });
     L.zombie(46.6, 23.4, { id: 'zd_3', type: 'shambler', yaw: -2.6, outfit: 'labcoat' });
@@ -194,6 +195,9 @@ export default {
         await c.wait(0.4);
         c.say('sami', 'Sie haben die Pumpen absichtlich aus gelassen.', { d: 2.6 });
         c.fact('Wartungsbuch: Die Pumpen von Ebene U4 wurden auf Anweisung der NEXARA-Sicherheit nicht wieder angefahren. Das Wasser soll Spuren aus Sektion C bedecken.');
+        // Der „Tote“ in der Ecke regt sich
+        await c.wait(1.6);
+        if (c.zombie('zw_crawl')) { c.sound('metal_creak', [25.2, 0.3, 23.3], { vol: 0.7 }); c.wake('zw_crawl', 'chase'); }
       },
     },
     {

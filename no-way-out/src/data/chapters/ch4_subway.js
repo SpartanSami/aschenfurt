@@ -5,7 +5,7 @@
 const PI = Math.PI;
 
 export default {
-  id: 'ch4', name: 'Die U-Bahn', tagline: 'Linie U3 · Klinikum – Marktplatz',
+  id: 'ch4', startFlag: 'c4_started', name: 'Die U-Bahn', tagline: 'Linie U3 · Klinikum – Marktplatz',
   w: 112, h: 50,
   opts: { floor: 's_floor', wall: 's_wall_tile2', ceil: 'concrete', height: 3.4 },
   env: { fog: 0x040505, fogDensity: 0.06, hemi: 0.015, exposure: 1.05, tint: 0xeef0e8, reverb: [3.2, 1.8], reverbMix: 0.5, sleeve: 0x8fb0c4 },

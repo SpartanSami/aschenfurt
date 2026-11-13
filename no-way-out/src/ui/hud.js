@@ -17,8 +17,13 @@ export class HUD {
     this.toasts = el('div', 'hud-toasts', this.root);
     this.obj = el('div', 'hud-objective', this.root);
     this.notif = el('div', 'hud-notif', this.root);
-    this.stam = el('div', 'hud-stamina', this.root, '<div></div>');
-    this.stamBar = this.stam.firstChild;
+    // Dezente Daueranzeige: Gesundheit, Ausdauer, Heilmittel
+    this.vitals = el('div', 'hud-vitals', this.root, '<div class="v-row v-hp"><i>♥</i><div class="v-bar"><div></div></div></div><div class="v-row v-st"><i>⚡</i><div class="v-bar"><div></div></div></div><div class="v-meds"></div>');
+    this.hpBar = this.vitals.querySelector('.v-hp .v-bar > div');
+    this.stBar = this.vitals.querySelector('.v-st .v-bar > div');
+    this.stWrap = this.vitals.querySelector('.v-st .v-bar');
+    this.medsEl = this.vitals.querySelector('.v-meds');
+    this.vitT = 0;
     this.status = el('div', 'hud-status', this.root);
     this.breath = el('div', 'hud-breath', this.root, '<span>Atem</span><div><div></div></div>');
     this.breathBar = this.breath.querySelector('div > div');
@@ -31,12 +36,16 @@ export class HUD {
     this.debugEl = el('div', 'hud-debug', this.root);
     this.ammoEl = el('div', 'hud-ammo', this.root);
     this.ammoT = 0;
+    // Auf Touch-Geräten lassen sich Anruf und Nachricht direkt antippen
+    this.callEl.addEventListener('pointerdown', (e) => { e.preventDefault(); if (game.phone.incoming) game.input.touch.pending.add('interact'); });
+    this.notif.addEventListener('pointerdown', (e) => { e.preventDefault(); if (game.mode === 'play' && !game.phone.open && game.state.hasPhone) { game.phone.show('messages'); this.notifT = 0; } });
     this.subQueue = [];
     this.statusT = 0; this.objT = 0; this.notifT = 0; this.saveT = 0;
     this.choiceState = null;
   }
 
-  setVisible(v) { this.root.style.display = v ? '' : 'none'; }
+  // Achtung: Die Grundregel im Stylesheet ist „display: none“ – ein leerer Wert würde die Anzeige versteckt lassen.
+  setVisible(v) { this.root.style.display = v ? 'block' : 'none'; }
 
   subtitle(name, text, color, dur, channel) {
     if (!this.game.settings.subtitles) return;
@@ -51,17 +60,19 @@ export class HUD {
     while (this.toasts.children.length > 4) this.toasts.firstChild.remove();
   }
   pickup(name) { this.toast('＋ ' + name); }
+  // Das Ziel bleibt klein und blass stehen; bei einer Änderung leuchtet es einige Sekunden auf
   objective(text) {
-    this.obj.innerHTML = `<small>ZIEL</small>${text}`;
-    this.obj.classList.add('show'); this.objT = 6;
+    this.obj.innerHTML = text ? `<small>ZIEL</small><span>${text}</span>` : '';
+    this.obj.classList.toggle('has', !!text);
+    if (text) { this.obj.classList.remove('show'); void this.obj.offsetWidth; this.obj.classList.add('show'); this.objT = 7; }
   }
   notify(from, text) {
-    this.notif.innerHTML = `<b>📱 ${from}</b><span>${text}</span><small>[${this.game.input.label('phone')}] Telefon</small>`;
+    this.notif.innerHTML = `<b>📱 ${from}</b><span>${text}</span><small>${this.game.input.touchMode ? 'antippen zum Lesen' : '[' + this.game.input.label('phone') + '] Telefon'}</small>`;
     this.notif.classList.add('show'); this.notifT = 5;
   }
   callBanner(name) {
     if (!name) { this.callEl.classList.remove('show'); return; }
-    this.callEl.innerHTML = `<b>📞 Eingehender Anruf</b><span>${name}</span><small>[${this.game.input.label('interact')}] annehmen</small>`;
+    this.callEl.innerHTML = `<b>📞 Eingehender Anruf</b><span>${name}</span><small>${this.game.input.touchMode ? 'antippen zum Annehmen' : '[' + this.game.input.label('interact') + '] annehmen'}</small>`;
     this.callEl.classList.add('show');
   }
   saved() { this.saveEl.classList.add('show'); this.saveT = 2.5; }
@@ -126,7 +137,7 @@ export class HUD {
       const pr = t.prompt ? t.prompt() : null;
       if (pr) txt = `<kbd>${g.input.label('interact')}</kbd> ${pr}${t.hold ? ' <small>(halten)</small>' : ''}`;
     }
-    if (p.mode === 'hidden') txt = `<kbd>${g.input.label('interact')}</kbd> Versteck verlassen &nbsp; <kbd>${g.input.label('vault')}</kbd> Atem anhalten`;
+    if (p.mode === 'hidden') txt = `<kbd>${g.input.label('interact')}</kbd> Versteck verlassen &nbsp; <kbd>${g.input.label('breath')}</kbd> ${g.input.touchMode ? 'halten = Atem anhalten' : 'Atem anhalten'}`;
     if (p.carry && p.mode === 'normal' && !txt) txt = `<kbd>${g.input.label('throw')}</kbd> Werfen`;
     if (txt !== this._lastPrompt) { this.prompt.innerHTML = txt || ''; this.prompt.classList.toggle('show', !!txt); this._lastPrompt = txt; }
     // Halten-Ring
@@ -137,36 +148,44 @@ export class HUD {
     this.cross.classList.toggle('active', !!t);
     const w = g.weapon;
     this.cross.classList.toggle('aim', !!(w && w.aimT > 0.5));
-    // Munition
+    // Munition: mit Waffe immer blass sichtbar, beim Ziehen/Schießen hell
     this.ammoT -= dt;
     if (w && w.has) {
       const txt = `<b>${w.mag}</b><span>/ ${w.reserve}</span>${w.reloading ? '<em>lädt nach …</em>' : w.mag === 0 && w.reserve === 0 ? '<em>leer</em>' : ''}`;
       if (txt !== this._ammoTxt) { this.ammoEl.innerHTML = txt; this._ammoTxt = txt; }
+      this.ammoEl.classList.add('has');
       this.ammoEl.classList.toggle('show', w.drawn || this.ammoT > 0);
       this.ammoEl.classList.toggle('low', w.mag <= 3);
-    } else this.ammoEl.classList.remove('show');
+    } else this.ammoEl.classList.remove('show', 'has');
     this.cross.style.opacity = p.mode === 'normal' && !g.phone.isOpen() ? '' : '0';
-    // Ausdauer
+    // Gesundheit und Ausdauer
     const sm = p.staminaMax();
-    const showSt = p.stamina < sm - 1 && p.mode !== 'hidden';
-    this.stam.classList.toggle('show', showSt);
-    this.stam.classList.toggle('exhausted', p.exhausted);
-    this.stamBar.style.width = (p.stamina / 100 * 100).toFixed(1) + '%';
-    this.stam.style.setProperty('--max', (sm / 100 * 100).toFixed(1) + '%');
+    const hpW = Math.max(0, Math.min(100, p.hp)).toFixed(0), stW = Math.max(0, p.stamina).toFixed(0);
+    if (hpW !== this._hpW) { this._hpW = hpW; this.hpBar.style.width = hpW + '%'; this.vitT = 4; }
+    if (stW !== this._stW) { this._stW = stW; this.stBar.style.width = stW + '%'; }
+    this.stWrap.style.setProperty('--max', sm.toFixed(0) + '%');
+    const hs = p.healthState;
+    if (hs !== this._vitHS) { this._vitHS = hs; this.vitals.dataset.hs = hs; }
+    this.vitals.classList.toggle('exhausted', p.exhausted);
+    this.vitT -= dt;
+    this.vitals.classList.toggle('active', this.vitT > 0 || p.stamina < sm - 1 || hs !== 'healthy' || !!p.heal);
+    const inv = g.inventory;
+    const meds = `✚ ${inv.count('bandage')} · ▣ ${inv.count('medkit')} · ◍ ${inv.count('pills')}`;
+    if (meds !== this._meds) { this._meds = meds; this.medsEl.textContent = meds; }
     // Atem im Versteck
     const showB = p.mode === 'hidden';
     this.breath.classList.toggle('show', showB);
     if (showB) this.breathBar.style.width = (p.breath / 9 * 100).toFixed(0) + '%';
     this.breath.classList.toggle('holding', p.breathHeld);
-    // Zustand
+    // Zustandstext (nur bei Änderung und beim Heilen)
     this.statusT -= dt;
     const st = p.healthState;
     if (this._lastHS !== st) { this._lastHS = st; this.statusT = 4; }
-    const heals = g.inventory;
-    this.status.innerHTML = `<span class="hs ${st}">${HEALTH_STATES[st]}</span><span>✚ ${heals.count('bandage')} · ▣ ${heals.count('medkit')} · ◍ ${heals.count('pills')}</span>`;
-    this.status.classList.toggle('show', this.statusT > 0 || p.heal);
-    if (p.heal) { this.status.innerHTML += `<div class="healbar"><div style="width:${Math.min(100, p.heal.t / p.heal.dur * 100)}%"></div></div>`; }
+    const showStatus = this.statusT > 0 || !!p.heal;
+    if (showStatus) this.status.innerHTML = `<span class="hs ${st}">${HEALTH_STATES[st]}</span>` + (p.heal ? `<div class="healbar"><div style="width:${Math.min(100, p.heal.t / p.heal.dur * 100)}%"></div></div>` : '');
+    this.status.classList.toggle('show', showStatus);
     this.objT -= dt; if (this.objT <= 0) this.obj.classList.remove('show');
+    this.obj.classList.toggle('hide', p.mode === 'dead' || !!g.camView);
     this.notifT -= dt; if (this.notifT <= 0) this.notif.classList.remove('show');
     this.saveT -= dt; if (this.saveT <= 0) this.saveEl.classList.remove('show');
     if (g.debug) this._debug();

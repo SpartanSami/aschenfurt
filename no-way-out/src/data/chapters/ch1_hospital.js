@@ -4,7 +4,7 @@
 const PI = Math.PI;
 
 export default {
-  id: 'ch1', name: 'Das Krankenhaus', tagline: 'Klinikum St. Elisabeth · Station 3',
+  id: 'ch1', startFlag: 'woke', name: 'Das Krankenhaus', tagline: 'Klinikum St. Elisabeth · Station 3',
   w: 80, h: 62,
   opts: { floor: 'h_floor', wall: 'h_wall', ceil: 'h_ceil', height: 3 },
   env: { fog: 0x07090a, fogDensity: 0.05, hemi: 0.02, exposure: 1.0, tint: 0xeef4ef, reverb: [1.5, 2.6], reverbMix: 0.32, date: 'Donnerstag, 13. November', sleeve: 0x8fb0c4 },
@@ -435,7 +435,7 @@ export default {
           const zz = c.zombie('z_its');
           const p = c.g.player;
           if (!zz) return true;
-          if (p.mode === 'hidden' && !c.get('hint_breath')) { c.flag('hint_breath'); c.msg('unknown', 'UNBEKANNT', 'Ruhig atmen. Wenn er nah ist: Luft anhalten. Nicht zu lange.'); c.g.hud.toast(`Im Versteck: <kbd>${c.g.input.label('vault')}</kbd> gedrückt halten = Atem anhalten`); }
+          if (p.mode === 'hidden' && !c.get('hint_breath')) { c.flag('hint_breath'); c.msg('unknown', 'UNBEKANNT', 'Ruhig atmen. Wenn er nah ist: Luft anhalten. Nicht zu lange.'); c.g.hud.toast(`Im Versteck: <kbd>${c.g.input.label('breath')}</kbd> gedrückt halten = Atem anhalten`); }
           const busy = ['chase', 'attack', 'grab', 'alert', 'checkhide', 'bash', 'getup', 'search'].includes(zz.state);
           calm = busy ? 0 : calm + 1 / 30;
           return calm > 3 && p.pos.z > 22 && p.pos.x < 45;

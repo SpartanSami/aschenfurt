@@ -12,7 +12,7 @@ function carRow(L, xs, z, rot, o = {}) {
 }
 
 export default {
-  id: 'ch3', name: 'Das Parkhaus', tagline: 'Parkhaus Am Klinikum · Ebenen −3 bis −1',
+  id: 'ch3', startFlag: 'c3_started', name: 'Das Parkhaus', tagline: 'Parkhaus Am Klinikum · Ebenen −3 bis −1',
   w: 100, h: 62,
   opts: { floor: 'concrete_floor', wall: 'concrete_wall', ceil: 'concrete', height: 2.7, ambient: 0.05 },
   env: { fog: 0x060605, fogDensity: 0.05, hemi: 0.02, exposure: 1.05, tint: 0xf4eee2, reverb: [2.6, 2.0], reverbMix: 0.45, sleeve: 0x8fb0c4 },

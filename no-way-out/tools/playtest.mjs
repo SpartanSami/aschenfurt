@@ -69,7 +69,7 @@ await page.evaluate(() => {
       const fd = Math.hypot(x - p.pos.x, z - p.pos.z);
       if (fd < 0.45) { gm.keyUp('KeyW'); gm.keyUp('ShiftLeft'); return 'stop'; }
       if (fd < best - 0.2) { best = fd; lastProg = t; }
-      if (t - lastProg > 6) { A.log('FESTGESTECKT bei', p.pos.x.toFixed(2), p.pos.z.toFixed(2), 'Ziel', x, z); A.stuck = true; gm.keyUp('KeyW'); return 'stop'; }
+      if (t - lastProg > 6) { A.log('FESTGESTECKT bei', p.pos.x.toFixed(2), p.pos.z.toFixed(2), 'Ziel', x, z, '| Modus', p.mode, 'Handy', gm.phone.open, 'Anruf', !!gm.phone.inCall, 'Dok', gm.docs.isOpen(), 'Heilen', !!p.heal, 'Zelle vorn', G.get(Math.floor(wp.x), Math.floor(wp.z)), 'Wegpunkt', wp.x.toFixed(1), wp.z.toFixed(1), 'Türen', gm.level.doors.filter((d) => Math.hypot(d.center.x - p.pos.x, d.center.z - p.pos.z) < 2.5).map((d) => d.id + ':' + (d.locked ? 'zu+verriegelt' : d.isShut() ? 'zu' : 'offen')).join(',')); A.stuck = true; gm.keyUp('KeyW'); return 'stop'; }
       // lokales Ausweichen bei Hängern
       gm.input.keys.delete('KeyA'); gm.input.keys.delete('KeyD');
       if (t - lastProg > 1.2) { const side = Math.floor((t - lastProg) / 0.8) % 2 ? 'KeyA' : 'KeyD'; gm.input.keys.add(side); }
@@ -92,18 +92,39 @@ await page.evaluate(() => {
   };
   A.tick = () => { const gm = g(); if (gm.phone.incoming && Math.random() < 0.3) gm.tap('KeyE'); if (gm.docs.isOpen()) gm.docs.close(); if (gm.qte && Math.random() < 0.5) gm.tap(Math.random() < 0.5 ? 'KeyA' : 'KeyD'); if (gm.camView) gm.tap('KeyE'); if (gm.modal === 'choice' && gm.hud.choiceState) { const st = gm.hud.choiceState; gm.hud.choiceState = null; st.done(A.choicePick ? A.choicePick(st.options) : st.options[0].id); } };
   A.wait = (s) => g().simulateAsync(s, 1 / 30, () => { A.tick(); });
+  // Anvisieren wie ein Spieler: Blick auf den Punkt richten, dann muss die Zielsuche des Spiels genau dieses
+  // Ziel liefern. So fallen Dinge auf, die ein Mensch gar nicht anwählen kann (zu weit, verdeckt, ausgenommen).
+  A.aim = (pos) => {
+    const gm = g(), p = gm.player;
+    const dx = pos.x - p.pos.x, dz = pos.z - p.pos.z;
+    p.yaw = Math.atan2(-dx, -dz);
+    p.pitch = Math.max(-1.45, Math.min(1.45, Math.atan2(pos.y - (p.pos.y + p.eyeHeight), Math.hypot(dx, dz))));
+    p.updateCamera(0); gm.camera.updateMatrixWorld(true);
+  };
   A.interact = (id) => {
     const gm = g();
     const ia = gm.level.interacts.find((o) => o.id === id && (!o.enabled || o.enabled()));
     if (!ia) { A.log('Interaktion nicht verfügbar:', id); return false; }
     const d = Math.hypot(ia.pos.x - gm.player.pos.x, ia.pos.z - gm.player.pos.z);
-    if (d > 2.5) A.log('WARN Interaktion aus Distanz', d.toFixed(1), id);
-    const dy = Math.abs(ia.pos.y - (gm.player.pos.y + 1.0));
-    if (dy > 1.8) { A.log('FEHLER Interaktion außer Reichweite (Höhe)', dy.toFixed(1), id); return false; }
-    gm.player._doInteract(ia);
-    return true;
+    // Liegt ein anderer Gegenstand im Blick davor, nimmt ihn auch ein Mensch zuerst (bis zu drei Versuche)
+    let t = null;
+    for (let k = 0; k < 3; k++) {
+      A.aim(ia.pos);
+      t = gm.player._findTarget();
+      if (t === ia) { gm.player._doInteract(ia); return true; }
+      if (t && t.kind === 'item' && t !== ia) { gm.player._doInteract(t); if (gm.docs.isOpen()) gm.docs.close(); continue; }
+      break;
+    }
+    A.log('FEHLER nicht anwählbar wie ein Spieler:', id, 'Abstand', d.toFixed(2), '– im Blick:', t ? (t.id || t.kind) : 'nichts'); A.unreachable = (A.unreachable || 0) + 1; return false;
   };
-  A.useDoor = (id) => { const gm = g(); const d = gm.level.door(id); gm.player._doInteract({ kind: 'door', door: d }); return !d.locked; };
+  A.useDoor = (id) => {
+    const gm = g(); const d = gm.level.door(id);
+    A.aim(d.center);
+    const t = gm.player._findTarget();
+    // Bei Doppeltüren zählt jeder Flügel (ein Mensch öffnet den, den er gerade ansieht)
+    if (!t || t.kind !== 'door' || (t.door !== d && t.door !== d.partner)) { A.log('FEHLER Tür nicht anwählbar wie ein Spieler:', id, '– im Blick:', t ? (t.id || t.kind) : 'nichts'); A.unreachable = (A.unreachable || 0) + 1; return false; }
+    gm.player._doInteract(t); return !d.locked;
+  };
   A.state = () => { const gm = g(); return { ch: gm.chapter?.id, mode: gm.mode, pmode: gm.player.mode, hp: Math.round(gm.player.hp), x: +gm.player.pos.x.toFixed(1), z: +gm.player.pos.z.toFixed(1), obj: gm.phone.data.objective, flags: Object.keys(gm.state.flags).filter((k) => !k.startsWith('read:') && !k.startsWith('used:')).join(',') }; };
 });
 
@@ -136,6 +157,9 @@ const list = which === 'all' ? Object.keys(ROUTES) : [which];
 let allOk = true;
 for (const [i, ch] of list.entries()) { const ok = await runChapter(ch, i === 0); allOk = allOk && ok; if (!ok && SEQ) break; }
 if (TIMES.length > 1) console.log('Spielzeit Autopilot gesamt:', TIMES.reduce((a, t) => a + t[1], 0).toFixed(1), 'min');
+const unreach = await page.evaluate(() => window.AUTO.unreachable || 0);
+console.log('Nicht anwählbare Interaktionen:', unreach);
+if (unreach) allOk = false;
 console.log('\nFehler:', errs.length ? '\n' + errs.slice(0, 20).join('\n') : 'keine');
 console.log(allOk && !errs.length ? 'ERGEBNIS: OK' : 'ERGEBNIS: PROBLEME');
 await browser.close(); srv.close();

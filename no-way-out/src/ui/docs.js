@@ -9,7 +9,8 @@ export class DocViewer {
     root.appendChild(this.el);
     this.openId = null;
     this.resolve = null;
-    this.el.addEventListener('click', (e) => { if (e.target.closest('.doc-close')) this.close(); });
+    // Schließen: Knopf oben rechts, Zeile unten oder Tipp neben das Blatt
+    this.el.addEventListener('click', (e) => { if (e.target.closest('.doc-close, .doc-x') || e.target === this.el) this.close(); });
   }
   open(id, o = {}) {
     const d = DOCS[id];
@@ -18,7 +19,7 @@ export class DocViewer {
     this.game.phone.addDoc(id);
     if (!this.game.state.flags['read:' + id]) { this.game.state.flags['read:' + id] = true; if (!o.fromPhone) this.game.hud.toast('Dokument im Telefon gespeichert'); }
     const body = d.body.split('\n\n').map((p) => p.startsWith('# ') ? `<h4>${p.slice(2)}</h4>` : p.startsWith('> ') ? `<blockquote>${p.slice(2).replace(/\n/g, '<br>')}</blockquote>` : `<p>${p.replace(/\n/g, '<br>').replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/~~(.+?)~~/g, '<s>$1</s>').replace(/\[\[(.+?)\]\]/g, '<span class="redact">$1</span>')}</p>`).join('');
-    this.el.innerHTML = `<div class="paper ${d.kind || 'file'}"><div class="doc-head"><small>${d.where || ''}</small><h2>${d.title}</h2></div><div class="doc-body">${body}</div><div class="doc-close">[E] / [Esc] Schließen</div></div>`;
+    this.el.innerHTML = `<div class="paper ${d.kind || 'file'}"><button class="doc-x" aria-label="Schließen">✕</button><div class="doc-head"><small>${d.where || ''}</small><h2>${d.title}</h2></div><div class="doc-body">${body}</div><div class="doc-close">${this.game.input.touchMode ? 'Schließen' : '[E] / [Esc] Schließen'}</div></div>`;
     this.el.classList.add('show');
     this.game.audio.play('paper', { vol: 0.6 });
     this.game.setModal('doc');

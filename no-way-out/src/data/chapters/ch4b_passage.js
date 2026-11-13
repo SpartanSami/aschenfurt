@@ -13,7 +13,7 @@ const DUMMIES = [
 ];
 
 export default {
-  id: 'ch4b', name: 'Die U-Bahn', part: true, partName: 'Linden-Passage',
+  id: 'ch4b', startFlag: 'c4b_started', name: 'Die U-Bahn', part: true, partName: 'Linden-Passage',
   tagline: 'Linden-Passage · Ebene −1 · Frischmarkt',
   w: 80, h: 36,
   opts: { floor: 's_floor', wall: 'plaster', ceil: 'h_ceil', height: 4.0 },
