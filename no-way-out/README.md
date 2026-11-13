@@ -24,8 +24,9 @@ Sami erwacht ohne Erinnerung in einem Krankenhaus. In seiner Akte steht kein Nam
   - Im Versteck wird „Ducken“ zu **Atem** (Atem anhalten).
   - **Laden** erscheint links, wenn das Magazin nicht voll ist.
   - **✚ Heilen** erscheint oben neben der Lebensanzeige, wenn es etwas zu heilen gibt.
-- **Das Spiel-Handy** öffnet sich als große, direkt antippbare Ansicht mit normal großer Schrift (Nachrichten, Notizen, Karte, Zustand). Sie passt sich Hoch- und Querformat an. Anruf und neue Nachricht lassen sich oben direkt antippen.
+- **Das Spiel-Handy** öffnet sich als große, direkt antippbare Ansicht mit normal großer Schrift (Nachrichten, Notizen, Karte, Zustand). Anruf und neue Nachricht lassen sich oben direkt antippen.
 - **Anzeigen** (Leben, Ausdauer, Munition, Ziel) liegen am oberen Rand, damit unten nichts verdeckt wird.
+- **Nur Querformat:** Auf dem Handy läuft das Spiel quer. Im Hochformat erscheint ein Hinweis, und das Spiel pausiert, bis das Gerät gedreht wird.
 
 Tablets nutzen automatisch kleinere Texturen und eine begrenzte Auflösung, damit Safari nicht an seine Speichergrenze stößt. Der Ton läuft auch, wenn das iPad auf „stumm“ steht.
 

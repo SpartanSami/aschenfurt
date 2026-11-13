@@ -68,7 +68,8 @@ Getestet wurde automatisiert in einem Headless-Chromium mit Software-Rendering (
 | Aufleuchten der Fundstücke | ✅ Bildschirmfotos mit und ohne Taschenlampe |
 | Heilmittel im gesamten Spiel nach der Erhöhung | ✅ Leicht 55 · Mittel 46 · Schwer 22 (vorher 39 · 30 · 14) |
 | Munition im gesamten Spiel nach der Erhöhung (Mittel) | ✅ 32 Schachteln, zusammen rund 370 Schuss mit der Startmunition (vorher rund 210); Leicht ×1,5, Schwer ×0,6 |
-| Abschlusstests mit dem Produktions-Build | ✅ Kapitel 1 bis 4 am Stück, 4·2 und 5 einzeln (Geheimnis-Ende), QA-Skript, Waffentest, Einzeldatei und Artefakt-Seite auf emuliertem Android-Handy |
+| Abschlusstests mit dem Produktions-Build | ✅ **gesamte Kampagne am Stück** (alle acht Abschnitte, 34,3 Minuten Autopilot-Spielzeit, Geheimnis-Ende, keine Fehler, 0 nicht anwählbare Interaktionen), QA-Skript, Waffentest |
+| Ausgelieferte Dateien (Einzeldatei und Artefakt-Seite) auf emuliertem Android-Handy | ✅ quer: neues Spiel läuft, Anzeige sichtbar, Knöpfe Ducken · Lampe · Handy · Benutzen · hoch: Hinweis „Bitte das Handy quer halten“ und Pause · zurück quer: Hinweis weg, Weiterspielen |
 
 ## Behobene Fehler (Auswahl)
 - **Die gesamte Bildschirmanzeige war seit der ersten Version unsichtbar.** Ziel, Untertitel, Bedienhinweise, Nachrichten- und Anrufhinweis, „Losreißen!“, Entscheidungen und Kapiteltitel wurden berechnet, aber nie gezeigt: Die Grundregel im Stylesheet lautete „display: none“, und das Einblenden setzte nur einen leeren Wert. Aufgefallen ist es nie, weil alle Tests die Logik prüften (z. B. „Text des Hinweises stimmt“) und kein Test nachsah, ob der Text wirklich auf dem Bildschirm steht. Jetzt gibt es dafür Bildschirmfotos aller Anzeigen.

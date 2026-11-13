@@ -33,8 +33,15 @@ export class TouchControls {
       </div>
       <button class="t-btn t-heal" data-t="heal">✚ Heilen</button>
       <button class="t-btn t-pause" data-t="pause" aria-label="Pause">II</button>
-      <div class="t-rotate">Tipp: Handy quer halten – mehr Sicht, mehr Platz zum Steuern</div>`;
+`;
     ui.insertBefore(this.base, ui.firstChild);
+    // Das Spiel läuft auf dem Handy nur im Querformat: Im Hochformat erscheint ein Hinweis, das Spiel pausiert.
+    this.rot = document.createElement('div');
+    this.rot.className = 'rotate-lock';
+    this.rot.innerHTML = '<div><i>⟳</i><b>Bitte das Handy quer halten</b><span>NO WAY OUT läuft im Querformat.</span></div>';
+    document.getElementById('app').appendChild(this.rot);
+    const tryLock = () => { try { const o = screen.orientation; if (o && o.lock) o.lock('landscape').catch(() => {}); } catch (e) { /* nicht überall erlaubt */ } };
+    window.addEventListener('pointerdown', tryLock, { once: true });
     // Kontextebene liegt über allem (Überwachungskameras, Losreißen)
     this.ctx = document.createElement('div');
     this.ctx.className = 'touch-ctx';
@@ -196,6 +203,10 @@ export class TouchControls {
   // Pro Bild: passende Ebene zeigen, Knöpfe an die Lage anpassen
   update() {
     const g = this.game, p = g.player, w = g.weapon;
+    // Hochformat: pausieren, bis das Gerät quer gehalten wird
+    const portrait = window.innerHeight > window.innerWidth * 1.05;
+    if (portrait !== this._portrait) { this._portrait = portrait; this.rot.classList.toggle('show', portrait); }
+    if (portrait && g.mode === 'play' && !g.noAutoPause) g.pause();
     let st = '';
     if (g.mode === 'play') {
       if (g.qte) st = 'qte';
