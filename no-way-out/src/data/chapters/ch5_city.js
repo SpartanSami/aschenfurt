@@ -290,6 +290,12 @@ export default {
       },
     },
     {
+      id: 'c5_deadman_off', when: 'interact:deadman', once: false, if: (c) => !c.get('gen5_on'), do: async (c) => {
+        c.say('sami', 'Kein Strom. Erst den Generator.', { d: 2 });
+        c.toast('Die Torsteuerung braucht Strom: zuerst den Generator starten.');
+      },
+    },
+    {
       id: 'c5_deadman', when: 'interact:deadman', once: false, if: (c) => c.get('gen5_on') && !c.get('final_choice'), do: async (c) => {
         const g = c.g;
         const frags = g.state.fragments.size;
@@ -311,7 +317,7 @@ export default {
       },
     },
     {
-      id: 'c5_restore_final', when: 'restore:final', once: false, do: async (c) => { c.flag('final_choice', null); c.objective('Zur Torsteuerung!'); await c.wait(3); c.noise(28, 14, 45, 'alarm'); for (const z of c.g.zombies) if (z.alive && z.pos.z > 23 && z.pos.z < 46) z.forceChase(); },
+      id: 'c5_restore_final', when: 'restore:final', once: false, do: async (c) => { c.flag('final_choice', null); delete c.g.state.flags['used:deadman']; c.objective('Zur Torsteuerung!'); await c.wait(3); c.noise(28, 14, 45, 'alarm'); for (const z of c.g.zombies) if (z.alive && z.pos.z > 23 && z.pos.z < 46) z.forceChase(); },
     },
     {
       id: 'c5_bridge', when: 'enter:bridge', if: (c) => ['hope', 'ilyas'].includes(c.get('final_choice')) && c.get('gate_open'), do: async (c) => {

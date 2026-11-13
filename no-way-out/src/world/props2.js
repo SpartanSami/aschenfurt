@@ -203,7 +203,10 @@ PROPS.deadman = (c, o) => {
   c.box(0.5, 1.2, 0.4, 'military', 0, 0.6, 0);
   c.box(0.3, 0.2, 0.05, emissiveMat(0xffb000, 1.5), 0, 1.0, 0.21);
   c.col(-0.25, -0.2, 0.25, 0.2, 0, 1.2, {});
-  if (o.id) c.interacts.push({ id: o.id, x: 0, z: 0.6, y: 1.0, prompt: o.prompt || 'Torsteuerung', radius: 1.2 });
+  // Wiederholt benutzbar: Ein Druck ohne Strom darf die Steuerung nicht für immer sperren
+  if (o.id) c.interacts.push({ id: o.id, x: 0, z: 0.6, y: 1.0, repeat: true, radius: 1.4,
+    prompt: (g) => (g.state.flags.gen5_on ? (o.prompt || 'Torsteuerung') : 'Torsteuerung – kein Strom. Erst den Generator starten.'),
+    enabled: (g) => !g.state.flags.final_choice });
 };
 
 PROPS.stripe = (c, o) => { c.box(0.12, 0.006, o.len || 5, 'paint_white', 0, 0.004, 0); };

@@ -490,6 +490,8 @@ export class Level {
   }
 
   _addInteract(ia) {
+    // Wiederholbare Schalter dürfen nie durch einen alten Merker gesperrt bleiben (ältere Spielstände)
+    if (ia.repeat) delete this.game.state.flags['used:' + ia.id];
     const fy = ia.y ?? this.grid.heightAt(ia.x, ia.z) + 1.0;
     const obj = {
       id: ia.id, kind: ia.kind || 'script', pos: new THREE.Vector3(ia.x, fy, ia.z), radius: ia.radius ?? 1.1,
