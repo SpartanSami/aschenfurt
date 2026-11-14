@@ -273,7 +273,7 @@ export default {
         c.sound('generator_start', [27.5, 1, 13.2], { vol: 1 });
         c.shake(0.3);
         await c.wait(2.4);
-        c.loop('gen', 'buzz_loop', [27.5, 1, 13.2], { vol: 0.6, bus: 'sfx' });
+        c.loop('gen', 'buzz_loop', [27.5, 1, 13.2], { vol: 0.35, bus: 'sfx' });
         c.power('flood', true);
         c.sound('power_on', null, { vol: 0.7 });
         c.noise(28, 14, 45, 'alarm'); c.noise(30, 34, 30, 'alarm');

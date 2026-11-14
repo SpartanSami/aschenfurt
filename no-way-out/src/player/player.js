@@ -554,14 +554,15 @@ export class Player {
     const mv = clamp(this.speedNow / PLAYER.walk, 0, 2.2);
     this.bobAmt = damp(this.bobAmt, this.mode === 'normal' || this.mode === 'heal' ? mv : 0, 6, dt);
     const inj = this.injury;
-    const bobY = Math.sin(this.bobT * 2) * 0.028 * this.bobAmt * bobS * (this.sprinting ? 1.5 : 1);
-    const bobX = Math.sin(this.bobT) * 0.022 * this.bobAmt * bobS;
+    // Kopfbewegung beim Gehen bewusst sanft (gegen Schwindel): wenig Auf und Ab, kaum seitliches Pendeln, kein Kippen
+    const bobY = Math.sin(this.bobT * 2) * 0.009 * this.bobAmt * bobS * (this.sprinting ? 1.25 : 1);
+    const bobX = Math.sin(this.bobT) * 0.005 * this.bobAmt * bobS;
     // Verletzung: unregelmäßiges Schwanken
-    const sway = inj * 0.025 * Math.sin(this.time * 1.3) + inj * 0.012 * Math.sin(this.time * 3.7);
+    const sway = inj * 0.008 * Math.sin(this.time * 0.9);
     // Hinken
-    const limp = this.healthState === 'severe' && this.painkiller <= 0 ? Math.max(0, Math.sin(this.bobT)) * 0.05 * this.bobAmt : 0;
+    const limp = this.healthState === 'severe' && this.painkiller <= 0 ? Math.max(0, Math.sin(this.bobT)) * 0.018 * this.bobAmt : 0;
     // Atmung (Ruhe)
-    const breathe = Math.sin(this.time * (1.4 + (1 - this.stamina / 100) * 2.5)) * 0.006 * (1 + inj);
+    const breathe = Math.sin(this.time * (1.2 + (1 - this.stamina / 100) * 1.2)) * 0.003 * (1 + inj * 0.5);
     let eye = this.eyeHeight;
     if (this.mode === 'hidden' || this.mode === 'hideMove') {
       const h = this.hide;
@@ -569,7 +570,7 @@ export class Player {
       eye = this.mode === 'hidden' ? target : lerp(this.hideAnim?.fromEye ?? this.eyeHeight, target, clamp((this.hideAnim?.t || 0) / (this.hideAnim?.dur || 1), 0, 1));
       if (this.hideAnim && !this.hideAnim.enter) eye = lerp(target, this.eyeHeight, clamp(this.hideAnim.t / this.hideAnim.dur, 0, 1));
     }
-    const shake = this.trauma * this.trauma;
+    const shake = this.trauma * this.trauma * 0.6;
     this.shakeT += dt * 30;
     const sx = (Math.sin(this.shakeT * 1.1) + Math.sin(this.shakeT * 2.3)) * 0.02 * shake;
     const sy = (Math.sin(this.shakeT * 1.7) + Math.sin(this.shakeT * 3.1)) * 0.02 * shake;
@@ -579,8 +580,8 @@ export class Player {
       this.pos.y + eye + bobY - limp - this.landDip + breathe + sy + this.camOffset.y,
       this.pos.z + rz * (bobX + sx) + this.camOffset.z,
     );
-    this.camRoll = damp(this.camRoll, -bobX * 0.6 + sway + (this.healthState === 'severe' ? Math.sin(this.time * 0.7) * 0.02 : 0), 8, dt);
-    cam.rotation.set(this.pitch + sy * 0.5 + sway * 0.4, this.yaw + sx * 0.5, this.camRoll, 'YXZ');
+    this.camRoll = damp(this.camRoll, sway + (this.healthState === 'severe' ? Math.sin(this.time * 0.5) * 0.006 : 0), 4, dt);
+    cam.rotation.set(this.pitch + sy * 0.5 + sway * 0.2, this.yaw + sx * 0.5, this.camRoll, 'YXZ');
     cam.updateMatrixWorld();
   }
 

@@ -489,7 +489,7 @@ export default {
         c.sound('generator_start', [35, 1, 57.2], { vol: 1 });
         c.shake(0.3);
         await c.wait(2.6);
-        c.loop('gen', 'buzz_loop', [35, 1, 57.2], { vol: 0.5, bus: 'sfx' });
+        c.loop('gen', 'buzz_loop', [35, 1, 57.2], { vol: 0.3, bus: 'sfx' });
         c.power('op', true); c.power('tech', true);
         c.lightMode('tech', 'flicker');
         c.sound('power_on', null, { vol: 0.8 });

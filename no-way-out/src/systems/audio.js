@@ -128,7 +128,8 @@ const LIB = {
   siren_far: (ctx) => buf(ctx, 6, (d) => { let ph = 0; for (let i = 0; i < d.length; i++) { const t = i / SR; const f = 600 + 250 * Math.sin(t * 2 * Math.PI * 0.25); ph += f / SR; d[i] = Math.sin(ph * 2 * Math.PI) * 0.15 * Math.sin(t / 6 * Math.PI); } }),
   hiss: (ctx) => buf(ctx, 3.2, (d) => { const hp = new Biquad('hp', 2500, 0.6); for (let i = 0; i < d.length; i++) { const t = i / SR; d[i] = hp.p(rnd()) * Math.min(1, t * 6) * Math.min(1, (3.2 - t) * 2); } normalize(d, 0.5); }),
   klaxon: (ctx) => buf(ctx, 1.6, (d) => { let ph = 0; for (let i = 0; i < d.length; i++) { const t = i / SR; const f = (t % 0.8) < 0.5 ? 420 : 0; ph += f / SR; d[i] = f ? (((ph % 1) * 2 - 1) * 0.5 + Math.sin(ph * 2 * Math.PI) * 0.3) : 0; } normalize(d, 0.6); }),
-  buzz_loop: (ctx) => buf(ctx, 2, (d) => { for (let i = 0; i < d.length; i++) { const t = i / SR; d[i] = (Math.sin(t * 2 * Math.PI * 100) * 0.5 + Math.sin(t * 2 * Math.PI * 200) * 0.25 + Math.sin(t * 2 * Math.PI * 300) * 0.1) * 0.4 + rnd() * 0.02; } }),
+  // weiches Generatorbrummen (früher schärferes 100/200/300-Hz-Summen)
+  buzz_loop: (ctx) => buf(ctx, 2, (d) => { let lp = 0; for (let i = 0; i < d.length; i++) { const t = i / SR; lp += (rnd() - lp) * 0.02; d[i] = (Math.sin(t * 2 * Math.PI * 50) * 0.5 + Math.sin(t * 2 * Math.PI * 100) * 0.12) * 0.3 + lp * 0.25; } }),
   caralarm_idle: (ctx) => buf(ctx, 1.5, (d) => { for (let i = 0; i < d.length; i++) { const t = i / SR; d[i] = (t % 1.5) < 0.04 ? Math.sin(t * 2 * Math.PI * 2400) * 0.15 : 0; } }),
   train_far: (ctx) => buf(ctx, 6, (d) => { const lp = new OnePole(150); for (let i = 0; i < d.length; i++) { const t = i / SR; d[i] = lp.lp(rnd()) * 3 * Math.sin(t / 6 * Math.PI) + Math.sin(t * 2 * Math.PI * 220) * 0.08 * Math.sin(t / 6 * Math.PI) * (t > 2 && t < 4 ? 1 : 0); } normalize(d, 0.7); }),
 };
@@ -428,9 +429,11 @@ class MusicDirector {
     this.started = true;
     const c = this.c;
     // Drone (Erkundung)
-    this.drone = this._pad([55, 55.3, 82.4, 110.2], 'sawtooth', 180);
+    // weich und ruhig: Sinus/Dreieck ohne Schwebung (die alte Sägezahn-Fläche brummte und pulsierte)
+    this.drone = this._pad([55, 82.4, 110], 'triangle', 220, 0.6);
     // Spannung: dissonanter Streicher-Cluster
-    this.tension = this._pad([110, 116.5, 155.6, 233.1, 246.9], 'sawtooth', 900);
+    // Spannung: dunkle, gedämpfte Fläche statt schriller Halbton-Reibung
+    this.tension = this._pad([82.4, 110, 130.8, 164.8], 'triangle', 500, 0.45);
     // Jagd: Bass-Ostinato wird per Scheduler gespielt
     this.chaseGain = c.createGain(); this.chaseGain.gain.value = 0; this.chaseGain.connect(this.out);
     this.chaseFilter = c.createBiquadFilter(); this.chaseFilter.type = 'lowpass'; this.chaseFilter.frequency.value = 700; this.chaseFilter.connect(this.chaseGain);
@@ -438,20 +441,20 @@ class MusicDirector {
     this.nextBeat = c.currentTime + 0.1;
     this.nextHB = c.currentTime + 0.5;
   }
-  _pad(freqs, type, cutoff) {
+  _pad(freqs, type, cutoff, level = 1) {
     const c = this.c;
     const g = c.createGain(); g.gain.value = 0;
     const f = c.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = cutoff; f.Q.value = 0.8;
     f.connect(g); g.connect(this.out);
     const send = c.createGain(); send.gain.value = 0.6; g.connect(send); send.connect(this.a.reverb);
     const oscs = freqs.map((fr, i) => {
-      const o = c.createOscillator(); o.type = type; o.frequency.value = fr; o.detune.value = (i % 2 ? 7 : -7);
-      const lfo = c.createOscillator(); lfo.frequency.value = 0.05 + i * 0.03; const lg = c.createGain(); lg.gain.value = 6; lfo.connect(lg); lg.connect(o.detune); lfo.start();
-      const og = c.createGain(); og.gain.value = 0.12 / freqs.length * 3;
+      const o = c.createOscillator(); o.type = type; o.frequency.value = fr; o.detune.value = 0;
+      const lfo = c.createOscillator(); lfo.frequency.value = 0.05 + i * 0.03; const lg = c.createGain(); lg.gain.value = 1.5; lfo.connect(lg); lg.connect(o.detune); lfo.start();
+      const og = c.createGain(); og.gain.value = 0.12 / freqs.length * 3 * level;
       o.connect(og); og.connect(f); o.start();
       return o;
     });
-    const flfo = c.createOscillator(); flfo.frequency.value = 0.07; const fg = c.createGain(); fg.gain.value = cutoff * 0.4; flfo.connect(fg); fg.connect(f.frequency); flfo.start();
+    const flfo = c.createOscillator(); flfo.frequency.value = 0.07; const fg = c.createGain(); fg.gain.value = cutoff * 0.15; flfo.connect(fg); fg.connect(f.frequency); flfo.start();
     return { g, f, oscs };
   }
   sting(kind = 'sting') {
@@ -475,12 +478,12 @@ class MusicDirector {
     this.intensity += (target - this.intensity) * Math.min(1, dt * up);
     const I = this.intensity;
     const ex = I < 0.5 ? 1 - I : Math.max(0, 0.5 - (I - 0.5) * 0.5);
-    this.drone.g.gain.setTargetAtTime((hidden ? 0.25 : 0.55) * ex * (game.musicQuiet ? 0.3 : 1), t, 0.8);
-    this.tension.g.gain.setTargetAtTime(clamp((I - 0.6) / 1.4, 0, 1) * (hidden ? 0.25 : 0.5) * (I > 2.6 ? 0.6 : 1), t, 0.6);
-    this.tension.f.frequency.setTargetAtTime(400 + I * 500, t, 0.8);
+    this.drone.g.gain.setTargetAtTime((hidden ? 0.2 : 0.4) * ex * (game.musicQuiet ? 0.3 : 1), t, 0.8);
+    this.tension.g.gain.setTargetAtTime(clamp((I - 0.6) / 1.4, 0, 1) * (hidden ? 0.2 : 0.35) * (I > 2.6 ? 0.6 : 1), t, 0.6);
+    this.tension.f.frequency.setTargetAtTime(350 + I * 150, t, 0.8);
     const chase = clamp((I - 2.0) / 0.8, 0, 1) * (hidden ? 0.05 : 1);
-    this.chaseGain.gain.setTargetAtTime(chase * 0.55, t, 0.3);
-    this.chaseFilter.frequency.setTargetAtTime(500 + chase * 1500, t, 0.3);
+    this.chaseGain.gain.setTargetAtTime(chase * 0.4, t, 0.3);
+    this.chaseFilter.frequency.setTargetAtTime(450 + chase * 650, t, 0.3);
     // Herzschlag beim Verstecken oder bei schwerer Verletzung
     const hb = (hidden && threat >= 1 ? 0.8 : 0) + (game.player && game.player.healthState === 'severe' ? 0.5 : 0) + (I > 2.5 ? 0.3 : 0);
     if (hb > 0 && t >= this.nextHB) {
@@ -516,14 +519,6 @@ class MusicDirector {
       const o = c.createOscillator(); o.type = 'sine'; o.frequency.setValueAtTime(90, time); o.frequency.exponentialRampToValueAtTime(35, time + 0.3);
       const g = c.createGain(); g.gain.setValueAtTime(0.9, time); g.gain.exponentialRampToValueAtTime(0.001, time + 0.45);
       o.connect(g); g.connect(this.chaseGain); o.start(time); o.stop(time + 0.5);
-    }
-    if (i % 32 === 28) {
-      // hohe Dissonanz
-      for (const f of [880, 932]) {
-        const o = c.createOscillator(); o.type = 'triangle'; o.frequency.value = f;
-        const g = c.createGain(); g.gain.setValueAtTime(0, time); g.gain.linearRampToValueAtTime(0.06, time + 0.3); g.gain.linearRampToValueAtTime(0, time + 1.6);
-        o.connect(g); g.connect(this.chaseGain); o.start(time); o.stop(time + 1.7);
-      }
     }
   }
   _piano(f) {
